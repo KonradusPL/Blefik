@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Card
 import com.konradpekala.blefik.data.model.Room
+import kotlinx.android.synthetic.main.item_room.view.*
 
 
 class RoomsAdapter(val rooms: ArrayList<Room>, val context: Context)
@@ -27,10 +28,16 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val context: Context)
     class RoomViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(room: Room){
             itemView.apply {
+                textRoomName.text = room.name
+                textUsersCount.text = room.usersCount.toString()
             }
         }
     }
-    fun refreshCards(list: List<Card>) {
 
+    fun updateList(room: Room){
+        if(!room.isRemoved){
+            rooms.add(room)
+            notifyItemInserted(rooms.size-1)
+        }
     }
 }

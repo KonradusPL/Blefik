@@ -14,6 +14,7 @@ android:id="@+id/constraintRooms">
             android:background="?attr/colorPrimary"
             android:theme="?attr/actionBarTheme"
             app:title="Pokoje"
+            android:elevation="4dp"
             app:titleTextColor="@color/white"
             android:minHeight="?attr/actionBarSize"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"

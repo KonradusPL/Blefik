@@ -17,4 +17,8 @@ class SharedPreferences(context: Context): Preferences {
             putString(CURRENT_USER_FULLNAME,value)
         }
     }
+
+    override fun getUserName(): String {
+        return mSharedPrefs.getString(CURRENT_USER_FULLNAME,"") ?: ""
+    }
 }

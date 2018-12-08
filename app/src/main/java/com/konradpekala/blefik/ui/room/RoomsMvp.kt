@@ -7,6 +7,7 @@ import com.konradpekala.blefik.ui.base.MvpView
 interface RoomsMvp {
     interface View: MvpView{
         fun showRooms(list: List<Room>)
+        fun updateRooms(room: Room)
         fun showCreateRoomView()
     }
     interface Presenter<V: View>: MvpPresenter<V>{
