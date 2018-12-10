@@ -7,11 +7,15 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
-        android:background="?android:attr/selectableItemBackground">
+>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground">
 
         <TextView
                 android:text="Dawać kozaki tutaj"
@@ -22,15 +26,24 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:textSize="18sp" android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/textUsersCount" android:textColor="@android:color/black"
-                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
+                android:layout_marginBottom="8dp" />
         <TextView
-                android:text="TextView"
+                android:text="0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent" android:id="@+id/textUsersCount"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/textRoomName"
+                app:layout_constraintBottom_toBottomOf="@+id/textRoomName" android:textColor="@android:color/black"
+                android:textSize="18sp" android:textStyle="bold"/>
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressRoom" app:layout_constraintTop_toBottomOf="@+id/textRoomName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp" tools:visibility="gone" android:visibility="gone"
+                android:indeterminate="true"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

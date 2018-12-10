@@ -21,4 +21,8 @@ class SharedPreferences(context: Context): Preferences {
     override fun getUserName(): String {
         return mSharedPrefs.getString(CURRENT_USER_FULLNAME,"") ?: ""
     }
+
+    override fun isUserLoggedIn(): Boolean {
+        return mSharedPrefs.getBoolean(IS_USER_LOGGED_IN,false)
+    }
 }

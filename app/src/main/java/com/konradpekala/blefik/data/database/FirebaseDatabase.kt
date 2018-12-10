@@ -2,6 +2,7 @@ package com.konradpekala.blefik.data.database
 
 import android.util.Log
 import com.google.firebase.firestore.*
+import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.model.User
 import io.reactivex.*
@@ -47,6 +48,14 @@ class FirebaseDatabase: Database {
         }
     }
 
+    override fun addPlayerToRoom(player: Player, roomId: String): Completable {
+        return Completable.create{emitter ->
+            database.collection("rooms")
+                .document(roomId)
+                .update("players",FieldValue.arrayUnion(player))
+        }
+    }
+
     override fun observeRooms(): Observable<Room> {
         return Observable.create { emitter: ObservableEmitter<Room> ->
               mRoomsListener = database.collection("rooms").addSnapshotListener { querySnapshot: QuerySnapshot?,
@@ -54,16 +63,18 @@ class FirebaseDatabase: Database {
                 Log.d("observeRooms",exception.toString())
                   Log.d("observeRooms",querySnapshot!!.documentChanges.size.toString())
                 for (dc in querySnapshot!!.documentChanges) {
+                    val id = dc.document.id
+                    val room = dc.document.toObject(Room::class.java)
+                    room.roomId = id
                     when (dc.type) {
                         DocumentChange.Type.ADDED -> {
-                            Log.d("observeRooms","asdasdasd")
-                            emitter.onNext(dc.document.toObject(Room::class.java))
+                            emitter.onNext(room)
                         }
                         DocumentChange.Type.REMOVED -> {
-                            emitter.onNext(dc.document.toObject(Room::class.java))
+                            emitter.onNext(room)
                         }
                         DocumentChange.Type.MODIFIED ->{
-                            emitter.onNext(dc.document.toObject(Room::class.java))
+                            emitter.onNext(room)
                         }
                     }
                 }

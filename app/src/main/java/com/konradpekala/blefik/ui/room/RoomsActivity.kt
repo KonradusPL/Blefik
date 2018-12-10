@@ -59,6 +59,22 @@ class RoomsActivity : BaseActivity(),RoomsMvp.View {
         mRoomsAdapter.updateList(room)
     }
 
+    override fun showRoomLoading(room: Room) {
+        mRoomsAdapter.showRoomLoading(room)
+    }
+
+    override fun hideRoomLoading() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun openGameActivity() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getPresenter(): RoomsMvp.Presenter<RoomsMvp.View> {
+        return mPresenter
+    }
+
     override fun showCreateRoomView() {
         val customView = LayoutInflater.from(this).inflate(R.layout.dialog_add_room,constraintRooms,false)
 
