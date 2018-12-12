@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Room
+import com.konradpekala.blefik.data.model.Status
 import com.konradpekala.blefik.ui.base.MvpView
 import com.konradpekala.blefik.ui.room.RoomsMvp
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
@@ -38,13 +39,17 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
                 progressRoom.visibility = if(room.isLoading)
                     View.VISIBLE else View.GONE
 
+                buttonStartGame.visibility = if(room.isLoading && room.locallyCreated)
+                    View.VISIBLE else View.GONE
+
                 val drawable = IconicsDrawable(context)
                     .icon(FontAwesome.Icon.faw_user)
                     .sizeDp(18)
                     .color(Color.BLACK)
                 textUsersCount.setCompoundDrawables(null,null,drawable,null)
 
-                itemView.setOnClickListener {
+                layoutRoom.setOnClickListener {
+                    Log.d("onRoomClick","inClickListener")
                     mvpView.getPresenter().onRoomClick(room)
                 }
             }
@@ -68,10 +73,27 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
 
 
 
-    fun updateList(room: Room){
-        if(!room.removed){
-            rooms.add(room)
-            notifyItemInserted(rooms.size-1)
+    fun updateList(newRoom: Room){
+        Log.d("updateList",newRoom.toString())
+        if(!newRoom.removed){
+            var itemFound = false
+            for (room in rooms){
+                if(room.roomId == newRoom.roomId){
+                    itemFound = true
+                    val index = rooms.indexOf(room)
+                    if(newRoom.status == Status.Removed){
+                        rooms.remove(room)
+                        notifyItemRemoved(index)
+                    }else if(newRoom.status == Status.Changed){
+                        rooms[index] = newRoom
+                        notifyItemChanged(index)
+                    }
+                }
+            }
+            if(!itemFound){
+                rooms.add(newRoom)
+                notifyItemInserted(rooms.size-1)
+            }
         }
     }
 }

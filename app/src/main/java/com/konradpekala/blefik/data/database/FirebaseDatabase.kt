@@ -1,9 +1,11 @@
 package com.konradpekala.blefik.data.database
 
 import android.util.Log
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
+import com.konradpekala.blefik.data.model.Status
 import com.konradpekala.blefik.data.model.User
 import io.reactivex.*
 
@@ -50,9 +52,23 @@ class FirebaseDatabase: Database {
 
     override fun addPlayerToRoom(player: Player, roomId: String): Completable {
         return Completable.create{emitter ->
+            val map = HashMap<String,Any>()
+            map["id"] = player.id
+            map["cardsCount"] = player.cardsCount
+            map["nick"] = player.nick
+            map["currentCards"] = player.currentCards
+
+
             database.collection("rooms")
                 .document(roomId)
-                .update("players",FieldValue.arrayUnion(player))
+                .update("players",FieldValue.arrayUnion(map))
+                .addOnCompleteListener { task: Task<Void> ->
+                    if(task.isSuccessful){
+                        emitter.onComplete()
+                    }else if(task.exception != null){
+                        emitter.onError(task.exception!!.fillInStackTrace())
+                    }
+                }
         }
     }
 
@@ -68,12 +84,15 @@ class FirebaseDatabase: Database {
                     room.roomId = id
                     when (dc.type) {
                         DocumentChange.Type.ADDED -> {
+                            room.status = Status.Added
                             emitter.onNext(room)
                         }
                         DocumentChange.Type.REMOVED -> {
+                            room.status = Status.Removed
                             emitter.onNext(room)
                         }
                         DocumentChange.Type.MODIFIED ->{
+                            room.status = Status.Changed
                             emitter.onNext(room)
                         }
                     }

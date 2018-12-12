@@ -1,23 +1,33 @@
 package com.konradpekala.blefik.ui.room
 
+import android.util.Log
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
+import com.konradpekala.blefik.data.model.Status
 import com.konradpekala.blefik.data.repo.RoomsRepo
 import com.konradpekala.blefik.ui.base.BasePresenter
 
 class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresenter<V>(view),
     RoomsMvp.Presenter<V>{
 
-    private var currentRoom: Room? = null
+    private var mCurrentRoom: Room? = null
 
     override fun start() {
         super.start()
         cd.add(repo.observeRooms()
             .subscribe({room: Room? ->
                 if(room != null){
+                    var isCreator = false
+                    if(mCurrentRoom != null &&
+                        mCurrentRoom!!.name == room.name && mCurrentRoom!!.creatorId == room.creatorId) {
+                        if(room.status == Status.Changed)
+                            mCurrentRoom = room
+                        room.isLoading = true
+
+                        if(room.creatorId == repo.phoneStuff.getAndroidId())
+                            room.locallyCreated = true
+                    }
                     view.updateRooms(room)
-                    if(currentRoom != null && room.name == currentRoom!!.name && room.creatorId == currentRoom!!.creatorId)
-                        view.showRoomLoading(room)
                 }
             },{t: Throwable? ->
                 view.showMessage(t.toString())
@@ -36,10 +46,10 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
         val creator = repo.prefs.getUserName()
         val creatorId = repo.phoneStuff.getAndroidId()
         val player = Player(creatorId,creator)
-        currentRoom = Room(name,1,creatorId,false,false)
-        currentRoom?.players?.add(player)
+        mCurrentRoom = Room(name = name, creatorId = creatorId)
+        mCurrentRoom?.players?.add(player)
 
-        cd.add(repo.addRoom(currentRoom!!)
+        cd.add(repo.addRoom(mCurrentRoom!!)
             .subscribe({t: String? ->
                 view.showMessage("Udało się!")
             },{t: Throwable? ->
@@ -48,16 +58,18 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
     }
 
     override fun onRoomClick(room: Room) {
+        Log.d("onRoomClick","true")
         val creator = repo.prefs.getUserName()
         val creatorId = repo.phoneStuff.getAndroidId()
         val player = Player(creatorId,creator)
 
-        currentRoom = room
-        cd.add(repo.addUserToRoom(player,currentRoom!!.roomId)
+        mCurrentRoom = room
+        cd.add(repo.addUserToRoom(player,mCurrentRoom!!.roomId)
             .subscribe({
-                
-            },{t: Throwable? ->
+                Log.d("onRoomClick","success")
 
+            },{t: Throwable? ->
+                Log.d("onRoomClick",t.toString())
             }))
     }
 
