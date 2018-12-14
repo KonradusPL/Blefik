@@ -28,4 +28,10 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
     }
+
+    fun changeRoomToStarted(room: Room): Completable{
+        return database.changeRoomToStarted(room)
+            .subscribeOn(SchedulerProvider.io())
+            .observeOn(SchedulerProvider.ui())
+    }
 }

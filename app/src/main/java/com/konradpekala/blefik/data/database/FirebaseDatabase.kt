@@ -41,9 +41,11 @@ class FirebaseDatabase: Database {
         return Single.create{emitter: SingleEmitter<String> ->
             database.collection("rooms").add(room)
                 .addOnCompleteListener{task ->
+
                     if(task.isSuccessful){
                         emitter.onSuccess("success")
-                    }else if(task.exception != null){
+                    }
+                    else if(task.exception != null){
                         emitter.onError(task.exception!!.fillInStackTrace())
                     }
                 }
@@ -98,6 +100,22 @@ class FirebaseDatabase: Database {
                     }
                 }
             }
+        }
+    }
+
+    override fun changeRoomToStarted(room: Room): Completable {
+        return Completable.create{emitter ->
+
+            database.collection("rooms")
+                .document(room.roomId)
+                .update("started",true)
+                .addOnCompleteListener { task: Task<Void> ->
+                    if(task.isSuccessful){
+                        emitter.onComplete()
+                    }else if(task.exception != null){
+                        emitter.onError(task.exception!!.fillInStackTrace())
+                    }
+                }
         }
     }
 

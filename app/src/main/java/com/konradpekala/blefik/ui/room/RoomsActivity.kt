@@ -1,20 +1,17 @@
 package com.konradpekala.blefik.ui.room
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.database.FirebaseDatabase
 import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.preferences.SharedPreferences
-import com.konradpekala.blefik.data.repo.RoomsRepo
 import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.base.BaseActivity
+import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.room.adapters.RoomsAdapter
 import kotlinx.android.synthetic.main.activity_rooms.*
-import kotlinx.android.synthetic.main.dialog_add_room.*
 import kotlinx.android.synthetic.main.dialog_add_room.view.*
 
 class RoomsActivity : BaseActivity(),RoomsMvp.View {
@@ -55,20 +52,13 @@ class RoomsActivity : BaseActivity(),RoomsMvp.View {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun updateRooms(room: Room) {
-        mRoomsAdapter.updateList(room)
-    }
 
-    override fun showRoomLoading(room: Room) {
-        mRoomsAdapter.showRoomLoading(room)
-    }
-
-    override fun hideRoomLoading() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getListAdapter(): RoomsAdapter {
+        return mRoomsAdapter
     }
 
     override fun openGameActivity() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        startActivity(Intent(this,GameActivity::class.java))
     }
 
     override fun getPresenter(): RoomsMvp.Presenter<RoomsMvp.View> {

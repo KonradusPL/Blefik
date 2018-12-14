@@ -52,6 +52,10 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
                     Log.d("onRoomClick","inClickListener")
                     mvpView.getPresenter().onRoomClick(room)
                 }
+
+                buttonStartGame.setOnClickListener {
+                    mvpView.getPresenter().onStartGameClick(room)
+                }
             }
         }
     }
@@ -60,7 +64,7 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
         Log.d("showRoomLoading",room.isLoading.toString())
         for (item in rooms){
             val i = rooms.indexOf(item)
-            if(item.name == room.name && item.creatorId == room.creatorId){
+            if(item.roomId == room.roomId){
                 Log.d("showRoomLoading","why")
                 rooms[i].isLoading = true
                 notifyItemChanged(i)
@@ -73,9 +77,9 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
 
 
 
-    fun updateList(newRoom: Room){
-        Log.d("updateList",newRoom.toString())
-        if(!newRoom.removed){
+    fun updateRooms(newRoom: Room){
+        Log.d("updateRooms",newRoom.toString())
+        if(newRoom.status != Status.Removed){
             var itemFound = false
             for (room in rooms){
                 if(room.roomId == newRoom.roomId){

@@ -17,17 +17,21 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
         cd.add(repo.observeRooms()
             .subscribe({room: Room? ->
                 if(room != null){
-                    var isCreator = false
                     if(mCurrentRoom != null &&
                         mCurrentRoom!!.name == room.name && mCurrentRoom!!.creatorId == room.creatorId) {
                         if(room.status == Status.Changed)
                             mCurrentRoom = room
+
                         room.isLoading = true
 
                         if(room.creatorId == repo.phoneStuff.getAndroidId())
                             room.locallyCreated = true
+
+                        else if(room.started){
+                            view.openGameActivity()
+                        }
                     }
-                    view.updateRooms(room)
+                    view.getListAdapter().updateRooms(room)
                 }
             },{t: Throwable? ->
                 view.showMessage(t.toString())
@@ -60,16 +64,37 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
     override fun onRoomClick(room: Room) {
         Log.d("onRoomClick","true")
         val creator = repo.prefs.getUserName()
-        val creatorId = repo.phoneStuff.getAndroidId()
-        val player = Player(creatorId,creator)
+        val id = repo.phoneStuff.getAndroidId()
+        val player = Player(id,creator)
 
         mCurrentRoom = room
-        cd.add(repo.addUserToRoom(player,mCurrentRoom!!.roomId)
+
+        if (room.hasPlayer(player)){
+            Log.d("onRoomClick","hasPlayer")
+            room.isLoading = true
+            view.getListAdapter().showRoomLoading(room)
+            return
+        }
+
+        cd.add(repo.addUserToRoom(player,room.roomId)
             .subscribe({
                 Log.d("onRoomClick","success")
-
             },{t: Throwable? ->
                 Log.d("onRoomClick",t.toString())
+            }))
+    }
+
+    override fun onStartGameClick(room: Room) {
+        if(room.players.size < 2){
+            view.showMessage("Do gry potrzeba conajmniej 2 graczy")
+            return
+        }
+
+        cd.add(repo.changeRoomToStarted(room)
+            .subscribe({
+                view.openGameActivity()
+            },{t: Throwable? ->
+                view.showMessage("Nie udało się stworzyć gry :(")
             }))
     }
 

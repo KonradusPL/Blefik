@@ -3,13 +3,12 @@ package com.konradpekala.blefik.ui.room
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.ui.base.MvpPresenter
 import com.konradpekala.blefik.ui.base.MvpView
+import com.konradpekala.blefik.ui.room.adapters.RoomsAdapter
 
 interface RoomsMvp {
     interface View: MvpView{
         fun showRooms(list: List<Room>)
-        fun updateRooms(room: Room)
-        fun showRoomLoading(room: Room)
-        fun hideRoomLoading()
+        fun getListAdapter(): RoomsAdapter
         fun openGameActivity()
         fun showCreateRoomView()
         fun getPresenter(): Presenter<View>
@@ -18,5 +17,6 @@ interface RoomsMvp {
         fun onAddRoomClick()
         fun onAddRoomClick(name: String)
         fun onRoomClick(room: Room)
+        fun onStartGameClick(room: Room)
     }
 }
