@@ -9,7 +9,7 @@ interface RoomsMvp {
     interface View: MvpView{
         fun showRooms(list: List<Room>)
         fun getListAdapter(): RoomsAdapter
-        fun openGameActivity()
+        fun openGameActivity(room: Room)
         fun showCreateRoomView()
         fun getPresenter(): Presenter<View>
     }

@@ -56,7 +56,6 @@ class FirebaseDatabase: Database {
         return Completable.create{emitter ->
             val map = HashMap<String,Any>()
             map["id"] = player.id
-            map["cardsCount"] = player.cardsCount
             map["nick"] = player.nick
             map["currentCards"] = player.currentCards
 

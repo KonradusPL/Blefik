@@ -17,8 +17,7 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
         cd.add(repo.observeRooms()
             .subscribe({room: Room? ->
                 if(room != null){
-                    if(mCurrentRoom != null &&
-                        mCurrentRoom!!.name == room.name && mCurrentRoom!!.creatorId == room.creatorId) {
+                    if(mCurrentRoom?.isEqualTo(room) == true) {
                         if(room.status == Status.Changed)
                             mCurrentRoom = room
 
@@ -28,7 +27,7 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
                             room.locallyCreated = true
 
                         else if(room.started){
-                            view.openGameActivity()
+                            view.openGameActivity(room)
                         }
                     }
                     view.getListAdapter().updateRooms(room)
@@ -92,7 +91,7 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
 
         cd.add(repo.changeRoomToStarted(room)
             .subscribe({
-                view.openGameActivity()
+                view.openGameActivity(room)
             },{t: Throwable? ->
                 view.showMessage("Nie udało się stworzyć gry :(")
             }))

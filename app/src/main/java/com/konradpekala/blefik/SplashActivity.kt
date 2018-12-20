@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.konradpekala.blefik.data.preferences.SharedPreferences
 import com.konradpekala.blefik.ui.createProfile.CreateProfileActivity
+import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.room.RoomsActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -21,7 +22,7 @@ class SplashActivity : AppCompatActivity() {
 
     }
     fun openRoomActivity(){
-        startActivity(Intent(this,RoomsActivity::class.java))
+        startActivity(Intent(this,GameActivity::class.java))
         finish()
     }
     fun openCreateProfileActivity(){

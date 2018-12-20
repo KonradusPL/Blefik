@@ -9,26 +9,8 @@ import com.konradpekala.blefik.ui.base.BasePresenter
 class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepository): BasePresenter<V>(view),
     GameMvp.Presenter<V> {
 
-    override fun start() {
-        super.start()
-
-        val list = listOf(
-            Card(
-                CardNumber.Ace,
-                CardColor.Club
-            ),
-            Card(
-                CardNumber.Jack,
-                CardColor.Diamond
-            ),
-            Card(
-                CardNumber.Ten,
-                CardColor.Heart
-            )
-        )
-
-        view.refreshCards(list)
-
+    override fun startGame(roomId: String, isCreator: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

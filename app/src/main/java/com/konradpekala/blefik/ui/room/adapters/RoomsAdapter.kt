@@ -79,25 +79,25 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
 
     fun updateRooms(newRoom: Room){
         Log.d("updateRooms",newRoom.toString())
-        if(newRoom.status != Status.Removed){
-            var itemFound = false
-            for (room in rooms){
-                if(room.roomId == newRoom.roomId){
-                    itemFound = true
-                    val index = rooms.indexOf(room)
-                    if(newRoom.status == Status.Removed){
-                        rooms.remove(room)
-                        notifyItemRemoved(index)
-                    }else if(newRoom.status == Status.Changed){
-                        rooms[index] = newRoom
-                        notifyItemChanged(index)
-                    }
+
+        var itemFound = false
+        for (room in rooms){
+            if(room.roomId == newRoom.roomId){
+                itemFound = true
+                val index = rooms.indexOf(room)
+                if(newRoom.status == Status.Removed || newRoom.started){
+                    rooms.remove(room)
+                    notifyItemRemoved(index)
+                }else if(newRoom.status == Status.Changed){
+                    rooms[index] = newRoom
+                    notifyItemChanged(index)
                 }
             }
-            if(!itemFound){
-                rooms.add(newRoom)
-                notifyItemInserted(rooms.size-1)
-            }
         }
+        if(!itemFound && !newRoom.started){
+            rooms.add(newRoom)
+            notifyItemInserted(rooms.size-1)
+        }
+
     }
 }

@@ -24,5 +24,9 @@ class Room(
         }
         return value
     }
+
+    fun isEqualTo(newRoom: Room): Boolean{
+        return name==newRoom.name && creatorId == newRoom.creatorId
+    }
 }
 enum class Status{Added,Changed,Removed}

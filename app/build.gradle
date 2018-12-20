@@ -67,6 +67,10 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.google.android.material:material:1.1.0-alpha01'
 
+    //hehe
+    compile 'com.wunderlist:sliding-layer:1.2.5'
+
+
 
 }
 

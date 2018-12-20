@@ -13,7 +13,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.item_current_card.view.*
 
-class CurrentCardsAdapter(val cards: ArrayList<Card>, val context: Context): RecyclerView.Adapter<CurrentCardsAdapter.CardViewHolder>() {
+class CardsAdapter(val cards: ArrayList<Card>, val context: Context): RecyclerView.Adapter<CardsAdapter.CardViewHolder>() {
     override fun getItemCount() = cards.size
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {

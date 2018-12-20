@@ -57,8 +57,11 @@ class RoomsActivity : BaseActivity(),RoomsMvp.View {
         return mRoomsAdapter
     }
 
-    override fun openGameActivity() {
-        startActivity(Intent(this,GameActivity::class.java))
+    override fun openGameActivity(room: Room) {
+        val intent = Intent(this,GameActivity::class.java)
+        intent.putExtra("roomId",room.roomId)
+        intent.putExtra("roomName",room.name)
+        startActivity(intent)
     }
 
     override fun getPresenter(): RoomsMvp.Presenter<RoomsMvp.View> {
