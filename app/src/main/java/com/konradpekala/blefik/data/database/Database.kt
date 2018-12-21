@@ -16,5 +16,8 @@ interface Database {
     fun observeRooms(): Observable<Room>
     fun changeRoomToStarted(room: Room): Completable
 
+    fun observeRoom(id: String): Observable<Room>
+    fun updateRoom(room: Room): Completable
+
     fun clean()
 }

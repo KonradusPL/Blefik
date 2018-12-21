@@ -102,6 +102,36 @@ class FirebaseDatabase: Database {
         }
     }
 
+    override fun observeRoom(id: String): Observable<Room> {
+        return Observable.create { emitter: ObservableEmitter<Room> ->
+                database.collection("rooms").document(id).addSnapshotListener{document, exception ->
+                    if (document == null){
+                        emitter.onError(Throwable())
+                        return@addSnapshotListener
+                    }
+                    val room = document.toObject(Room::class.java)
+                    if(room != null)
+                        emitter.onNext(room)
+                }
+        }
+    }
+
+    override fun updateRoom(room: Room): Completable {
+        return Completable.create{emitter ->
+
+            database.collection("rooms")
+                .document(room.roomId)
+                .update(room.getMap())
+                .addOnCompleteListener { task: Task<Void> ->
+                    if(task.isSuccessful){
+                        emitter.onComplete()
+                    }else if(task.exception != null){
+                        emitter.onError(task.exception!!.fillInStackTrace())
+                    }
+                }
+        }
+    }
+
     override fun changeRoomToStarted(room: Room): Completable {
         return Completable.create{emitter ->
 

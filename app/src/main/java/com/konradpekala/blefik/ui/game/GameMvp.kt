@@ -5,6 +5,7 @@ import com.konradpekala.blefik.ui.base.MvpView
 import com.konradpekala.blefik.data.model.Card
 import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
+import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 import com.konradpekala.blefik.ui.room.RoomsMvp
 
 interface GameMvp {
@@ -13,9 +14,10 @@ interface GameMvp {
         fun getPresenter(): RoomsMvp.Presenter<RoomsMvp.View>
         fun getBidAdapter(): CardsAdapter
         fun getPlayerCardsAdapter(): CardsAdapter
+        fun getPlayersAdapter(): PlayersAdapter
     }
 
     interface Presenter<V: View>: MvpPresenter<V>{
-        fun startGame(roomId: String, isCreator: Boolean)
+        fun startGame(roomId: String, creatorId: String)
     }
 }

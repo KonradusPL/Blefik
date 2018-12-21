@@ -61,6 +61,7 @@ class RoomsActivity : BaseActivity(),RoomsMvp.View {
         val intent = Intent(this,GameActivity::class.java)
         intent.putExtra("roomId",room.roomId)
         intent.putExtra("roomName",room.name)
+        intent.putExtra("creatorId",room.name)
         startActivity(intent)
     }
 

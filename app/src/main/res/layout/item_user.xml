@@ -33,7 +33,7 @@
                 android:text="5 kart"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView6"
+                android:id="@+id/textPlayerCards"
                 app:layout_constraintTop_toBottomOf="@+id/textFullName"
                 android:layout_marginTop="4dp" app:layout_constraintStart_toEndOf="@+id/imageUser"
                 android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"

@@ -3,7 +3,7 @@ package com.konradpekala.blefik.data.preferences
 import android.content.Context
 import androidx.core.content.edit
 
-class SharedPreferences(context: Context): Preferences {
+class SharedPrefs(context: Context): Preferences {
 
     private val CURRENT_USER_FULLNAME = "CURRENT_USER_FULLNAME"
     private val IS_USER_LOGGED_IN = "IS_USER_LOGGED_IN"
