@@ -63,6 +63,7 @@ class RoomsActivity : BaseActivity(),RoomsMvp.View {
         intent.putExtra("roomName",room.name)
         intent.putExtra("creatorId",room.name)
         startActivity(intent)
+        finish()
     }
 
     override fun getPresenter(): RoomsMvp.Presenter<RoomsMvp.View> {

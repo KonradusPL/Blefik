@@ -34,12 +34,14 @@ class CardsAdapter(val cards: ArrayList<Card>, val context: Context): RecyclerVi
                     CardColor.Diamond -> CommunityMaterial.Icon.cmd_cards_diamond
                     CardColor.Spade -> CommunityMaterial.Icon.cmd_cards_spade
                     CardColor.Heart -> CommunityMaterial.Icon.cmd_cards_heart
+                    CardColor.None -> CommunityMaterial.Icon.cmd_cards_heart
                 }
                 val color = when(card.color){
                     CardColor.Club -> Color.BLACK
                     CardColor.Diamond -> Color.RED
                     CardColor.Spade -> Color.BLACK
                     CardColor.Heart -> Color.RED
+                    CardColor.None -> Color.BLACK
                 }
                 textNumber1.text = card.fromNumberToString()
                 textNumber2.text = card.fromNumberToString()

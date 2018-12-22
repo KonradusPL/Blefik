@@ -49,7 +49,7 @@ object CardsGenerator {
                 player.cardsCount++
             player.currentCards.clear()
             for(i in 1..player.cardsCount){
-                val card = temporaryArray[random.nextInt(24)]
+                val card = temporaryArray[random.nextInt(23)]
                 temporaryArray.remove(card)
                 player.currentCards.add(card)
             }

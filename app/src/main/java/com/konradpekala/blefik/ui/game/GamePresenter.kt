@@ -31,7 +31,9 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
     }
 
     private fun newRound(){
-        cd.add(repo.makeNewRound(mRoom!!)
+        val room = Room(mRoom!!)
+        Log.d("whereIsArray",room.players.toString())
+        cd.add(repo.makeNewRound(room)
             .subscribe({
                 view.showMessage("Pokój updated!")
             },{t: Throwable? ->

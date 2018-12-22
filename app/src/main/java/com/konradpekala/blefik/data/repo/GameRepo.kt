@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.data.repo
 
+import android.util.Log
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.model.UpdateType
@@ -21,6 +22,7 @@ class GameRepo(val db: Database,val cardsGenerator: CardsGenerator, val prefs: S
     fun makeNewRound(room: Room): Completable{
         room.updateType = UpdateType.NewGame
         cardsGenerator.cardsForNewRound(room.players,true)
+        Log.d("whereIsArray",room.players.toString())
 
         return db.updateRoom(room)
             .subscribeOn(SchedulerProvider.io())

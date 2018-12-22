@@ -12,10 +12,10 @@ class Room(
     @get:Exclude var status: Status = Status.Added,
     @get:Exclude var locallyCreated: Boolean = false,
     var started: Boolean = false,
-    val players: ArrayList<Player> = ArrayList()
+    var players: ArrayList<Player> = ArrayList()
                 ){
 
-    fun getMap(): HashMap<String,Any>{
+    fun toMap(): HashMap<String,Any>{
         val hashMap = HashMap<String,Any>()
         hashMap["name"] = name
         hashMap["creatorId"] = creatorId
@@ -29,6 +29,16 @@ class Room(
         return "name: $name, status: $status, isLoading: $isLoading"
     }
 
+    constructor(room: Room) : this() {
+        name = room.name
+        creatorId = room.creatorId
+        updateType = room.updateType
+        currentPlayer = room.currentPlayer
+        started = room.started
+        players = ArrayList(room.players)
+        roomId = room.roomId
+    }
+
     fun hasPlayer(newPlayer: Player): Boolean{
         var value = false
         for (player in players){
@@ -40,6 +50,15 @@ class Room(
 
     fun isEqualTo(newRoom: Room): Boolean{
         return name==newRoom.name && creatorId == newRoom.creatorId
+    }
+
+    fun playerMap(): ArrayList<HashMap<String,Any>>{
+        val arrayList = ArrayList<HashMap<String,Any>>()
+        for(player in players){
+            val map = player.map()
+            arrayList.add(map)
+        }
+        return arrayList
     }
 
 }

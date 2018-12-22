@@ -104,12 +104,13 @@ class FirebaseDatabase: Database {
 
     override fun observeRoom(id: String): Observable<Room> {
         return Observable.create { emitter: ObservableEmitter<Room> ->
-                database.collection("rooms").document(id).addSnapshotListener{document, exception ->
-                    if (document == null){
+                database.collection("rooms").document(id).addSnapshotListener{dc, exception ->
+                    if (dc == null){
                         emitter.onError(Throwable())
                         return@addSnapshotListener
                     }
-                    val room = document.toObject(Room::class.java)
+                    val room = dc.toObject(Room::class.java)
+                    room?.roomId = id
                     if(room != null)
                         emitter.onNext(room)
                 }
@@ -119,9 +120,11 @@ class FirebaseDatabase: Database {
     override fun updateRoom(room: Room): Completable {
         return Completable.create{emitter ->
 
+            Log.d("updateRoom",room.roomId)
+
             database.collection("rooms")
                 .document(room.roomId)
-                .update(room.getMap())
+                .update("players",room.playerMap(),"updateType",room.updateType.name)
                 .addOnCompleteListener { task: Task<Void> ->
                     if(task.isSuccessful){
                         emitter.onComplete()
