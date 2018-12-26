@@ -1,9 +1,11 @@
 package com.konradpekala.blefik.ui.game.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Player
@@ -27,11 +29,14 @@ class PlayersAdapter(val players: ArrayList<Player>, val context: Context): Recy
             itemView.apply {
                 textFullName.text = player.nick
                 textPlayerCards.text = "${player.currentCards.size} kart"
+                setBackgroundColor(if(player.isCurrentPlayer) ContextCompat.getColor(context,R.color.colorCurrentPlayer)
+                else Color.WHITE)
+
             }
         }
     }
 
-    fun refreshCards(list: List<Player>) {
+    fun refresh(list: List<Player>) {
         players.clear()
         players.addAll(list)
         notifyDataSetChanged()

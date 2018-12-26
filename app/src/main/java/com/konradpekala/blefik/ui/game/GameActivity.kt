@@ -1,8 +1,12 @@
 package com.konradpekala.blefik.ui.game
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.animation.RotateAnimation
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.data.model.User
@@ -10,6 +14,8 @@ import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
 import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 import com.konradpekala.blefik.ui.room.RoomsMvp
+import com.mikepenz.fontawesome_typeface_library.FontAwesome
+import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.activity_game.*
 import org.jetbrains.anko.ctx
 
@@ -33,6 +39,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
         initBidList()
         initPlayerCardsList()
         initPlayersList()
+        initCardsShowingButton()
 
         val roomId = intent.getStringExtra("roomId")
         val creatorId = intent.getStringExtra("creatorId")
@@ -43,6 +50,29 @@ class GameActivity : BaseActivity(),GameMvp.View {
         //******
         //****
         //**
+    }
+
+    private fun initCardsShowingButton(){
+        fabShowPlayerCards.setImageDrawable(IconicsDrawable(this)
+            .icon(FontAwesome.Icon.faw_arrow_up)
+            .sizeDp(24)
+            .color(Color.WHITE))
+        val a = RotateAnimation(0f,23f)
+
+
+        //Prepare animations
+        val constraintSet1 = ConstraintSet()
+        constraintSet1.clone(constrLayoutGame)
+        val constraintSet2 = ConstraintSet()
+        constraintSet2.clone(this, R.layout.activity_game_cards_shown)
+
+        var changed = false
+        fabShowPlayerCards.setOnClickListener {
+            TransitionManager.beginDelayedTransition(constrLayoutGame)
+            val constraint = if (changed) constraintSet1 else constraintSet2
+            constraint.applyTo(constrLayoutGame)
+            changed = !changed
+        }
     }
 
     private fun initPlayersList(){

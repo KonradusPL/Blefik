@@ -1,6 +1,7 @@
 package com.konradpekala.blefik.data.model
 
 import com.google.firebase.firestore.Exclude
+import java.util.*
 
 class Room(
     var name: String = "",
@@ -59,6 +60,17 @@ class Room(
             arrayList.add(map)
         }
         return arrayList
+    }
+
+    fun sortPlayers(): Room{
+        Collections.sort(players,SortByNick())
+        return this
+    }
+
+    fun updateCurrentPlayer(): Room{
+        if(currentPlayer < players.size && currentPlayer >= 0)
+            players[currentPlayer].isCurrentPlayer = true
+        return this
     }
 
 }

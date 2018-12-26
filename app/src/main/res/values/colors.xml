@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#005005</color>
     <color name="colorPrimaryLight">#60ad5e</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorCurrentPlayer">#ffebee</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
 </resources>

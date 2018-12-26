@@ -11,9 +11,11 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
     RoomsMvp.Presenter<V>{
 
     private var mCurrentRoom: Room? = null
+    private var gameOpened = false
 
     override fun start() {
         super.start()
+        gameOpened = false
         cd.add(repo.observeRooms()
             .subscribe({room: Room? ->
                 if(room != null){
@@ -26,7 +28,8 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
                         if(room.creatorId == repo.phoneStuff.getAndroidId())
                             room.locallyCreated = true
 
-                        else if(room.started){
+                        else if(room.started && !gameOpened){
+                            gameOpened = true
                             view.openGameActivity(room)
                         }
                     }
@@ -38,6 +41,7 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
     }
 
     override fun stop() {
+        Log.d("stopRooms","true")
         super.stop()
         repo.database.clean()
     }
