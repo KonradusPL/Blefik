@@ -68,7 +68,11 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha01'
 
     //hehe
-    compile 'com.wunderlist:sliding-layer:1.2.5'
+    implementation 'com.wunderlist:sliding-layer:1.2.5'
+
+    //Expandable list
+    implementation 'com.thoughtbot:expandablerecyclerview:1.3'
+
 
 
 

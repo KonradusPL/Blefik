@@ -1,10 +1,8 @@
 package com.konradpekala.blefik.utils
 
-import com.konradpekala.blefik.data.model.Card
-import com.konradpekala.blefik.data.model.CardColor
-import com.konradpekala.blefik.data.model.CardNumber
-import com.konradpekala.blefik.data.model.Player
+import com.konradpekala.blefik.data.model.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 object CardsGenerator {
 
@@ -39,6 +37,20 @@ object CardsGenerator {
         Card(CardNumber.Nine,CardColor.Spade),
         Card(CardNumber.Nine,CardColor.Heart)
         )
+
+    fun generateBidTypesForCreator(): ArrayList<BidType>{
+        return arrayListOf(
+            BidType("Wysoka karta",BidPickingType.OneCard,1, arrayListOf(BidValue())),
+            BidType("Para",BidPickingType.OneCard,2, arrayListOf(BidValue())),
+            BidType("Dwie pary",BidPickingType.TwoCards,3, arrayListOf(BidValue())),
+            BidType("Trójka",BidPickingType.OneCard,4, arrayListOf(BidValue())),
+            BidType("Strit",BidPickingType.Set,5, arrayListOf(BidValue())),
+            BidType("Kolor",BidPickingType.Color,6, arrayListOf(BidValue())),
+            BidType("Full",BidPickingType.TwoCards,7, arrayListOf(BidValue())),
+            BidType("Kareta",BidPickingType.OneCard,8, arrayListOf(BidValue())),
+            BidType("Poker",BidPickingType.Color,9, arrayListOf(BidValue())),
+            BidType("Poker królewski",BidPickingType.Color,10, arrayListOf(BidValue())))
+    }
 
     fun cardsForNewRound(players: ArrayList<Player>, newRound: Boolean){
         val temporaryArray = ArrayList(cards)

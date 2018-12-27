@@ -13,7 +13,9 @@ import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
 import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
+import com.konradpekala.blefik.ui.game.adapters.createbid.BidsAdapter
 import com.konradpekala.blefik.ui.room.RoomsMvp
+import com.konradpekala.blefik.utils.CardsGenerator
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.activity_game.*
@@ -35,11 +37,12 @@ class GameActivity : BaseActivity(),GameMvp.View {
 
         toolbarGame.title = intent.getStringExtra("roomName") ?: ""
 
-
         initBidList()
         initPlayerCardsList()
         initPlayersList()
         initCardsShowingButton()
+        initBidsCreatorList()
+        initOtherUI()
 
         val roomId = intent.getStringExtra("roomId")
         val creatorId = intent.getStringExtra("creatorId")
@@ -50,6 +53,13 @@ class GameActivity : BaseActivity(),GameMvp.View {
         //******
         //****
         //**
+    }
+
+    private fun initOtherUI(){
+        iconBack.setImageDrawable(IconicsDrawable(this)
+            .icon(FontAwesome.Icon.faw_arrow_down)
+            .sizeDp(18)
+            .color(Color.BLACK))
     }
 
     private fun initCardsShowingButton(){
@@ -74,6 +84,15 @@ class GameActivity : BaseActivity(),GameMvp.View {
             changed = !changed
         }
     }
+
+    private fun initBidsCreatorList(){
+        val bidTypes = CardsGenerator.generateBidTypesForCreator()
+        val mBidsAdapter = BidsAdapter(bidTypes,this)
+
+        listBids.adapter = mBidsAdapter
+        listBids.layoutManager = LinearLayoutManager(this)
+    }
+
 
     private fun initPlayersList(){
         mPlayersAdapter = PlayersAdapter(ArrayList(),this)
