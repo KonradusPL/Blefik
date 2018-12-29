@@ -32,9 +32,19 @@ class GameRepo(val db: Database,val cardsGenerator: CardsGenerator, val prefs: S
         room.updateType = UpdateType.NewGame
         cardsGenerator.cardsForNewRound(room.players,true)
 
+        room.currentPlayer = 0
+
+        return db.updatePlayers(room)
+            .subscribeOn(SchedulerProvider.io())
+            .observeOn(SchedulerProvider.ui())
+    }
+    fun makeNextPlayer(): Completable{
+        val room = Room(mRoom)
+        room.updateType = UpdateType.NextPlayer
         if(room.currentPlayer < room.players.size-1)
             room.currentPlayer++
-
+        else
+            room.currentPlayer = 0
         return db.updatePlayers(room)
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
@@ -61,7 +71,7 @@ class GameRepo(val db: Database,val cardsGenerator: CardsGenerator, val prefs: S
     fun isBidProperlyCreated(bid: Bid): Boolean{
         if(bid.pickingType == BidPickingType.OneCard && bid.firstCardNumber != CardNumber.None)
             return true
-        else if (bid.pickingType == BidPickingType.OneCard &&
+        else if (bid.pickingType == BidPickingType.TwoCards &&
             bid.firstCardNumber != CardNumber.None &&
             bid.secondCardNumber != CardNumber.None)
             return true

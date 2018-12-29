@@ -32,6 +32,9 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                 if(room.updateType == UpdateType.NewBid){
                     view.getBidAdapter().refreshCards(repo.generateBidCards())
                 }
+                if(room.updateType == UpdateType.NextPlayer){
+                    view.getPlayersAdapter().refresh(room.players)
+                }
             },{t: Throwable? ->
                 view.showMessage(t.toString())
             }))
@@ -64,10 +67,10 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
         }
 
         cd.add(repo.updateBid(bid)
+            .concatWith(repo.makeNextPlayer())
             .subscribe({
-                newRound()
+                view.showMessage("Nowy zawodnik!")
             },{t: Throwable? ->
-                view.showMessage(t.toString())
                 Log.d("onCreateBidClick",t.toString())
             }))
     }
