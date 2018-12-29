@@ -1,6 +1,7 @@
 package com.konradpekala.blefik.ui.game
 
 import android.util.Log
+import com.konradpekala.blefik.data.model.Bid
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.model.UpdateType
 import com.konradpekala.blefik.data.repo.GameRepo
@@ -8,8 +9,6 @@ import com.konradpekala.blefik.ui.base.BasePresenter
 
 class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<V>(view),
     GameMvp.Presenter<V> {
-
-    private var mRoom: Room? = null
 
     override fun startGame(roomId: String, creatorId: String) {
         Log.d("startGame","true")
@@ -20,7 +19,6 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                 Log.d("onNext vs doOnNext","onNext")
                 view.showMessage("Dostałem rooma!")
 
-                mRoom = room
                 if(firstTime){
                     firstTime = false
                     view.getPlayersAdapter().refresh(room.players)
@@ -31,20 +29,46 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                     view.getPlayersAdapter().refresh(room.players)
                     view.getPlayerCardsAdapter().refreshCards(repo.getPlayer()!!.currentCards)
                 }
+                if(room.updateType == UpdateType.NewBid){
+                    view.getBidAdapter().refreshCards(repo.generateBidCards())
+                }
             },{t: Throwable? ->
                 view.showMessage(t.toString())
             }))
     }
 
     private fun newRound(){
-        val room = Room(mRoom!!)
-        Log.d("whereIsArray",room.players.toString())
-        cd.add(repo.makeNewRound(room)
+        cd.add(repo.makeNewRound()
             .subscribe({
                 view.showMessage("Pokój updated!")
             },{t: Throwable? ->
                 Log.d("newRound",t.toString())
                 view.showMessage(t.toString())
+            }))
+    }
+
+    override fun onRaiseBidClick() {
+        view.openBidCreator()
+    }
+
+    override fun onCreateBidClick(bid: Bid) {
+        view.closeBidCreator()
+
+        if(!repo.isBidProperlyCreated(bid)){
+            view.showMessage("Wybierz poprawnie stawke!")
+            return
+        }
+        if(!repo.isNewBidHigher(bid)){
+            view.showMessage("Wybierz wyższą stawke niż poprzednia!")
+            return
+        }
+
+        cd.add(repo.updateBid(bid)
+            .subscribe({
+                newRound()
+            },{t: Throwable? ->
+                view.showMessage(t.toString())
+                Log.d("onCreateBidClick",t.toString())
             }))
     }
 

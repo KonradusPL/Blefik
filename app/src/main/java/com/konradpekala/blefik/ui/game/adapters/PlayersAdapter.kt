@@ -8,10 +8,15 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
+import com.konradpekala.blefik.data.model.CardColor
 import com.konradpekala.blefik.data.model.Player
+import com.konradpekala.blefik.ui.base.MvpView
+import com.konradpekala.blefik.ui.game.GameMvp
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.item_user.view.*
 
-class PlayersAdapter(val players: ArrayList<Player>, val context: Context): RecyclerView.Adapter<PlayersAdapter.UserVH>() {
+class PlayersAdapter(val players: ArrayList<Player>, val mvpView: GameMvp.View): RecyclerView.Adapter<PlayersAdapter.UserVH>() {
     override fun getItemCount() = players.size
 
     override fun onBindViewHolder(holder: UserVH, position: Int) {
@@ -19,18 +24,37 @@ class PlayersAdapter(val players: ArrayList<Player>, val context: Context): Recy
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserVH {
-        val view =  LayoutInflater.from(context)
+        val view =  LayoutInflater.from(mvpView.getCtx())
             .inflate(R.layout.item_user,parent,false)
         return UserVH(view)
     }
 
-    class UserVH(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class UserVH(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(player: Player){
+
             itemView.apply {
                 textFullName.text = player.nick
-                textPlayerCards.text = "${player.currentCards.size} kart"
+                textPlayerCards.text = "${player.currentCards.size}"
+
+                val iconCardDrawable = IconicsDrawable(context)
+                    .icon(CommunityMaterial.Icon.cmd_cards_playing_outline)
+                    .color(Color.BLACK)
+                    .sizeDp(14)
+                textPlayerCards.setCompoundDrawables(null,null,iconCardDrawable,null)
+
                 setBackgroundColor(if(player.isCurrentPlayer) ContextCompat.getColor(context,R.color.colorCurrentPlayer)
                 else Color.WHITE)
+                if(player.phoneOwner && player.isCurrentPlayer){
+                    buttonCheck.visibility = View.VISIBLE
+                    buttonRaiseBid.visibility = View.VISIBLE
+                }else{
+                    buttonCheck.visibility = View.GONE
+                    buttonRaiseBid.visibility = View.GONE
+                }
+
+                buttonRaiseBid.setOnClickListener {
+                    mvpView.getPresenter().onRaiseBidClick()
+                }
 
             }
         }

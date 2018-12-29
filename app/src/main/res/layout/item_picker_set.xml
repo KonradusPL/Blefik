@@ -5,12 +5,21 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="wrap_content">
 
-    <TextView
-            android:text="Set"
-            android:layout_width="wrap_content"
+    <EditText
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/textView5" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:inputType="textPersonName"
+            android:ems="10"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/fieldHighestCard"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            app:layout_constraintVertical_bias="0.0" android:textSize="14sp" android:hint="Najwyższa karta(A lub K)"
+            android:layout_marginTop="4dp" android:layout_marginBottom="4dp" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonBidSetCreate"/>
+    <Button
+            android:text="Stwórz"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" app:layout_constraintTop_toTopOf="@+id/fieldHighestCard"
+            app:layout_constraintBottom_toBottomOf="@+id/fieldHighestCard" android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/buttonBidSetCreate" android:textSize="12sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

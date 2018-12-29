@@ -7,7 +7,8 @@ data class Player(var id: String = "",
                   var nick: String = "",
                   var currentCards: ArrayList<Card> = ArrayList(),
                   var cardsCount: Int = 0,
-                  @get:Exclude var isCurrentPlayer: Boolean = false){
+                  @get:Exclude var isCurrentPlayer: Boolean = false,
+                  @get:Exclude var phoneOwner: Boolean = false){
     fun map(): HashMap<String,Any>{
         val map = HashMap<String,Any>()
         map["id"] = id

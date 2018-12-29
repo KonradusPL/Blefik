@@ -8,6 +8,7 @@ class Room(
     var creatorId: String = "",
     var updateType: UpdateType = UpdateType.None,
     var currentPlayer: Int = 0,
+    var currentBid: Bid? = null,
     @get:Exclude var isLoading: Boolean = false,
     @get:Exclude var roomId: String = "",
     @get:Exclude var status: Status = Status.Added,
@@ -70,6 +71,14 @@ class Room(
     fun updateCurrentPlayer(): Room{
         if(currentPlayer < players.size && currentPlayer >= 0)
             players[currentPlayer].isCurrentPlayer = true
+        return this
+    }
+
+    fun updatePhoneOwner(phoneId: String): Room{
+        for(player in players){
+            if (player.id == phoneId)
+                player.phoneOwner = true
+        }
         return this
     }
 

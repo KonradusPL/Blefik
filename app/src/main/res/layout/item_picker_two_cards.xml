@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="wrap_content">
 
-    <TextView
-            android:text="Dwie karty"
+    <EditText
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/fieldFirstOfTwo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="1.0" android:textSize="14sp"
+            android:layout_marginTop="4dp" android:layout_marginBottom="4dp" android:hint="Pierwsza karta"
+            app:layout_constraintEnd_toStartOf="@+id/editText2" app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginStart="8dp" android:layout_width="0dp"/>
+    <Button
+            android:text="Stwórz"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp" android:id="@+id/textView4" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_height="40dp" app:layout_constraintTop_toTopOf="@+id/fieldFirstOfTwo"
+            app:layout_constraintBottom_toBottomOf="@+id/fieldFirstOfTwo" android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/buttonBidTwoCreate" android:textSize="12sp"/>
+    <EditText
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/fieldSecondOfTwo"
+            app:layout_constraintStart_toEndOf="@+id/fieldFirstOfTwo" android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/buttonBidTwoCreate"
+            android:hint="Druga karta" android:textSize="14sp" android:layout_width="0dp"
+            app:layout_constraintTop_toTopOf="@+id/fieldFirstOfTwo"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

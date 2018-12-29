@@ -67,4 +67,77 @@ object CardsGenerator {
             }
         }
     }
+
+    fun generateCardsForBid(bid: Bid?): ArrayList<Card>{
+        val bidCards = ArrayList<Card>()
+        if (bid == null)
+            return bidCards
+
+        val bidName = bid.name
+
+        when(bidName){
+            "Wysoka karta" ->{
+                bidCards.add(Card(bid.firstCardNumber))
+            }
+            "Para" ->{
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+            }
+            "Dwie pary" ->{
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.secondCardNumber))
+                bidCards.add(Card(bid.secondCardNumber))
+            }
+            "Trójka" ->{
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+            }
+            "Strit" ->{
+                val ace = Card(CardNumber.Ace)
+                bidCards.add(ace)
+                bidCards.add(Card(CardNumber.King))
+                bidCards.add(Card(CardNumber.Queen))
+                bidCards.add(Card(CardNumber.Jack))
+                bidCards.add(Card(CardNumber.Ten))
+                if(bid.firstCardNumber == CardNumber.King){
+                    bidCards.remove(ace)
+                    bidCards.add(Card(CardNumber.Nine))
+                }
+            }
+            "Kolor" ->{
+                for(i in 1..5)
+                    bidCards.add(Card(CardNumber.None,bid.color))
+            }
+            "Full" ->{
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+            }
+            "Kareta" ->{
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.secondCardNumber))
+                bidCards.add(Card(bid.secondCardNumber))
+            }
+            "Poker" ->{
+                bidCards.add(Card(CardNumber.King))
+                bidCards.add(Card(CardNumber.Queen))
+                bidCards.add(Card(CardNumber.Jack))
+                bidCards.add(Card(CardNumber.Ten))
+                bidCards.add(Card(CardNumber.Nine))
+            }
+            "Poker królewski" ->{
+                bidCards.add(Card(CardNumber.Ace,bid.color))
+                bidCards.add(Card(CardNumber.King,bid.color))
+                bidCards.add(Card(CardNumber.Queen,bid.color))
+                bidCards.add(Card(CardNumber.Jack,bid.color))
+                bidCards.add(Card(CardNumber.Ten,bid.color))
+            }
+        }
+        return bidCards
+    }
 }

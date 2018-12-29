@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.data.database
 
+import com.konradpekala.blefik.data.model.Bid
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.model.User
@@ -17,7 +18,8 @@ interface Database {
     fun changeRoomToStarted(room: Room): Completable
 
     fun observeRoom(id: String): Observable<Room>
-    fun updateRoom(room: Room): Completable
+    fun updatePlayers(room: Room): Completable
+    fun updateBid(room: Room): Completable
 
     fun clean()
 }

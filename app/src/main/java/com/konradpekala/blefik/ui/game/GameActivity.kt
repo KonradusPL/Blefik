@@ -60,6 +60,9 @@ class GameActivity : BaseActivity(),GameMvp.View {
             .icon(FontAwesome.Icon.faw_arrow_down)
             .sizeDp(18)
             .color(Color.BLACK))
+        iconBack.setOnClickListener {
+            openBidCreator()
+        }
     }
 
     private fun initCardsShowingButton(){
@@ -112,8 +115,8 @@ class GameActivity : BaseActivity(),GameMvp.View {
         listCurrentCards.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false)
     }
 
-    override fun getPresenter(): RoomsMvp.Presenter<RoomsMvp.View> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getPresenter(): GameMvp.Presenter<GameMvp.View> {
+        return mPresenter
     }
 
     override fun getBidAdapter(): CardsAdapter {
@@ -128,8 +131,22 @@ class GameActivity : BaseActivity(),GameMvp.View {
         return mPlayerCardsAdapter
     }
 
+    override fun openBidCreator() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(this, R.layout.activity_game_bid_creator)
 
-    override fun showUsers(users: List<User>) {
+        TransitionManager.beginDelayedTransition(constrLayoutGame)
+
+        constraintSet.applyTo(constrLayoutGame)
+    }
+
+    override fun closeBidCreator() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(this, R.layout.activity_game)
+
+        TransitionManager.beginDelayedTransition(constrLayoutGame)
+
+        constraintSet.applyTo(constrLayoutGame)
     }
 
 }

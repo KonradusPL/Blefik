@@ -3,10 +3,7 @@ package com.konradpekala.blefik.data.database
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import com.konradpekala.blefik.data.model.Player
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.model.Status
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.*
 import io.reactivex.*
 
 class FirebaseDatabase: Database {
@@ -117,14 +114,16 @@ class FirebaseDatabase: Database {
         }
     }
 
-    override fun updateRoom(room: Room): Completable {
+    override fun updatePlayers(room: Room): Completable {
         return Completable.create{emitter ->
 
-            Log.d("updateRoom",room.roomId)
+            Log.d("updatePlayers",room.roomId)
 
             database.collection("rooms")
                 .document(room.roomId)
-                .update("players",room.playerMap(),"updateType",room.updateType.name)
+                .update("players",room.playerMap(),
+                    "updateType",room.updateType.name,
+                    "currentPlayer",room.currentPlayer)
                 .addOnCompleteListener { task: Task<Void> ->
                     if(task.isSuccessful){
                         emitter.onComplete()
@@ -132,6 +131,23 @@ class FirebaseDatabase: Database {
                         emitter.onError(task.exception!!.fillInStackTrace())
                     }
                 }
+        }
+    }
+
+    override fun updateBid(room: Room): Completable {
+        return Completable.create { emitter ->
+
+            database.collection("rooms")
+                .document(room.roomId)
+                .update("currentBid",room.currentBid!!.map(),"updateType",room.updateType.name)
+                .addOnCompleteListener { task: Task<Void> ->
+                    if(task.isSuccessful){
+                        emitter.onComplete()
+                    }else if(task.exception != null){
+                        emitter.onError(task.exception!!.fillInStackTrace())
+                    }
+                }
+
         }
     }
 
