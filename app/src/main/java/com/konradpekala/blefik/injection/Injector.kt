@@ -9,7 +9,7 @@ import com.konradpekala.blefik.ui.game.GameMvp
 import com.konradpekala.blefik.ui.game.GamePresenter
 import com.konradpekala.blefik.ui.room.RoomsMvp
 import com.konradpekala.blefik.ui.room.RoomsPresenter
-import com.konradpekala.blefik.utils.CardsGenerator
+import com.konradpekala.blefik.utils.CardsStuff
 import com.konradpekala.blefik.utils.PhoneStuff
 
 object Injector {
@@ -26,7 +26,7 @@ object Injector {
 
     fun getGamePresenter(view: GameMvp.View,ctx: Context): GamePresenter<GameMvp.View>{
         if(mGamePresenter == null){
-            mGamePresenter = GamePresenter(view, GameRepo(FirebaseDatabase(),CardsGenerator,SharedPrefs(ctx),PhoneStuff(ctx)))
+            mGamePresenter = GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,SharedPrefs(ctx),PhoneStuff(ctx)))
         }else
             mGamePresenter!!.view = view
         return mGamePresenter!!

@@ -9,13 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.ui.base.BaseActivity
-import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
 import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 import com.konradpekala.blefik.ui.game.adapters.createbid.BidsAdapter
-import com.konradpekala.blefik.ui.room.RoomsMvp
-import com.konradpekala.blefik.utils.CardsGenerator
+import com.konradpekala.blefik.utils.CardsStuff
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.activity_game.*
@@ -89,7 +87,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
     }
 
     private fun initBidsCreatorList(){
-        val bidTypes = CardsGenerator.generateBidTypesForCreator()
+        val bidTypes = CardsStuff.generateBidTypesForCreator()
         val mBidsAdapter = BidsAdapter(bidTypes,this)
 
         listBids.adapter = mBidsAdapter

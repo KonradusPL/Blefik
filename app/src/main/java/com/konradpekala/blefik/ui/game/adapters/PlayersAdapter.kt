@@ -1,6 +1,5 @@
 package com.konradpekala.blefik.ui.game.adapters
 
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.model.CardColor
 import com.konradpekala.blefik.data.model.Player
-import com.konradpekala.blefik.ui.base.MvpView
 import com.konradpekala.blefik.ui.game.GameMvp
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -54,6 +51,10 @@ class PlayersAdapter(val players: ArrayList<Player>, val mvpView: GameMvp.View):
 
                 buttonRaiseBid.setOnClickListener {
                     mvpView.getPresenter().onRaiseBidClick()
+                }
+
+                buttonCheck.setOnClickListener {
+                    mvpView.getPresenter().onCheckBidClick()
                 }
 
             }

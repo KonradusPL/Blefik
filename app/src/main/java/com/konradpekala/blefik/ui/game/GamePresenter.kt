@@ -23,7 +23,7 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                     firstTime = false
                     view.getPlayersAdapter().refresh(room.players)
                     if(repo.playerIsCreator())
-                        newRound()
+                        newRound(true)
                 }
                 if(room.updateType == UpdateType.NewGame){
                     view.getPlayersAdapter().refresh(room.players)
@@ -40,8 +40,8 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
             }))
     }
 
-    private fun newRound(){
-        cd.add(repo.makeNewRound()
+    private fun newRound(firstRound: Boolean){
+        cd.add(repo.makeNewRound(firstRound)
             .subscribe({
                 view.showMessage("Pokój updated!")
             },{t: Throwable? ->
@@ -73,6 +73,22 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
             },{t: Throwable? ->
                 Log.d("onCreateBidClick",t.toString())
             }))
+    }
+
+    override fun onCheckBidClick() {
+        if (!repo.isBidCreated()){
+            view.showMessage("Brakuje stawki!")
+            return
+        }
+        if(repo.isBidInCards()){
+            view.showMessage("Wygrana runda!")
+            repo.addCardToPlayer(true)
+        }else{
+            view.showMessage("Przegrana runda!")
+            repo.addCardToPlayer(false)
+        }
+
+        newRound(false)
     }
 
 }

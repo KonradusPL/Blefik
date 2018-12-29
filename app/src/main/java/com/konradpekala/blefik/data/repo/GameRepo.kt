@@ -4,13 +4,13 @@ import android.util.Log
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.*
 import com.konradpekala.blefik.data.preferences.SharedPrefs
-import com.konradpekala.blefik.utils.CardsGenerator
+import com.konradpekala.blefik.utils.CardsStuff
 import com.konradpekala.blefik.utils.PhoneStuff
 import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-class GameRepo(val db: Database,val cardsGenerator: CardsGenerator, val prefs: SharedPrefs, val phoneStuff: PhoneStuff) {
+class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPrefs, val phoneStuff: PhoneStuff) {
 
     private lateinit var mRoom: Room
 
@@ -27,10 +27,11 @@ class GameRepo(val db: Database,val cardsGenerator: CardsGenerator, val prefs: S
             .observeOn(SchedulerProvider.ui())
     }
 
-    fun makeNewRound(): Completable{
+    fun makeNewRound(firstRound: Boolean): Completable{
         val room = Room(mRoom)
         room.updateType = UpdateType.NewGame
-        cardsGenerator.cardsForNewRound(room.players,true)
+        cardsStuff.cardsForNewRound(room.players,firstRound)
+        room.currentBid = null
 
         room.currentPlayer = 0
 
@@ -101,6 +102,30 @@ class GameRepo(val db: Database,val cardsGenerator: CardsGenerator, val prefs: S
     }
 
     fun generateBidCards(): ArrayList<Card>{
-        return cardsGenerator.generateCardsForBid(mRoom.currentBid)
+        return cardsStuff.generateCardsForBid(mRoom.currentBid)
+    }
+
+    fun isBidCreated() = mRoom.currentBid != null
+
+    fun isBidInCards(): Boolean{
+        val cardsList = ArrayList<Card>()
+        for(player in mRoom.players){
+            for(card in player.currentCards){
+                cardsList.add(card)
+            }
+        }
+        return cardsStuff.isBidInCards(cardsList,mRoom.currentBid!!)
+    }
+
+    fun addCardToPlayer(hasCheckerWon: Boolean){
+        val loserIndex: Int
+        if(hasCheckerWon){
+            loserIndex = if (mRoom.currentPlayer == 0) mRoom.players.size-1
+                            else mRoom.currentPlayer-1
+        }else{
+            loserIndex = mRoom.currentPlayer
+        }
+
+        mRoom.players[loserIndex].cardsCount++
     }
 }

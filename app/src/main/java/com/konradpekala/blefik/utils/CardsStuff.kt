@@ -4,9 +4,20 @@ import com.konradpekala.blefik.data.model.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-object CardsGenerator {
+object CardsStuff {
 
-    val cards = arrayListOf(
+    val wysokaKarta = "Wysoka karta"
+    val para = "Para"
+    val dwiePary = "Dwie pary"
+    val trojka = "Trójka"
+    val strit = "Strit"
+    val kolor = "Kolor"
+    val full = "Full"
+    val kareta = "Kareta"
+    val poker = "Poker"
+    val pokerKrolewski = "Poker królewski"
+
+    fun allCards() = arrayListOf(
         Card(CardNumber.Ace,CardColor.Club),
         Card(CardNumber.Ace,CardColor.Diamond),
         Card(CardNumber.Ace,CardColor.Spade),
@@ -40,20 +51,20 @@ object CardsGenerator {
 
     fun generateBidTypesForCreator(): ArrayList<BidType>{
         return arrayListOf(
-            BidType("Wysoka karta",BidPickingType.OneCard,1, arrayListOf(BidValue())),
-            BidType("Para",BidPickingType.OneCard,2, arrayListOf(BidValue())),
-            BidType("Dwie pary",BidPickingType.TwoCards,3, arrayListOf(BidValue())),
-            BidType("Trójka",BidPickingType.OneCard,4, arrayListOf(BidValue())),
-            BidType("Strit",BidPickingType.Set,5, arrayListOf(BidValue())),
-            BidType("Kolor",BidPickingType.Color,6, arrayListOf(BidValue())),
-            BidType("Full",BidPickingType.TwoCards,7, arrayListOf(BidValue())),
-            BidType("Kareta",BidPickingType.OneCard,8, arrayListOf(BidValue())),
-            BidType("Poker",BidPickingType.Color,9, arrayListOf(BidValue())),
-            BidType("Poker królewski",BidPickingType.Color,10, arrayListOf(BidValue())))
+            BidType(wysokaKarta,BidPickingType.OneCard,1, arrayListOf(BidValue())),
+            BidType(para,BidPickingType.OneCard,2, arrayListOf(BidValue())),
+            BidType(dwiePary,BidPickingType.TwoCards,3, arrayListOf(BidValue())),
+            BidType(trojka,BidPickingType.OneCard,4, arrayListOf(BidValue())),
+            BidType(strit,BidPickingType.Set,5, arrayListOf(BidValue())),
+            BidType(kolor,BidPickingType.Color,6, arrayListOf(BidValue())),
+            BidType(full,BidPickingType.TwoCards,7, arrayListOf(BidValue())),
+            BidType(kareta,BidPickingType.OneCard,8, arrayListOf(BidValue())),
+            BidType(poker,BidPickingType.Color,9, arrayListOf(BidValue())),
+            BidType(pokerKrolewski,BidPickingType.Color,10, arrayListOf(BidValue())))
     }
 
     fun cardsForNewRound(players: ArrayList<Player>, newRound: Boolean){
-        val temporaryArray = ArrayList(cards)
+        val temporaryArray = ArrayList(allCards())
         val random = Random()
 
         for(player in players){
@@ -76,25 +87,25 @@ object CardsGenerator {
         val bidName = bid.name
 
         when(bidName){
-            "Wysoka karta" ->{
+            wysokaKarta ->{
                 bidCards.add(Card(bid.firstCardNumber))
             }
-            "Para" ->{
+            para ->{
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
             }
-            "Dwie pary" ->{
+            dwiePary ->{
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.secondCardNumber))
                 bidCards.add(Card(bid.secondCardNumber))
             }
-            "Trójka" ->{
+            trojka ->{
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
             }
-            "Strit" ->{
+            strit ->{
                 val ace = Card(CardNumber.Ace)
                 bidCards.add(ace)
                 bidCards.add(Card(CardNumber.King))
@@ -106,31 +117,31 @@ object CardsGenerator {
                     bidCards.add(Card(CardNumber.Nine))
                 }
             }
-            "Kolor" ->{
+            kolor ->{
                 for(i in 1..5)
                     bidCards.add(Card(CardNumber.None,bid.color))
             }
-            "Full" ->{
+            full ->{
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
             }
-            "Kareta" ->{
+            kareta ->{
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.secondCardNumber))
                 bidCards.add(Card(bid.secondCardNumber))
             }
-            "Poker" ->{
+            poker ->{
                 bidCards.add(Card(CardNumber.King))
                 bidCards.add(Card(CardNumber.Queen))
                 bidCards.add(Card(CardNumber.Jack))
                 bidCards.add(Card(CardNumber.Ten))
                 bidCards.add(Card(CardNumber.Nine))
             }
-            "Poker królewski" ->{
+            pokerKrolewski ->{
                 bidCards.add(Card(CardNumber.Ace,bid.color))
                 bidCards.add(Card(CardNumber.King,bid.color))
                 bidCards.add(Card(CardNumber.Queen,bid.color))
@@ -139,5 +150,87 @@ object CardsGenerator {
             }
         }
         return bidCards
+    }
+
+    fun isBidInCards(cards: ArrayList<Card>,bid: Bid): Boolean{
+        val bidCards = generateCardsForBid(bid)
+        if(bidCards.size == 0){
+            throw Throwable("bład przy tworzeniu kart ze stawki, bidCards.size == 0")
+        }
+
+        when(bid.name){
+            wysokaKarta ->findOneTypeCard(cards,bidCards,1)
+            para ->findOneTypeCard(cards,bidCards,2)
+            dwiePary ->{
+                var f = 0
+                var s= 0
+                for(card in cards){
+                    if(card.number == bidCards[0].number)
+                        f++
+                    if(card.number == bidCards[3].number)
+                        s++
+                }
+                if(f>=2 && s >= 2)
+                    return true
+            }
+            trojka ->findOneTypeCard(cards,bidCards,3)
+            strit ->{
+                for (card in cards){
+                    for(bidCard in bidCards){
+                        if(bidCard.number == card.number){
+                            bidCards.remove(bidCard)
+                        }
+                    }
+                }
+                if(bidCards.size == 0)
+                    return true
+            }
+            kolor ->{
+                var c = 0
+                for(card in cards){
+                    if(card.color == bid.color)
+                        c++
+                }
+                if(c >= 5)
+                    return true
+            }
+            full ->{
+                var f = 0
+                var s= 0
+                for(card in cards){
+                    if(card.number == bidCards[0].number)
+                        f++
+                    if(card.number == bidCards[3].number)
+                        s++
+                }
+                if(f>=3 && s >= 2)
+                    return true
+            }
+            kareta -> findOneTypeCard(cards,bidCards,4)
+            poker -> return findPoker(cards, bidCards)
+            pokerKrolewski -> return findPoker(cards,bidCards)
+        }
+        return false
+    }
+
+    private fun findPoker(cards: ArrayList<Card>, bidCards: ArrayList<Card>): Boolean{
+        for(card in cards){
+            var cardFound = false
+            for(bidCard in bidCards){
+                if(bidCard.color == card.color && bidCard.number == card.number)
+                    cardFound = true
+            }
+            if (!cardFound)
+                return false
+        }
+        return true
+    }
+    private fun findOneTypeCard(cards: ArrayList<Card>, bidCards: ArrayList<Card>, n: Int): Boolean{
+        var f = 0
+        for(card in cards) {
+            if (card.number == bidCards[0].number)
+                f++
+        }
+        return f>=n
     }
 }

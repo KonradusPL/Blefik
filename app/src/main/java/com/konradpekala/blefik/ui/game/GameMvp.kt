@@ -23,5 +23,6 @@ interface GameMvp {
         fun startGame(roomId: String, creatorId: String)
         fun onCreateBidClick(bid: Bid)
         fun onRaiseBidClick()
+        fun onCheckBidClick()
     }
 }
