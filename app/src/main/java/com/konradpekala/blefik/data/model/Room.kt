@@ -14,8 +14,7 @@ class Room(
     @get:Exclude var status: Status = Status.Added,
     @get:Exclude var locallyCreated: Boolean = false,
     var started: Boolean = false,
-    var players: ArrayList<Player> = ArrayList()
-                ){
+    var players: ArrayList<Player> = ArrayList()){
 
     fun toMap(): HashMap<String,Any>{
         val hashMap = HashMap<String,Any>()
@@ -36,6 +35,7 @@ class Room(
         creatorId = room.creatorId
         updateType = room.updateType
         currentPlayer = room.currentPlayer
+        currentBid = room.currentBid
         started = room.started
         players = ArrayList(room.players)
         roomId = room.roomId
@@ -84,4 +84,4 @@ class Room(
 
 }
 enum class Status{Added,Changed,Removed}
-enum class UpdateType{NewGame,NewBid,NextPlayer,None}
+enum class UpdateType{NewGame,NewBid,NextPlayer,PlayerBeaten,None}

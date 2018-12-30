@@ -114,23 +114,40 @@ class FirebaseDatabase: Database {
         }
     }
 
-    override fun updatePlayers(room: Room): Completable {
+    override fun updateRoom(room: Room): Completable {
         return Completable.create{emitter ->
 
-            Log.d("updatePlayers",room.roomId)
-
-            database.collection("rooms")
+            val document = database.collection("rooms")
                 .document(room.roomId)
-                .update("players",room.playerMap(),
-                    "updateType",room.updateType.name,
+
+
+            val request = when(room.updateType){
+                UpdateType.NextPlayer -> document.update("updateType",room.updateType.name,
                     "currentPlayer",room.currentPlayer)
-                .addOnCompleteListener { task: Task<Void> ->
-                    if(task.isSuccessful){
-                        emitter.onComplete()
-                    }else if(task.exception != null){
-                        emitter.onError(task.exception!!.fillInStackTrace())
-                    }
+
+                UpdateType.PlayerBeaten -> document.update("updateType",room.updateType.name,
+                    "players",room.playerMap())
+
+                UpdateType.NewGame -> document.update("players",room.playerMap(),
+                    "updateType",room.updateType.name,
+                    "currentPlayer",room.currentPlayer,
+                    "currentBid", room.currentBid?.map())
+
+                UpdateType.NewBid -> document.update("players",room.playerMap(),
+                    "updateType",room.updateType.name,
+                    "currentPlayer",room.currentPlayer,
+                    "currentBid", room.currentBid?.map())
+
+                else -> document.update("updateType",room.updateType.name)
+            }
+
+            request.addOnCompleteListener { task: Task<Void> ->
+                if(task.isSuccessful){
+                    emitter.onComplete()
+                }else if(task.exception != null){
+                    emitter.onError(task.exception!!.fillInStackTrace())
                 }
+            }
         }
     }
 
@@ -139,7 +156,7 @@ class FirebaseDatabase: Database {
 
             database.collection("rooms")
                 .document(room.roomId)
-                .update("currentBid",room.currentBid!!.map(),"updateType",room.updateType.name)
+                .update("currentBid",room.currentBid?.map(),"updateType",room.updateType.name)
                 .addOnCompleteListener { task: Task<Void> ->
                     if(task.isSuccessful){
                         emitter.onComplete()

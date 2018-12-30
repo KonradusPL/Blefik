@@ -6,6 +6,8 @@ import kotlin.collections.ArrayList
 
 object CardsStuff {
 
+    var maxCardNumber = 4
+
     val wysokaKarta = "Wysoka karta"
     val para = "Para"
     val dwiePary = "Dwie pary"
@@ -63,16 +65,16 @@ object CardsStuff {
             BidType(pokerKrolewski,BidPickingType.Color,10, arrayListOf(BidValue())))
     }
 
-    fun cardsForNewRound(players: ArrayList<Player>, newRound: Boolean){
+    fun cardsForNewRound(players: ArrayList<Player>, firstRound: Boolean){
         val temporaryArray = ArrayList(allCards())
         val random = Random()
 
         for(player in players){
-            if (newRound)
+            if (firstRound)
                 player.cardsCount++
             player.currentCards.clear()
             for(i in 1..player.cardsCount){
-                val card = temporaryArray[random.nextInt(23)]
+                val card = temporaryArray[random.nextInt(temporaryArray.size-1)]
                 temporaryArray.remove(card)
                 player.currentCards.add(card)
             }
@@ -125,14 +127,15 @@ object CardsStuff {
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
-                bidCards.add(Card(bid.firstCardNumber))
+                bidCards.add(Card(bid.secondCardNumber))
+                bidCards.add(Card(bid.secondCardNumber))
+
             }
             kareta ->{
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
                 bidCards.add(Card(bid.firstCardNumber))
-                bidCards.add(Card(bid.secondCardNumber))
-                bidCards.add(Card(bid.secondCardNumber))
+                bidCards.add(Card(bid.firstCardNumber))
             }
             poker ->{
                 bidCards.add(Card(CardNumber.King))

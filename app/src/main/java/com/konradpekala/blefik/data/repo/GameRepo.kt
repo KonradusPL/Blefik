@@ -33,9 +33,16 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
         cardsStuff.cardsForNewRound(room.players,firstRound)
         room.currentBid = null
 
-        room.currentPlayer = 0
+        if(firstRound)
+            room.currentPlayer = 0
+        else{
+            if(room.currentPlayer < room.players.size-1)
+                room.currentPlayer++
+            else
+                room.currentPlayer = 0
+        }
 
-        return db.updatePlayers(room)
+        return db.updateRoom(room)
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
     }
@@ -46,7 +53,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
             room.currentPlayer++
         else
             room.currentPlayer = 0
-        return db.updatePlayers(room)
+        return db.updateRoom(room)
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
     }
@@ -127,5 +134,23 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
         }
 
         mRoom.players[loserIndex].cardsCount++
+    }
+
+    fun removePlayer(player: Player): Completable{
+        val room = Room(mRoom)
+        room.updateType = UpdateType.PlayerBeaten
+        room.players.remove(player)
+
+        return db.updateRoom(room)
+            .subscribeOn(SchedulerProvider.io())
+            .observeOn(SchedulerProvider.ui())
+    }
+
+    fun isSomeoneBeaten(): Player?{
+        for(player in mRoom.players){
+            if(player.cardsCount > cardsStuff.maxCardNumber)
+                return player
+        }
+        return null
     }
 }

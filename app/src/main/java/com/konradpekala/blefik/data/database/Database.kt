@@ -18,7 +18,7 @@ interface Database {
     fun changeRoomToStarted(room: Room): Completable
 
     fun observeRoom(id: String): Observable<Room>
-    fun updatePlayers(room: Room): Completable
+    fun updateRoom(room: Room): Completable
     fun updateBid(room: Room): Completable
 
     fun clean()
