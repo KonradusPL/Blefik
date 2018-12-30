@@ -5,39 +5,44 @@
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <com.mikepenz.iconics.view.IconicsImageView
+    <com.mikepenz.iconics.view.IconicsImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonHeart"
+            android:backgroundTint="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonClub"
     />
-    <com.mikepenz.iconics.view.IconicsImageView
+    <com.mikepenz.iconics.view.IconicsImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonClub"
+            android:backgroundTint="@color/white"
             app:layout_constraintTop_toTopOf="@id/buttonHeart"
             app:layout_constraintStart_toEndOf="@+id/buttonHeart"
             app:layout_constraintEnd_toStartOf="@+id/buttonDiamond" app:layout_constraintHorizontal_bias="0.5"/>
-    <com.mikepenz.iconics.view.IconicsImageView
+    <com.mikepenz.iconics.view.IconicsImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonDiamond"
+            android:backgroundTint="@color/white"
             app:layout_constraintTop_toTopOf="@id/buttonHeart"
             app:layout_constraintStart_toEndOf="@+id/buttonClub" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonSpade"/>
-    <com.mikepenz.iconics.view.IconicsImageView
+    <com.mikepenz.iconics.view.IconicsImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonSpade"
+            android:backgroundTint="@color/white"
             app:layout_constraintTop_toTopOf="@id/buttonHeart"
             app:layout_constraintStart_toEndOf="@+id/buttonDiamond" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintHorizontal_bias="0.5"/>
     <Button
             android:text="Stwórz"
             android:layout_width="wrap_content"
+
             android:layout_height="40dp" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:id="@+id/buttonBidColorCreate"
             app:layout_constraintTop_toBottomOf="@+id/buttonSpade" android:layout_marginBottom="4dp"

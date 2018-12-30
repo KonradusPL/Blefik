@@ -34,7 +34,7 @@ class CardsAdapter(val cards: ArrayList<Card>, val context: Context): RecyclerVi
                     CardColor.Diamond -> CommunityMaterial.Icon.cmd_cards_diamond
                     CardColor.Spade -> CommunityMaterial.Icon.cmd_cards_spade
                     CardColor.Heart -> CommunityMaterial.Icon.cmd_cards_heart
-                    CardColor.None -> CommunityMaterial.Icon.cmd_cards_heart
+                    CardColor.None -> CommunityMaterial.Icon.cmd_cards_playing_outline
                 }
                 val color = when(card.color){
                     CardColor.Club -> Color.BLACK

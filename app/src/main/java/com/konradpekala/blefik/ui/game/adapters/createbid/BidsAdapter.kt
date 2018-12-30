@@ -1,10 +1,12 @@
 package com.konradpekala.blefik.ui.game.adapters.createbid
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.rotationMatrix
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.*
@@ -145,25 +147,27 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
                 buttonDiamond.setImageDrawable(IconicsDrawable(ctx).sizeDp(20).icon(CommunityMaterial.Icon.cmd_cards_diamond)
                     .color(Color.RED))
 
+                val greenColor = ContextCompat.getColor(context,R.color.colorPrimaryLight)
+
                 buttonClub.setOnClickListener {
                     cardColor = CardColor.Club
                     cleanButtons()
-                    buttonClub.setBackgroundColor(Color.LTGRAY)
+                    backgroundTintList = ColorStateList.valueOf(greenColor)
                 }
                 buttonSpade.setOnClickListener {
                     cardColor = CardColor.Spade
                     cleanButtons()
-                    buttonSpade.setBackgroundColor(Color.LTGRAY)
+                    backgroundTintList = ColorStateList.valueOf(greenColor)
                 }
                 buttonHeart.setOnClickListener {
                     cardColor = CardColor.Heart
                     cleanButtons()
-                    buttonHeart.setBackgroundColor(Color.LTGRAY)
+                    backgroundTintList = ColorStateList.valueOf(greenColor)
                 }
                 buttonDiamond.setOnClickListener {
                     cardColor = CardColor.Diamond
                     cleanButtons()
-                    buttonDiamond.setBackgroundColor(Color.LTGRAY)
+                    backgroundTintList = ColorStateList.valueOf(greenColor)
                 }
 
                 buttonBidColorCreate.setOnClickListener {
@@ -175,10 +179,10 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
         }
          private fun cleanButtons(){
              root.apply {
-                 buttonClub.setBackgroundColor(Color.WHITE)
-                 buttonSpade.setBackgroundColor(Color.WHITE)
-                 buttonHeart.setBackgroundColor(Color.WHITE)
-                 buttonDiamond.setBackgroundColor(Color.WHITE)
+                 buttonClub.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+                 buttonSpade.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+                 buttonHeart.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+                 buttonDiamond.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
              }
          }
     }

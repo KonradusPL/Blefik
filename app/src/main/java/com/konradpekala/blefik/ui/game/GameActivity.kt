@@ -2,6 +2,7 @@ package com.konradpekala.blefik.ui.game
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.view.animation.RotateAnimation
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +27,8 @@ class GameActivity : BaseActivity(),GameMvp.View {
     private lateinit var mBidAdapter: CardsAdapter
     private lateinit var mPlayerCardsAdapter: CardsAdapter
     private lateinit var mPlayersAdapter: PlayersAdapter
+
+    private var playerCardsViewOpened = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,15 +62,18 @@ class GameActivity : BaseActivity(),GameMvp.View {
             .sizeDp(18)
             .color(Color.BLACK))
         iconBack.setOnClickListener {
-            openBidCreator()
+            closeBidCreator()
+            playerCardsViewOpened = false
         }
     }
 
     private fun initCardsShowingButton(){
-        fabShowPlayerCards.setImageDrawable(IconicsDrawable(this)
+        val iconicsDrawable = IconicsDrawable(this)
             .icon(FontAwesome.Icon.faw_arrow_up)
-            .sizeDp(24)
-            .color(Color.WHITE))
+            .sizeDp(20)
+            .color(Color.WHITE)
+
+        fabShowPlayerCards.setImageDrawable(iconicsDrawable)
         val a = RotateAnimation(0f,23f)
 
 
@@ -77,12 +83,16 @@ class GameActivity : BaseActivity(),GameMvp.View {
         val constraintSet2 = ConstraintSet()
         constraintSet2.clone(this, R.layout.activity_game_cards_shown)
 
-        var changed = false
         fabShowPlayerCards.setOnClickListener {
             TransitionManager.beginDelayedTransition(constrLayoutGame)
-            val constraint = if (changed) constraintSet1 else constraintSet2
+            val constraint = if (playerCardsViewOpened) constraintSet1 else constraintSet2
             constraint.applyTo(constrLayoutGame)
-            changed = !changed
+
+            val icon = if (playerCardsViewOpened) FontAwesome.Icon.faw_arrow_up
+            else FontAwesome.Icon.faw_arrow_down
+            fabShowPlayerCards.setImageDrawable(iconicsDrawable.icon(icon))
+
+            playerCardsViewOpened = !playerCardsViewOpened
         }
     }
 
