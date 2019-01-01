@@ -1,6 +1,5 @@
 package com.konradpekala.blefik.ui.room.adapters
 
-import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.model.Status
-import com.konradpekala.blefik.ui.base.MvpView
 import com.konradpekala.blefik.ui.room.RoomsMvp
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
@@ -36,10 +34,10 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
             itemView.apply {
                 textRoomName.text = room.name
                 textUsersCount.text = room.players.size.toString()
-                progressRoom.visibility = if(room.isLoading)
+                progressRoom.visibility = if(room.isChoosenByPlayer)
                     View.VISIBLE else View.GONE
 
-                buttonStartGame.visibility = if(room.isLoading && room.locallyCreated)
+                buttonStartGame.visibility = if(room.isChoosenByPlayer && room.locallyCreated)
                     View.VISIBLE else View.GONE
 
                 val drawable = IconicsDrawable(context)
@@ -61,15 +59,15 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
     }
 
     fun showRoomLoading(room: Room){
-        Log.d("showRoomLoading",room.isLoading.toString())
+        Log.d("showRoomLoading",room.isChoosenByPlayer.toString())
         for (item in rooms){
             val i = rooms.indexOf(item)
             if(item.roomId == room.roomId){
                 Log.d("showRoomLoading","why")
-                rooms[i].isLoading = true
+                rooms[i].isChoosenByPlayer = true
                 notifyItemChanged(i)
-            }else if (item.isLoading){
-                rooms[i].isLoading = false
+            }else if (item.isChoosenByPlayer){
+                rooms[i].isChoosenByPlayer = false
                 notifyItemChanged(i)
             }
         }

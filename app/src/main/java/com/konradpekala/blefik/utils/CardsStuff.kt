@@ -162,8 +162,8 @@ object CardsStuff {
         }
 
         when(bid.name){
-            wysokaKarta ->findOneTypeCard(cards,bidCards,1)
-            para ->findOneTypeCard(cards,bidCards,2)
+            wysokaKarta ->return findOneTypeCard(cards,bidCards,1)
+            para ->return findOneTypeCard(cards,bidCards,2)
             dwiePary ->{
                 var f = 0
                 var s= 0
@@ -176,7 +176,7 @@ object CardsStuff {
                 if(f>=2 && s >= 2)
                     return true
             }
-            trojka ->findOneTypeCard(cards,bidCards,3)
+            trojka ->return findOneTypeCard(cards,bidCards,3)
             strit ->{
                 for (card in cards){
                     for(bidCard in bidCards){
@@ -209,7 +209,7 @@ object CardsStuff {
                 if(f>=3 && s >= 2)
                     return true
             }
-            kareta -> findOneTypeCard(cards,bidCards,4)
+            kareta ->return findOneTypeCard(cards,bidCards,4)
             poker -> return findPoker(cards, bidCards)
             pokerKrolewski -> return findPoker(cards,bidCards)
         }

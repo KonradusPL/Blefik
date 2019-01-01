@@ -9,7 +9,7 @@ class Room(
     var updateType: UpdateType = UpdateType.None,
     var currentPlayer: Int = 0,
     var currentBid: Bid? = null,
-    @get:Exclude var isLoading: Boolean = false,
+    @get:Exclude var isChoosenByPlayer: Boolean = false,
     @get:Exclude var roomId: String = "",
     @get:Exclude var status: Status = Status.Added,
     @get:Exclude var locallyCreated: Boolean = false,
@@ -27,7 +27,7 @@ class Room(
         return hashMap
     }
     override fun toString(): String {
-        return "name: $name, status: $status, isLoading: $isLoading"
+        return "name: $name, status: $status, isChoosenByPlayer: $isChoosenByPlayer"
     }
 
     constructor(room: Room) : this() {
@@ -39,15 +39,6 @@ class Room(
         started = room.started
         players = ArrayList(room.players)
         roomId = room.roomId
-    }
-
-    fun hasPlayer(newPlayer: Player): Boolean{
-        var value = false
-        for (player in players){
-            if(player.id == newPlayer.id)
-                value = true
-        }
-        return value
     }
 
     fun isEqualTo(newRoom: Room): Boolean{
@@ -71,6 +62,17 @@ class Room(
     fun updateCurrentPlayer(): Room{
         if(currentPlayer < players.size && currentPlayer >= 0)
             players[currentPlayer].isCurrentPlayer = true
+        return this
+    }
+
+    fun updateLocallyCreated(creatorId: String): Room{
+        if(this.creatorId == creatorId)
+            locallyCreated = true
+        return this
+    }
+
+    fun updateIsChoosenByPlayer(value: Boolean): Room{
+        isChoosenByPlayer = value
         return this
     }
 
