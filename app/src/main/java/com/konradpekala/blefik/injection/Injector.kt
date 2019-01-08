@@ -17,18 +17,20 @@ object Injector {
     private var mGamePresenter: GamePresenter<GameMvp.View>? = null
 
     fun getRoomPresenter(view: RoomsMvp.View,ctx: Context): RoomsPresenter<RoomsMvp.View>{
-        if(mRoomPresenter == null){
+        /*if(mRoomPresenter == null){
             mRoomPresenter = RoomsPresenter(view, RoomsRepo(FirebaseDatabase(), SharedPrefs(ctx), PhoneStuff(ctx)))
         }else
             mRoomPresenter!!.view = view
-        return mRoomPresenter!!
+        return mRoomPresenter!!*/
+        return RoomsPresenter(view, RoomsRepo(FirebaseDatabase(), SharedPrefs(ctx), PhoneStuff(ctx)))
     }
 
     fun getGamePresenter(view: GameMvp.View,ctx: Context): GamePresenter<GameMvp.View>{
-        if(mGamePresenter == null){
+        /*if(mGamePresenter == null){
             mGamePresenter = GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,SharedPrefs(ctx),PhoneStuff(ctx)))
         }else
             mGamePresenter!!.view = view
-        return mGamePresenter!!
+        return mGamePresenter!!*/
+        return GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,SharedPrefs(ctx),PhoneStuff(ctx)))
     }
 }

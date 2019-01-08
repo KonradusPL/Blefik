@@ -73,6 +73,16 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
         }
     }
 
+    fun removeRoomsLoading(){
+        for(room in rooms){
+            if(room.isChoosenByPlayer){
+                val itemIndex = rooms.indexOf(room)
+                room.isChoosenByPlayer = false
+                notifyItemChanged(itemIndex)
+            }
+        }
+    }
+
 
 
     fun updateRooms(newRoom: Room){

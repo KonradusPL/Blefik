@@ -30,13 +30,13 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
         return database.observeRooms()
             .map { t: Room -> t.updateLocallyCreated(phoneStuff.getAndroidId()) }
             .map { t: Room -> if(mCurrentRoom?.isEqualTo(t) == true) t.updateIsChoosenByPlayer(true) else t}
-            .doOnNext { t -> mCurrentRoom = t }
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
     }
 
     fun addUserToRoom(room: Room): Completable{
         val player = getLocalPlayer()
+        mCurrentRoom = room
 
         return database.addPlayerToRoom(player, room.roomId)
             .subscribeOn(SchedulerProvider.io())
@@ -50,7 +50,7 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
     }
 
     fun playerIsInRoom(room: Room): Boolean{
-        val localPlayer = Player()
+        val localPlayer = getLocalPlayer()
         for(player in room.players){
             if(player.id == localPlayer.id)
                 return true
@@ -62,7 +62,6 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
         val creator = prefs.getUserName()
         val id = phoneStuff.getAndroidId()
         return Player(id,creator)
-
     }
 
     fun isSameAsChosenBefore(room: Room): Boolean{
@@ -71,5 +70,9 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
         else if(mCurrentRoom!!.roomId == room.roomId && mCurrentRoom!!.name == room.name)
             return true
         return false
+    }
+
+    fun updateCurrentRoom(room: Room){
+        mCurrentRoom = room
     }
 }

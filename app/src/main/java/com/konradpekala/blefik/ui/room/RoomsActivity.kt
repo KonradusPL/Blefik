@@ -42,14 +42,10 @@ class RoomsActivity : BaseActivity(),RoomsMvp.View {
         }
     }
 
-    private fun initList(){
-        mRoomsAdapter = RoomsAdapter(ArrayList(),this)
+    private fun initList() {
+        mRoomsAdapter = RoomsAdapter(ArrayList(), this)
         listRooms.adapter = mRoomsAdapter
         listRooms.layoutManager = LinearLayoutManager(this)
-    }
-
-    override fun showRooms(list: List<Room>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 

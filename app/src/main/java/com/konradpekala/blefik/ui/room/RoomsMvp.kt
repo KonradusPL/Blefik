@@ -7,7 +7,6 @@ import com.konradpekala.blefik.ui.room.adapters.RoomsAdapter
 
 interface RoomsMvp {
     interface View: MvpView{
-        fun showRooms(list: List<Room>)
         fun getListAdapter(): RoomsAdapter
         fun openGameActivity(room: Room)
         fun showCreateRoomView()

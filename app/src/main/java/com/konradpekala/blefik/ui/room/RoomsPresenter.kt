@@ -19,6 +19,8 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
                     gameOpened = true
                     view.openGameActivity(room)
                 }
+                if(room.isChoosenByPlayer)
+                    repo.updateCurrentRoom(room)
                 view.getListAdapter().updateRooms(room)
 
             },{t: Throwable? ->
@@ -36,6 +38,8 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
         view.showCreateRoomView()
     }
     override fun onAddRoomClick(name: String) {
+        view.getListAdapter().removeRoomsLoading()
+
         cd.add(repo.addRoom(name)
             .subscribe({t: String? ->
                 view.showMessage("Udało się!")
@@ -45,7 +49,6 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
     }
 
     override fun onRoomClick(room: Room) {
-
         if(repo.isSameAsChosenBefore(room))
             return
 
@@ -53,8 +56,13 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
             Log.d("onRoomClick","hasPlayer")
             room.isChoosenByPlayer = true
             view.getListAdapter().showRoomLoading(room)
+            repo.updateCurrentRoom(room)
             return
         }
+
+        view.getListAdapter().removeRoomsLoading()
+        Log.d("onRoomClick","qweqweqwe")
+
         cd.add(repo.addUserToRoom(room)
             .subscribe({
                 Log.d("onRoomClick","success")
