@@ -1,9 +1,11 @@
 package com.konradpekala.blefik.ui.game
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.RotateAnimation
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +16,7 @@ import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
 import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 import com.konradpekala.blefik.ui.game.adapters.createbid.BidsAdapter
+import com.konradpekala.blefik.ui.room.RoomsActivity
 import com.konradpekala.blefik.utils.CardsStuff
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
@@ -96,6 +99,10 @@ class GameActivity : BaseActivity(),GameMvp.View {
         }
     }
 
+    private fun animatePlayerCardsView(){
+        fabShowPlayerCards.performClick()
+    }
+
     private fun initBidsCreatorList(){
         val bidTypes = CardsStuff.generateBidTypesForCreator()
         val mBidsAdapter = BidsAdapter(bidTypes,this)
@@ -148,13 +155,32 @@ class GameActivity : BaseActivity(),GameMvp.View {
         constraintSet.applyTo(constrLayoutGame)
     }
 
-    override fun closeBidCreator() {
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setTitle("Wyjście z gry")
+            .setMessage("Jesteś pewien że chcesz wyjść z gry?")
+            .setPositiveButton("Tak!") { _, _ ->
+                openRoomActivity()
+            }.setNegativeButton("Nigdy(͡° ͜ʖ ͡°)"){ _, _ ->  }
+            .create()
+            .show()
+    }
+
+    override fun openRoomActivity() {
+        startActivity(Intent(this,RoomsActivity::class.java))
+        finish()
+    }
+
+    override fun closeBidCreator(){
         val constraintSet = ConstraintSet()
         constraintSet.clone(this, R.layout.activity_game)
 
         TransitionManager.beginDelayedTransition(constrLayoutGame)
 
         constraintSet.applyTo(constrLayoutGame)
+
+        if(playerCardsViewOpened)
+            animatePlayerCardsView()
     }
 
 }

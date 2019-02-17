@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.data.model
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import java.util.*
 
@@ -9,6 +10,7 @@ class Room(
     var updateType: UpdateType = UpdateType.None,
     var currentPlayer: Int = 0,
     var currentBid: Bid? = null,
+    var createdTime: Timestamp? = null,
     @get:Exclude var isChoosenByPlayer: Boolean = false,
     @get:Exclude var roomId: String = "",
     @get:Exclude var status: Status = Status.Added,

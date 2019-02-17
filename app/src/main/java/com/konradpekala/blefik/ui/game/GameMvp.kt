@@ -17,6 +17,7 @@ interface GameMvp {
         fun getPlayersAdapter(): PlayersAdapter
         fun openBidCreator()
         fun closeBidCreator()
+        fun openRoomActivity()
     }
 
     interface Presenter<V: View>: MvpPresenter<V>{

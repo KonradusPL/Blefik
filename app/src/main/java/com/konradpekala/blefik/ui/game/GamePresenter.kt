@@ -17,7 +17,6 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
         cd.add(repo.observeRoom(roomId)
             .subscribe({room: Room ->
                 Log.d("onNext vs doOnNext","onNext")
-                view.showMessage("Dostałem rooma!")
                 Log.d("startGame",room.currentBid?.name ?: "ASd")
 
                 if(firstTime){
@@ -26,29 +25,36 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                     if(repo.playerIsCreator())
                         newRound(true)
                 }
-                if(room.updateType == UpdateType.NewGame){
-                    view.getPlayersAdapter().refresh(room.players)
-                    view.getPlayerCardsAdapter().refreshCards(repo.getPlayer()!!.currentCards)
-                    view.getBidAdapter().refreshCards(emptyList())
-                }
-                if(room.updateType == UpdateType.NewBid){
-                    view.getBidAdapter().refreshCards(repo.generateBidCards())
-                }
-                if(room.updateType == UpdateType.NextPlayer){
-                    view.getPlayersAdapter().refresh(room.players)
+                when(room.updateType){
+                    UpdateType.NewGame -> {
+                        view.getPlayersAdapter().refresh(room.players)
+                        view.getPlayerCardsAdapter().refreshCards(repo.getPlayer()!!.currentCards)
+                        view.getBidAdapter().refreshCards(emptyList())
+                    }
+                    UpdateType.NewBid -> {
+                        view.getBidAdapter().refreshCards(repo.generateBidCards())
+                    }
+                    UpdateType.NextPlayer -> {
+                        view.getPlayersAdapter().refresh(room.players)
+                    }
+                    UpdateType.PlayerBeaten -> {
+                        if (room.players.size == 1){
+                            view.showMessage("${room.players[0].nick} wygrał!")
+                            view.openRoomActivity()
+                        }
+                    }
+                    else -> {}
                 }
             },{t: Throwable? ->
-                view.showMessage(t.toString())
             }))
     }
 
     private fun newRound(firstRound: Boolean){
         cd.add(repo.makeNewRound(firstRound)
             .subscribe({
-                view.showMessage("Pokój updated!")
+                view.showMessage("Nowa runda!")
             },{t: Throwable? ->
                 Log.d("newRound",t.toString())
-                view.showMessage(t.toString())
             }))
     }
 
@@ -68,6 +74,8 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
             return
         }
 
+        view.hideKeyboard()
+
         cd.add(repo.updateBid(bid)
             .concatWith(repo.makeNextPlayer())
             .subscribe({
@@ -83,19 +91,22 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
             return
         }
         if(repo.isBidInCards()){
-            view.showMessage("Wygrana runda!")
-            repo.addCardToPlayer(true)
-        }else{
             view.showMessage("Przegrana runda!")
             repo.addCardToPlayer(false)
+        }else{
+            view.showMessage("Wygrana runda!")
+            repo.addCardToPlayer(true)
         }
 
         val beaten = repo.isSomeoneBeaten()
         if(beaten != null){
-            view.showMessage("${beaten.nick} przegrał!")
             cd.add(repo.removePlayer(beaten)
                 .subscribe({
-                    newRound(false)
+                    view.showMessage("${beaten.nick} przegrał!")
+                    if(repo.getRoom()!!.players.size == 1)
+                        view.openRoomActivity()
+                    else
+                        newRound(false)
                 },{t ->
                     Log.d("removePlayer",t.toString())
                     view.showMessage("Nie udało się usunąć gracza")

@@ -178,14 +178,16 @@ object CardsStuff {
             }
             trojka ->return findOneTypeCard(cards,bidCards,3)
             strit ->{
+                val removableCards = ArrayList(bidCards)
                 for (card in cards){
                     for(bidCard in bidCards){
                         if(bidCard.number == card.number){
-                            bidCards.remove(bidCard)
+                            removableCards.remove(bidCard)
+                            break
                         }
                     }
                 }
-                if(bidCards.size == 0)
+                if(removableCards.size == 0)
                     return true
             }
             kolor ->{

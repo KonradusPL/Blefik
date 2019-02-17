@@ -153,4 +153,8 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
         }
         return null
     }
+
+    fun getRoom(): Room?{
+        return mRoom
+    }
 }

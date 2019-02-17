@@ -1,5 +1,7 @@
 package com.konradpekala.blefik.data.repo
 
+import android.util.Log
+import com.google.firebase.Timestamp
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
@@ -18,7 +20,7 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
         val creator = prefs.getUserName()
         val creatorId = phoneStuff.getAndroidId()
         val player = Player(creatorId,creator)
-        mCurrentRoom = Room(name = name, creatorId = creatorId)
+        mCurrentRoom = Room(name = name, creatorId = creatorId,createdTime = Timestamp.now())
         mCurrentRoom?.players?.add(player)
 
         return database.addRoom(mCurrentRoom!!)
@@ -27,8 +29,12 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
     }
 
     fun observeRooms(): Observable<Room> {
-        return database.observeRooms()
+        return database.observeRooms().filter { t: Room ->
+            (Timestamp.now().seconds-t.createdTime!!.seconds)/60 < 10 }
             .map { t: Room -> t.updateLocallyCreated(phoneStuff.getAndroidId()) }
+            .doOnNext {
+                t: Room? -> Log.d("sekundziki",((Timestamp.now().seconds-t!!.createdTime!!.seconds)/60).toString())
+            }
             .map { t: Room -> if(mCurrentRoom?.isEqualTo(t) == true) t.updateIsChoosenByPlayer(true) else t}
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
@@ -58,7 +64,7 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
         return false
     }
 
-    fun getLocalPlayer(): Player{
+    private fun getLocalPlayer(): Player{
         val creator = prefs.getUserName()
         val id = phoneStuff.getAndroidId()
         return Player(id,creator)

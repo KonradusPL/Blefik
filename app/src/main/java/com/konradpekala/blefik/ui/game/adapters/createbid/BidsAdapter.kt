@@ -152,22 +152,26 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
                 buttonClub.setOnClickListener {
                     cardColor = CardColor.Club
                     cleanButtons()
-                    backgroundTintList = ColorStateList.valueOf(greenColor)
+                    backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_active);
+                    //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.colorPrimary)
                 }
                 buttonSpade.setOnClickListener {
                     cardColor = CardColor.Spade
                     cleanButtons()
-                    backgroundTintList = ColorStateList.valueOf(greenColor)
+                    backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_active);
+                    //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.colorPrimary)
                 }
                 buttonHeart.setOnClickListener {
                     cardColor = CardColor.Heart
                     cleanButtons()
-                    backgroundTintList = ColorStateList.valueOf(greenColor)
+                    backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_active);
+                    //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.colorPrimary)
                 }
                 buttonDiamond.setOnClickListener {
                     cardColor = CardColor.Diamond
                     cleanButtons()
-                    backgroundTintList = ColorStateList.valueOf(greenColor)
+                    backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_active);
+                    //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.colorPrimary)
                 }
 
                 buttonBidColorCreate.setOnClickListener {
@@ -178,11 +182,16 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
             }
         }
          private fun cleanButtons(){
+             val ctx = viewMvp.getCtx()
              root.apply {
-                 buttonClub.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
-                 buttonSpade.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
-                 buttonHeart.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
-                 buttonDiamond.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+                 buttonClub.backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_inactive)
+                 buttonDiamond.backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_inactive)
+                 buttonHeart.backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_inactive)
+                 buttonSpade.backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_inactive)
+                 //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.white)
+                 //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.white)
+                 //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.white)
+                 //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.white)
              }
          }
     }
