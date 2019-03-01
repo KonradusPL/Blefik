@@ -24,7 +24,7 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V,val repo: RoomsRepo): BasePresent
                 view.getListAdapter().updateRooms(room)
 
             },{t: Throwable? ->
-                view.showMessage(t.toString())
+                //view.showMessage(t.toString())
             }))
     }
 

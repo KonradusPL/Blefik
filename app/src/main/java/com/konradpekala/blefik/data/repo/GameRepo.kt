@@ -81,7 +81,8 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
             return true
         else if (bid.pickingType == BidPickingType.TwoCards &&
             bid.firstCardNumber != CardNumber.None &&
-            bid.secondCardNumber != CardNumber.None)
+            bid.secondCardNumber != CardNumber.None &&
+            bid.firstCardNumber.name != bid.secondCardNumber.name)
             return true
         else if (bid.pickingType == BidPickingType.Color &&
             bid.color != CardColor.None)

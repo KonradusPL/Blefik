@@ -73,7 +73,7 @@ dependencies {
     //Expandable list
     implementation 'com.thoughtbot:expandablerecyclerview:1.3'
 
-
+    implementation "com.andkulikov:transitionseverywhere:2.0.0-alpha01"
 
 
 }

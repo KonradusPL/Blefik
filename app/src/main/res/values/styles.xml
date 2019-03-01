@@ -9,4 +9,9 @@
         <item name="android:fontFamily">@font/roboto</item>
     </style>
 
+    <style name="ToolbarWhiteTheme" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
 </resources>

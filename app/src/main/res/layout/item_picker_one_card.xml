@@ -5,21 +5,18 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="wrap_content">
 
-    <EditText
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/fieldFirstCard"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
-            app:layout_constraintVertical_bias="0.0" android:textSize="14sp" android:hint="Karta (np. A, 10)"
-            android:layout_marginTop="4dp" android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp" app:layout_constraintEnd_toStartOf="@+id/buttonBidOneCreate"
-            android:layout_width="0dp"/>
     <Button
             android:text="Stwórz"
             android:layout_width="wrap_content"
-            android:layout_height="40dp" app:layout_constraintTop_toTopOf="@+id/fieldFirstCard"
-            app:layout_constraintBottom_toBottomOf="@+id/fieldFirstCard" android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/buttonBidOneCreate" android:textSize="12sp"/>
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/buttonBidOneCreate" android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/fieldFirstCard"
+            app:layout_constraintBottom_toBottomOf="@+id/fieldFirstCard"/>
+    <Spinner
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/fieldFirstCard"
+            app:layout_constraintEnd_toStartOf="@+id/buttonBidOneCreate" android:layout_marginEnd="8dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

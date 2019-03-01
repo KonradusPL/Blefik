@@ -138,11 +138,11 @@ object CardsStuff {
                 bidCards.add(Card(bid.firstCardNumber))
             }
             poker ->{
-                bidCards.add(Card(CardNumber.King))
-                bidCards.add(Card(CardNumber.Queen))
-                bidCards.add(Card(CardNumber.Jack))
-                bidCards.add(Card(CardNumber.Ten))
-                bidCards.add(Card(CardNumber.Nine))
+                bidCards.add(Card(CardNumber.King,bid.color))
+                bidCards.add(Card(CardNumber.Queen,bid.color))
+                bidCards.add(Card(CardNumber.Jack,bid.color))
+                bidCards.add(Card(CardNumber.Ten,bid.color))
+                bidCards.add(Card(CardNumber.Nine,bid.color))
             }
             pokerKrolewski ->{
                 bidCards.add(Card(CardNumber.Ace,bid.color))

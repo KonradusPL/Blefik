@@ -3,13 +3,14 @@ package com.konradpekala.blefik.ui.game
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
+import android.view.*
 import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
+import androidx.transition.*
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.injection.Injector
@@ -20,6 +21,7 @@ import com.konradpekala.blefik.ui.room.RoomsActivity
 import com.konradpekala.blefik.utils.CardsStuff
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
+import com.transitionseverywhere.Rotate
 import kotlinx.android.synthetic.main.activity_game.*
 import org.jetbrains.anko.ctx
 
@@ -40,6 +42,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
         mPresenter = Injector.getGamePresenter(this,ctx)
 
         toolbarGame.title = intent.getStringExtra("roomName") ?: ""
+        setSupportActionBar(toolbarGame)
 
         initBidList()
         initPlayerCardsList()
@@ -53,7 +56,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
         //**
         //****
         //******
-        mPresenter.startGame(roomId,creatorId)
+        mPresenter.startGame(roomId,creatorId,true)
         //******
         //****
         //**
@@ -73,30 +76,46 @@ class GameActivity : BaseActivity(),GameMvp.View {
     private fun initCardsShowingButton(){
         val iconicsDrawable = IconicsDrawable(this)
             .icon(FontAwesome.Icon.faw_arrow_up)
-            .sizeDp(20)
+            .sizeDp(18)
             .color(Color.WHITE)
 
         fabShowPlayerCards.setImageDrawable(iconicsDrawable)
-        val a = RotateAnimation(0f,23f)
 
+        var visible = false
 
-        //Prepare animations
         val constraintSet1 = ConstraintSet()
         constraintSet1.clone(constrLayoutGame)
         val constraintSet2 = ConstraintSet()
-        constraintSet2.clone(this, R.layout.activity_game_cards_shown)
+        constraintSet2.clone(constrLayoutGame)
+        constraintSet2.connect(R.id.layoutPlayerCards,ConstraintSet.BOTTOM,
+            ConstraintLayout.LayoutParams.PARENT_ID,ConstraintSet.BOTTOM)
+        constraintSet2.clear(R.id.layoutPlayerCards,ConstraintSet.TOP)
 
         fabShowPlayerCards.setOnClickListener {
-            TransitionManager.beginDelayedTransition(constrLayoutGame)
-            val constraint = if (playerCardsViewOpened) constraintSet1 else constraintSet2
+
+            visible = !visible
+
+
+            TransitionManager.beginDelayedTransition(constrLayoutGame,TransitionSet()
+                .addTransition(Rotate())
+                .addTransition(ChangeBounds()))
+            val constraint = if (visible) constraintSet2 else constraintSet1
             constraint.applyTo(constrLayoutGame)
-
-            val icon = if (playerCardsViewOpened) FontAwesome.Icon.faw_arrow_up
-            else FontAwesome.Icon.faw_arrow_down
-            fabShowPlayerCards.setImageDrawable(iconicsDrawable.icon(icon))
-
-            playerCardsViewOpened = !playerCardsViewOpened
+            fabShowPlayerCards.rotation = if (visible) 180f else 0f
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_game,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item != null && item.itemId == R.id.item_refresh){
+            showMessage("refreshGame")
+            mPresenter.refreshGame()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun animatePlayerCardsView(){
@@ -142,17 +161,17 @@ class GameActivity : BaseActivity(),GameMvp.View {
         return mPlayersAdapter
     }
 
+    override fun animateBidChanges() {
+        TransitionManager.beginDelayedTransition(constrLayoutGame)
+    }
+
     override fun getPlayerCardsAdapter(): CardsAdapter {
         return mPlayerCardsAdapter
     }
 
     override fun openBidCreator() {
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(this, R.layout.activity_game_bid_creator)
-
-        TransitionManager.beginDelayedTransition(constrLayoutGame)
-
-        constraintSet.applyTo(constrLayoutGame)
+        TransitionManager.beginDelayedTransition(constrLayoutGame,Slide(Gravity.BOTTOM))
+        layoutBidCreator.visibility = View.VISIBLE
     }
 
     override fun onBackPressed() {
@@ -172,7 +191,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
     }
 
     override fun closeBidCreator(){
-        val constraintSet = ConstraintSet()
+        /*val constraintSet = ConstraintSet()
         constraintSet.clone(this, R.layout.activity_game)
 
         TransitionManager.beginDelayedTransition(constrLayoutGame)
@@ -180,7 +199,9 @@ class GameActivity : BaseActivity(),GameMvp.View {
         constraintSet.applyTo(constrLayoutGame)
 
         if(playerCardsViewOpened)
-            animatePlayerCardsView()
+            animatePlayerCardsView()*/
+        TransitionManager.beginDelayedTransition(constrLayoutGame,Slide(Gravity.BOTTOM))
+        layoutBidCreator.visibility = View.GONE
     }
 
 }

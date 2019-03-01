@@ -10,9 +10,11 @@ import com.konradpekala.blefik.ui.base.BasePresenter
 class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<V>(view),
     GameMvp.Presenter<V> {
 
-    override fun startGame(roomId: String, creatorId: String) {
+    var mNeedToRefresh = false
+
+    override fun startGame(roomId: String, creatorId: String,firstT: Boolean) {
         Log.d("startGame","true")
-        var firstTime = true
+        var firstTime = firstT
 
         cd.add(repo.observeRoom(roomId)
             .subscribe({room: Room ->
@@ -32,6 +34,7 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                         view.getBidAdapter().refreshCards(emptyList())
                     }
                     UpdateType.NewBid -> {
+                        view.animateBidChanges()
                         view.getBidAdapter().refreshCards(repo.generateBidCards())
                     }
                     UpdateType.NextPlayer -> {
@@ -47,6 +50,13 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                 }
             },{t: Throwable? ->
             }))
+    }
+
+    override fun refreshGame() {
+        cd.clear()
+        mNeedToRefresh = true
+        val currentRoom = repo.getRoom()
+        startGame(currentRoom!!.roomId,currentRoom!!.creatorId,false)
     }
 
     private fun newRound(firstRound: Boolean){
