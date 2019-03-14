@@ -11,16 +11,19 @@
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent" android:id="@+id/buttonBidTwoCreate" android:textSize="12sp"
-            tools:layout_editor_absoluteY="4dp"/>
-    <Spinner
+            app:layout_constraintTop_toTopOf="@+id/fieldSecondOfTwo"
+            app:layout_constraintBottom_toBottomOf="@+id/fieldSecondOfTwo"/>
+    <com.jaredrummler.materialspinner.MaterialSpinner
             android:layout_width="100dp"
             android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:ms_background_color="@color/lightGray"
             android:id="@+id/fieldFirstOfTwo" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/fieldSecondOfTwo"/>
-    <Spinner
+    <com.jaredrummler.materialspinner.MaterialSpinner
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            app:ms_background_color="@color/lightGray"
             android:id="@+id/fieldSecondOfTwo" app:layout_constraintStart_toEndOf="@+id/fieldFirstOfTwo"
             app:layout_constraintEnd_toStartOf="@+id/buttonBidTwoCreate"
             app:layout_constraintTop_toTopOf="@+id/fieldFirstOfTwo" app:layout_constraintHorizontal_bias="0.5"/>

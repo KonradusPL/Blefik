@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -17,7 +16,7 @@ import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
 import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 import com.konradpekala.blefik.ui.game.adapters.createbid.BidsAdapter
-import com.konradpekala.blefik.ui.room.RoomsActivity
+import com.konradpekala.blefik.ui.main.RoomsActivity
 import com.konradpekala.blefik.utils.CardsStuff
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable

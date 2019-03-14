@@ -42,7 +42,4 @@ open class BaseActivity : AppCompatActivity(), MvpView {
         return this
     }
 
-    override fun getActivity(): Activity {
-        return this
-    }
 }

@@ -31,6 +31,7 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                     UpdateType.NewGame -> {
                         view.getPlayersAdapter().refresh(room.players)
                         view.getPlayerCardsAdapter().refreshCards(repo.getPlayer()!!.currentCards)
+                        view.animateBidChanges()
                         view.getBidAdapter().refreshCards(emptyList())
                     }
                     UpdateType.NewBid -> {

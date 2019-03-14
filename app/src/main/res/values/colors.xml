@@ -7,4 +7,5 @@
     <color name="colorCurrentPlayer">#ffebee</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="lightGray">#DBDBDB</color>
 </resources>

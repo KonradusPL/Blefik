@@ -10,7 +10,7 @@ import com.konradpekala.blefik.data.database.FirebaseDatabase
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.data.repo.CreateProfileRepo
 import com.konradpekala.blefik.ui.base.BaseActivity
-import com.konradpekala.blefik.ui.room.RoomsActivity
+import com.konradpekala.blefik.ui.main.RoomsActivity
 import kotlinx.android.synthetic.main.activity_create_profile.*
 
 

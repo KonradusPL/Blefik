@@ -46,12 +46,6 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
                 viewType == BidPickingType.TwoCards.ordinal+5
     }
 
-    private fun generateAdapterForBid() = ArrayAdapter<String>(
-        viewMvp.getCtx(),
-        android.R.layout.simple_spinner_dropdown_item,
-        arrayListOf("A","K","Q","J","10","9")
-    )
-
     override fun onCreateChildViewHolder(parent: ViewGroup?, viewType: Int): ChildViewHolder {
         when (viewType){
             BidPickingType.Color.ordinal+5 -> {
@@ -62,19 +56,20 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
             BidPickingType.OneCard.ordinal+5 -> {
                 val itemView = LayoutInflater.from(viewMvp.getCtx())
                     .inflate(R.layout.item_picker_one_card,parent,false)
-                itemView.fieldFirstCard.adapter = generateAdapterForBid()
+                itemView.fieldFirstCard.setItems("A","K","Q","J","10","9")
                 return OneCardViewHolder(itemView)
             }
             BidPickingType.TwoCards.ordinal+5 -> {
                 val itemView = LayoutInflater.from(viewMvp.getCtx())
                     .inflate(R.layout.item_picker_two_cards,parent,false)
-                itemView.fieldFirstOfTwo.adapter = generateAdapterForBid()
-                itemView.fieldSecondOfTwo.adapter = generateAdapterForBid()
+                itemView.fieldFirstOfTwo.setItems("A","K","Q","J","10","9")
+                itemView.fieldSecondOfTwo.setItems("A","K","Q","J","10","9")
                 return TwoCardsViewHolder(itemView)
             }
             BidPickingType.Set.ordinal +5-> {
                 val itemView = LayoutInflater.from(viewMvp.getCtx())
                     .inflate(R.layout.item_picker_set,parent,false)
+                itemView.fieldHighestCard.setItems("A","K")
                 return SetViewHolder(itemView)
             }
             else -> {
@@ -121,7 +116,7 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
     inner class OneCardViewHolder(val root: View): ChildViewHolder(root){
         fun bind(bidType: BidType){
             root.buttonBidOneCreate.setOnClickListener {
-                val text = root.fieldFirstCard.selectedItem.toString()
+                val text = root.fieldFirstCard.text.toString()
                 val cardNumber = Card.fromStringToNumber(text)
 
                 viewMvp.getPresenter().onCreateBidClick(Bid(bidType.name,bidType.power,bidType.pickingType,
@@ -133,8 +128,8 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
     inner class TwoCardsViewHolder(val root: View): ChildViewHolder(root){
         fun bind(bidType: BidType){
             root.buttonBidTwoCreate.setOnClickListener {
-                val text1 = root.fieldFirstOfTwo.selectedItem.toString()
-                val text2 = root.fieldSecondOfTwo.selectedItem.toString()
+                val text1 = root.fieldFirstOfTwo.text.toString()
+                val text2 = root.fieldSecondOfTwo.text.toString()
                 val cardNumber1 = Card.fromStringToNumber(text1)
                 val cardNumber2 = Card.fromStringToNumber(text2)
 
@@ -173,30 +168,23 @@ internal class BidsAdapter(val bidTypes: ArrayList<BidType>,val viewMvp: GameMvp
                     cleanButtons()
                     ViewCompat.setBackgroundTintList(buttonClub, ContextCompat.getColorStateList(ctx, R.color.colorAccent))
 
-                    //backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_active);
-                    //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.colorPrimary)
                 }
                 buttonSpade.setOnClickListener {
                     cardColor = CardColor.Spade
                     cleanButtons()
                     ViewCompat.setBackgroundTintList(buttonSpade, ContextCompat.getColorStateList(ctx, R.color.colorAccent))
 
-                    //backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_active);
-                    //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.colorPrimary)
                 }
                 buttonHeart.setOnClickListener {
                     cardColor = CardColor.Heart
                     cleanButtons()
                     ViewCompat.setBackgroundTintList(buttonHeart, ContextCompat.getColorStateList(ctx, R.color.colorAccent))
-                    //backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_active);
-                    //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.colorPrimary)
                 }
                 buttonDiamond.setOnClickListener {
                     cardColor = CardColor.Diamond
                     cleanButtons()
                     ViewCompat.setBackgroundTintList(buttonDiamond, ContextCompat.getColorStateList(ctx, R.color.colorAccent))
-                    //backgroundTintList = ctx.resources.getColorStateList(R.color.btn_bid_active);
-                    //backgroundTintList = ContextCompat.getColorStateList(ctx, R.color.colorPrimary)
+
                 }
 
                 buttonBidColorCreate.setOnClickListener {

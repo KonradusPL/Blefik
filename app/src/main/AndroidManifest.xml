@@ -16,11 +16,12 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.game.GameActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="portrait">
+        <activity
+                android:name=".ui.game.GameActivity"
+                android:configChanges="orientation"
+                android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ui.room.RoomsActivity">
+        <activity android:name=".ui.main.RoomsActivity">
         </activity>
         <activity android:name=".ui.createProfile.CreateProfileActivity">
         </activity>
@@ -30,6 +31,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
         </activity>
     </application>
 

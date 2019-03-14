@@ -7,8 +7,8 @@ import com.konradpekala.blefik.data.repo.GameRepo
 import com.konradpekala.blefik.data.repo.RoomsRepo
 import com.konradpekala.blefik.ui.game.GameMvp
 import com.konradpekala.blefik.ui.game.GamePresenter
-import com.konradpekala.blefik.ui.room.RoomsMvp
-import com.konradpekala.blefik.ui.room.RoomsPresenter
+import com.konradpekala.blefik.ui.main.RoomsMvp
+import com.konradpekala.blefik.ui.main.RoomsPresenter
 import com.konradpekala.blefik.utils.CardsStuff
 import com.konradpekala.blefik.utils.PhoneStuff
 

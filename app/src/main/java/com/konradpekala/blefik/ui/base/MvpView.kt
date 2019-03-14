@@ -13,5 +13,4 @@ interface MvpView {
     fun isConnectedToNetwork(): Boolean
 
     fun getCtx(): Context
-    fun getActivity(): Activity
 }
