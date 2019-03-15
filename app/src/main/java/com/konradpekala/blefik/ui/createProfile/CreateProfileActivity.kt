@@ -10,7 +10,7 @@ import com.konradpekala.blefik.data.database.FirebaseDatabase
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.data.repo.CreateProfileRepo
 import com.konradpekala.blefik.ui.base.BaseActivity
-import com.konradpekala.blefik.ui.main.RoomsActivity
+import com.konradpekala.blefik.ui.main.rooms.RoomsActivity
 import kotlinx.android.synthetic.main.activity_create_profile.*
 
 
@@ -43,7 +43,7 @@ class CreateProfileActivity : BaseActivity(),CreateProfileMvp.View {
     }
 
     override fun openRoomActivity() {
-        startActivity(Intent(this,RoomsActivity::class.java))
+        startActivity(Intent(this, RoomsActivity::class.java))
         finish()
     }
 }

@@ -16,10 +16,11 @@ open class BaseFragment<V: MvpView>: Fragment(),MvpView {
     }
 
     override fun showMessage(message: String) {
-
+        parentMvp.showMessage(message)
     }
 
     override fun showMessage(message: Int) {
+        parentMvp.showMessage(message)
     }
 
     override fun isConnectedToNetwork(): Boolean {
@@ -28,7 +29,7 @@ open class BaseFragment<V: MvpView>: Fragment(),MvpView {
 
 
     override fun hideKeyboard() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        parentMvp.hideKeyboard()
     }
 
 

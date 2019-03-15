@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.model.Status
-import com.konradpekala.blefik.ui.main.RoomsMvp
+import com.konradpekala.blefik.ui.main.rooms.RoomsMvp
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
 import kotlinx.android.synthetic.main.item_room.view.*

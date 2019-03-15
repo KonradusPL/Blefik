@@ -16,12 +16,12 @@ open class BaseActivity : AppCompatActivity(), MvpView {
 
     override fun hideKeyboard() {
         //all lines from StackOverflow
-        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         var view = currentFocus
         if (view == null) {
             view = View(this)
         }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun showMessage(message: String) {

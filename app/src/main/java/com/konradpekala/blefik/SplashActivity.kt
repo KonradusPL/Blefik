@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.ui.createProfile.CreateProfileActivity
-import com.konradpekala.blefik.ui.main.RoomsActivity
+import com.konradpekala.blefik.ui.main.rooms.RoomsActivity
 import es.dmoral.toasty.Toasty
 
 class SplashActivity : AppCompatActivity() {
@@ -23,13 +23,13 @@ class SplashActivity : AppCompatActivity() {
         val preferences = SharedPrefs(this)
 
         if(preferences.isUserLoggedIn())
-            openRoomActivity()
+            openMainActivity()
         else
             openCreateProfileActivity()
 
     }
-    private fun openRoomActivity(){
-        startActivity(Intent(this,RoomsActivity::class.java))
+    private fun openMainActivity(){
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
     private fun openCreateProfileActivity(){

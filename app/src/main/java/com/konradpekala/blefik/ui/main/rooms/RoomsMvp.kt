@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.ui.main
+package com.konradpekala.blefik.ui.main.rooms
 
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.ui.base.MvpPresenter

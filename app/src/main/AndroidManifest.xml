@@ -21,7 +21,7 @@
                 android:configChanges="orientation"
                 android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ui.main.RoomsActivity">
+        <activity android:name=".ui.main.rooms.RoomsActivity">
         </activity>
         <activity android:name=".ui.createProfile.CreateProfileActivity">
         </activity>
