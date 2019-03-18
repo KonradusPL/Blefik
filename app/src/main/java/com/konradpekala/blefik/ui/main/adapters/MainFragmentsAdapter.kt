@@ -3,7 +3,7 @@ package com.konradpekala.blefik.ui.main.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.konradpekala.blefik.MainActivity
+import com.konradpekala.blefik.ui.main.MainActivity
 
 class MainFragmentsAdapter(fm: FragmentManager,val mainActivity: MainActivity): FragmentStatePagerAdapter(fm) {
 

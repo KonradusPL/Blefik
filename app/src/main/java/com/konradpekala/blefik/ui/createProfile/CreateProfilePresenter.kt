@@ -15,7 +15,7 @@ class CreateProfilePresenter<V: CreateProfileMvp.View>(view: V, val repo: Create
             return
         }
 
-        cd.add(repo.addUser(User(nick,"")).subscribe {
+        cd.add(repo.addUser(User(nick,"","","")).subscribe {
             view.showMessage("Udało się !")
             view.openRoomActivity()
         })

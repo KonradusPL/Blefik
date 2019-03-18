@@ -1,12 +1,16 @@
 package com.konradpekala.blefik.injection
 
 import android.content.Context
+import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.database.FirebaseDatabase
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.data.repo.GameRepo
+import com.konradpekala.blefik.data.repo.LoginRepository
 import com.konradpekala.blefik.data.repo.RoomsRepo
 import com.konradpekala.blefik.ui.game.GameMvp
 import com.konradpekala.blefik.ui.game.GamePresenter
+import com.konradpekala.blefik.ui.login.LoginMvp
+import com.konradpekala.blefik.ui.login.LoginPresenter
 import com.konradpekala.blefik.ui.main.rooms.RoomsMvp
 import com.konradpekala.blefik.ui.main.rooms.RoomsPresenter
 import com.konradpekala.blefik.utils.CardsStuff
@@ -35,5 +39,9 @@ object Injector {
             mGamePresenter!!.view = view
         return mGamePresenter!!*/
         return GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,SharedPrefs(ctx),PhoneStuff(ctx)))
+    }
+
+    fun getLoginPresenter(view: LoginMvp.View,ctx: Context): LoginPresenter<LoginMvp.View>{
+        return LoginPresenter(view, LoginRepository(FirebaseAuth(),FirebaseDatabase()))
     }
 }

@@ -7,7 +7,8 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.ui.createProfile.CreateProfileActivity
-import com.konradpekala.blefik.ui.main.rooms.RoomsActivity
+import com.konradpekala.blefik.ui.login.LoginActivity
+import com.konradpekala.blefik.ui.main.MainActivity
 import es.dmoral.toasty.Toasty
 
 class SplashActivity : AppCompatActivity() {
@@ -25,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         if(preferences.isUserLoggedIn())
             openMainActivity()
         else
-            openCreateProfileActivity()
+            openLoginActivity()
 
     }
     private fun openMainActivity(){
@@ -34,6 +35,10 @@ class SplashActivity : AppCompatActivity() {
     }
     private fun openCreateProfileActivity(){
         startActivity(Intent(this,CreateProfileActivity::class.java))
+        finish()
+    }
+    private fun openLoginActivity(){
+        startActivity(Intent(this,LoginActivity::class.java))
         finish()
     }
 }

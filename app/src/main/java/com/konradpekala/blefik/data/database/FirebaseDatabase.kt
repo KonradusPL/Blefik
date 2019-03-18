@@ -188,5 +188,13 @@ class FirebaseDatabase: Database {
         mRoomsListener?.remove()
     }
 
+    fun createUser(email: String,password: String,id: String, nick: String): Single<String>{
+        val user = User(email = email,password = password,id = id,nick = nick)
+        return Single.create { emitter ->
+            database.collection("users").document(user.id).set(user)
+                .addOnSuccessListener { emitter.onSuccess("success") }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }
+    }
 
 }

@@ -1,12 +1,12 @@
-package com.konradpekala.blefik
+package com.konradpekala.blefik.ui.main
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.game.GameActivity
-import com.konradpekala.blefik.ui.main.MainMvp
 import com.konradpekala.blefik.ui.main.adapters.MainFragmentsAdapter
 import com.konradpekala.blefik.ui.main.rooms.RoomsFragment
 import kotlinx.android.synthetic.main.activity_main.*

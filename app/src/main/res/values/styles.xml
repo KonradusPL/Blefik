@@ -1,4 +1,5 @@
-<resources>
+
+<resources >
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -12,6 +13,23 @@
     <style name="ToolbarWhiteTheme" parent="AppTheme">
         <item name="android:textColorSecondary">@color/white</item>
         <item name="colorControlNormal">@color/white</item>
+    </style>
+
+    <style name="EditTextLogin" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/lightGray</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+    </style>
+
+
+    <style name="EditTextLayoutLogin" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">#e2e2e2</item>
+
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
     </style>
 
 </resources>
