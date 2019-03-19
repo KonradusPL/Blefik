@@ -12,13 +12,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            android:theme="?attr/actionBarTheme"
-            app:title="Pokoje"
+            android:theme="@style/ToolbarWhiteTheme"
+            app:title="Blefik"
             android:elevation="2dp"
             app:titleTextColor="@color/white"
             android:minHeight="?attr/actionBarSize"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/toolbarRooms" app:layout_constraintTop_toTopOf="parent"/>
+            android:id="@+id/toolbarMain" app:layout_constraintTop_toTopOf="parent"/>
     <com.google.android.material.tabs.TabLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/tabLayoutMain"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarRooms">
+            app:layout_constraintTop_toBottomOf="@+id/toolbarMain">
 
     </com.google.android.material.tabs.TabLayout>
     <androidx.viewpager.widget.ViewPager

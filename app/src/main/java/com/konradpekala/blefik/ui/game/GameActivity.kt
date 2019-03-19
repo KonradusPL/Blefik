@@ -179,7 +179,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
             .setMessage("Jesteś pewien że chcesz wyjść z gry?")
             .setPositiveButton("Tak!") { _, _ ->
                 openRoomActivity()
-            }.setNegativeButton("Nigdy(͡° ͜ʖ ͡°)"){ _, _ ->  }
+            }.setNegativeButton("Nigdy(͡°͜ʖ͡°)"){ _, _ ->  }
             .create()
             .show()
     }
@@ -190,15 +190,6 @@ class GameActivity : BaseActivity(),GameMvp.View {
     }
 
     override fun closeBidCreator(){
-        /*val constraintSet = ConstraintSet()
-        constraintSet.clone(this, R.layout.activity_game)
-
-        TransitionManager.beginDelayedTransition(constrLayoutGame)
-
-        constraintSet.applyTo(constrLayoutGame)
-
-        if(playerCardsViewOpened)
-            animatePlayerCardsView()*/
         TransitionManager.beginDelayedTransition(constrLayoutGame,Slide(Gravity.BOTTOM))
         layoutBidCreator.visibility = View.GONE
     }

@@ -2,6 +2,8 @@ package com.konradpekala.blefik.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Room
@@ -25,9 +27,25 @@ class MainActivity : BaseActivity(),MainMvp.View {
         mRoomsFragment = RoomsFragment()
         mRankingFragment = Fragment()
 
+        setSupportActionBar(toolbarMain)
+        initTabsStuff()
+
+    }
+
+    private fun initTabsStuff(){
         mFragmentAdapter = MainFragmentsAdapter(supportFragmentManager,this)
         viewPager.adapter = mFragmentAdapter
         tabLayoutMain.setupWithViewPager(viewPager)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun openGameActivity(room: Room) {
