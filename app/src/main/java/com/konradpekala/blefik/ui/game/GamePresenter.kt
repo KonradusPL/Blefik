@@ -50,6 +50,7 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                     else -> {}
                 }
             },{t: Throwable? ->
+                Log.d("observeGame",t.toString())
             }))
     }
 

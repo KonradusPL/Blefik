@@ -1,6 +1,7 @@
 package com.konradpekala.blefik.data.repo
 
 import android.util.Log
+import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.*
 import com.konradpekala.blefik.data.preferences.SharedPrefs
@@ -10,14 +11,14 @@ import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPrefs, val phoneStuff: PhoneStuff) {
+class GameRepo(val db: Database, val cardsStuff: CardsStuff, val auth: FirebaseAuth, val phoneStuff: PhoneStuff) {
 
     private lateinit var mRoom: Room
 
     fun observeRoom(id: String): Observable<Room>{
         return db.observeRoom(id)
             .map { t: Room -> t.sortPlayers().updateCurrentPlayer()
-                .updatePhoneOwner(phoneStuff.getAndroidId())
+                .updatePhoneOwner(auth.getUserId())
             }
             .doOnNext { room: Room? ->
                 Log.d("onNext vs doOnNext","doOnNext")
@@ -28,7 +29,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
     }
 
     fun makeNewRound(firstRound: Boolean): Completable{
-        val room = Room(mRoom)
+        val room = mRoom.copy()
         room.updateType = UpdateType.NewGame
         cardsStuff.cardsForNewRound(room.players,firstRound)
         room.currentBid = null
@@ -47,7 +48,8 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
             .observeOn(SchedulerProvider.ui())
     }
     fun makeNextPlayer(): Completable{
-        val room = Room(mRoom)
+        //val room = Room(mRoom)
+        val room = mRoom.copy()
         room.updateType = UpdateType.NextPlayer
         if(room.currentPlayer < room.players.size-1)
             room.currentPlayer++
@@ -59,7 +61,8 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
     }
 
     fun updateBid(bid: Bid): Completable{
-        val room = Room(mRoom)
+        //val room = Room(mRoom)
+        val room = mRoom.copy()
         room.updateType = UpdateType.NewBid
         room.currentBid = bid
 
@@ -70,7 +73,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
 
     fun getPlayer(): Player? {
         for(player in mRoom!!.players){
-            if(player.id == phoneStuff.getAndroidId())
+            if(player.id == auth.getUserId())
                 return player
         }
         return null
@@ -138,7 +141,8 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val prefs: SharedPr
     }
 
     fun removePlayer(player: Player): Completable{
-        val room = Room(mRoom)
+        //val room = Room(mRoom)
+        val room = mRoom.copy()
         room.updateType = UpdateType.PlayerBeaten
         room.players.remove(player)
 

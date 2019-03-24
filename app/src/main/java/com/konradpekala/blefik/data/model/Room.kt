@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import java.util.*
 
-class Room(
+data class Room(
     var name: String = "",
     var creatorId: String = "",
     var updateType: UpdateType = UpdateType.None,

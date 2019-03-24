@@ -36,10 +36,10 @@ class LoginPresenter<V: LoginMvp.View>(view: V,val repo: LoginRepository): BaseP
     override fun onSignInButtonClick(email: String, password: String) {
         view.showLoading()
         cd.add(repo.signIn(email, password)
-            .doOnComplete { view.hideLoading() }
-            .subscribe({
+            .flatMap { id: String -> repo.getUserNick(id) }
+            .subscribe({  nick: String ->
                 view.hideLoading()
-                view.showMessage("Sukces!")
+                view.showMessage(nick)
                 view.openMainActivity()
             },{t: Throwable? ->
                 view.hideLoading()

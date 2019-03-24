@@ -197,4 +197,23 @@ class FirebaseDatabase: Database {
         }
     }
 
+    fun changeUserNick(id: String, newNick: String): Completable{
+        return Completable.create { emitter ->
+            database.collection("users").document(id).update("nick",newNick)
+                .addOnSuccessListener { emitter.onComplete()}
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }
+    }
+
+    fun getUserNick(id: String): Single<String>{
+        return Single.create { emitter ->
+            database.collection("users").document(id).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val obj = documentSnapshot.toObject(User::class.java)
+                    emitter.onSuccess(obj!!.nick)
+                }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }
+    }
+
 }

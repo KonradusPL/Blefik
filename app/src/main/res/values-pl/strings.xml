@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Blefik</string>
+    <string name="title_activity_login">Stwórz profil</string>
+
+    <string name="password_6_chars">Hasło powinno zawierać conajmniej 6 cyfr!</string>
+    <string name="success">Sukces!</string>
+    <string name="create_account_error">Błąd! Nie można utworzyć konta!</string>
+    <string name="sign_in_error">Błąd! Nie można zalogować się konta!</string>
+    <string name="change_name_error">Bład przy zmienianiu nazwy!</string>
+    <string name="location_check">"Upewnij się że masz włącząną lokalizacje"</string>
+
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Hasło</string>
+
+    <string name="button_sign_in">Zaloguj się</string>
+    <string name="button_sign_up">Stwórz konto</string>
+    <string name="button_sign_out">Wyloguj się</string>
+    <string name="button_change_name">Zmień nazwe</string>
+    <string name="button_privacy_policy">Polityka prywatności</string>
+
+    <string name="name">Nazwa</string>
+    <string name="level">Poziom:</string>
+    <string name="distance">Dystanc:</string>
+    <string name="change_name">Zmień nazwe</string>
+    <string name="new_name">Nowa nazwa</string>
+    <string name="changing_name">Zmiana nazwy</string>
+
+    <string name="reached_dest">Właśnie dotarłeś do celu!</string>
+</resources>

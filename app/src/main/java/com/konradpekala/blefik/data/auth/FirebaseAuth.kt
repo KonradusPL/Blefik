@@ -27,13 +27,13 @@ class FirebaseAuth {
         }
     }
 
-    fun signIn(email: String, password: String): Completable {
-        return Completable.create { emitter ->
+    fun signIn(email: String, password: String): Single<String> {
+        return Single.create { emitter ->
             auth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
                     if(task.isSuccessful){
                         Log.w("createUserWithEmail:s", task.exception)
-                        emitter.onComplete()
+                        emitter.onSuccess(auth.currentUser!!.uid)
                     }else{
                         Log.w("createUserWithEmail:e", task.exception)
                         emitter.onError(task.exception!!.fillInStackTrace())

@@ -7,9 +7,10 @@ import com.konradpekala.blefik.ui.base.MvpView
 interface MainMvp {
     interface View: MvpView{
         fun openGameActivity(room: Room)
+        fun openLoginActivity()
     }
-    interface Presenter: MvpPresenter<View>{
-        fun onChangeNickClick()
+    interface Presenter<V: View>: MvpPresenter<V>{
+        fun onChangeNickClick(newNick: String)
         fun onLogOutClick()
     }
 }

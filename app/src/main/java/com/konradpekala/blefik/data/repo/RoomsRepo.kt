@@ -2,23 +2,23 @@ package com.konradpekala.blefik.data.repo
 
 import android.util.Log
 import com.google.firebase.Timestamp
+import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.preferences.Preferences
-import com.konradpekala.blefik.utils.PhoneStuff
 import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
-class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: PhoneStuff) {
+class RoomsRepo(var database: Database,val prefs: Preferences,val auth: FirebaseAuth) {
 
     private var mCurrentRoom: Room? = null
 
     fun addRoom(name: String): Single<String> {
-        val creator = prefs.getUserName()
-        val creatorId = phoneStuff.getAndroidId()
+        val creator = prefs.getUserNick()
+        val creatorId = auth.getUserId()
         val player = Player(creatorId,creator)
         mCurrentRoom = Room(name = name, creatorId = creatorId,createdTime = Timestamp.now())
         mCurrentRoom?.players?.add(player)
@@ -31,7 +31,7 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
     fun observeRooms(): Observable<Room> {
         return database.observeRooms().filter { t: Room ->
             (Timestamp.now().seconds-t.createdTime!!.seconds)/60 < 10 }
-            .map { t: Room -> t.updateLocallyCreated(phoneStuff.getAndroidId()) }
+            .map { t: Room -> t.updateLocallyCreated(auth.getUserId()) }
             .doOnNext {
                 t: Room? -> Log.d("sekundziki",((Timestamp.now().seconds-t!!.createdTime!!.seconds)/60).toString())
             }
@@ -65,8 +65,9 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val phoneStuff: Ph
     }
 
     private fun getLocalPlayer(): Player{
-        val creator = prefs.getUserName()
-        val id = phoneStuff.getAndroidId()
+        val creator = prefs.getUserNick()
+        val id = auth.getUserId()
+        Log.d("local player","$creator $id")
         return Player(id,creator)
     }
 

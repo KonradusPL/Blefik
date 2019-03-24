@@ -2,24 +2,29 @@ package com.konradpekala.blefik.data.preferences
 
 import android.content.Context
 import androidx.core.content.edit
+import com.konradpekala.blefik.data.model.User
 
 class SharedPrefs(context: Context): Preferences {
 
-    private val CURRENT_USER_FULLNAME = "CURRENT_USER_FULLNAME"
+    private val USER_NICK = "USER_NICK"
     private val IS_USER_LOGGED_IN = "IS_USER_LOGGED_IN"
 
 
     private val mSharedPrefs = context.getSharedPreferences("shared_preferences",Context.MODE_PRIVATE)
 
-    override fun saveCurrentUser(value: String) {
+    override fun setUserNick(value: String) {
         mSharedPrefs.edit {
             putBoolean(IS_USER_LOGGED_IN,true)
-            putString(CURRENT_USER_FULLNAME,value)
+            putString(USER_NICK,value)
         }
     }
 
-    override fun getUserName(): String {
-        return mSharedPrefs.getString(CURRENT_USER_FULLNAME,"") ?: ""
+    override fun getUserNick(): String {
+        return mSharedPrefs.getString(USER_NICK,"") ?: ""
+    }
+
+    override fun setUser(value: User) {
+        TODO()
     }
 
     override fun isUserLoggedIn(): Boolean {

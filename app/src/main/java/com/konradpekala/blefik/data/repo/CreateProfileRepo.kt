@@ -9,7 +9,7 @@ class CreateProfileRepo(private val db: Database, private val prefs: SharedPrefs
 
     fun addUser(user: User): Completable{
         return Completable.create { emitter ->
-            prefs.saveCurrentUser(user.nick)
+            prefs.setUserNick(user.nick)
             emitter.onComplete()
         }
     }

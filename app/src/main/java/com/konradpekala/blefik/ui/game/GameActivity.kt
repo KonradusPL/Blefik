@@ -16,6 +16,7 @@ import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
 import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 import com.konradpekala.blefik.ui.game.adapters.createbid.BidsAdapter
+import com.konradpekala.blefik.ui.main.MainActivity
 import com.konradpekala.blefik.ui.main.rooms.RoomsActivity
 import com.konradpekala.blefik.utils.CardsStuff
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
@@ -185,7 +186,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
     }
 
     override fun openRoomActivity() {
-        startActivity(Intent(this, RoomsActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 

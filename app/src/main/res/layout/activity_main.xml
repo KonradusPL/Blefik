@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.rooms.RoomsActivity"
-        android:id="@+id/constraintRooms">
+        android:id="@+id/layoutMain">
 
     <androidx.appcompat.widget.Toolbar
             android:layout_width="0dp"

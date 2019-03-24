@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.View
 import com.konradpekala.blefik.R
+import com.konradpekala.blefik.data.repo.LoginRepository
 import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.main.MainActivity
@@ -13,13 +14,15 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseActivity(),LoginMvp.View {
 
-    private val mPresenter = Injector.getLoginPresenter(this,this)
+    private lateinit var mPresenter: LoginPresenter<LoginMvp.View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         initButtons()
+
+        mPresenter = Injector.getLoginPresenter(this,applicationContext)
     }
 
     private fun initButtons(){
