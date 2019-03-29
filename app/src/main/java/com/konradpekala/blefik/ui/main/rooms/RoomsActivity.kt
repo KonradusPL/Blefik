@@ -13,7 +13,7 @@ import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.main.adapters.RoomsAdapter
 import kotlinx.android.synthetic.main.activity_rooms.*
 import kotlinx.android.synthetic.main.dialog_add_room.view.*
-
+// Old not used activity replaced by RoomsFragment
 class RoomsActivity : BaseActivity(), RoomsMvp.View {
 
     private lateinit var mRoomsAdapter: RoomsAdapter

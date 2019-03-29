@@ -216,4 +216,34 @@ class FirebaseDatabase: Database {
         }
     }
 
+    override fun getUserGamesWon(id: String): Single<Int>{
+        return Single.create { emitter ->
+            database.collection("users").document(id).get()
+                .addOnSuccessListener {
+                        documentSnapshot ->
+                    val obj = documentSnapshot.toObject(User::class.java)
+                    emitter.onSuccess(obj!!.gamesWon)
+                }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }
+    }
+
+    override fun updateUserGamesWon(id: String, gamesWon: Int): Completable{
+        return Completable.create { emitter ->
+            database.collection("users").document(id).update("gamesWon",gamesWon)
+                .addOnSuccessListener { emitter.onComplete()}
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }
+    }
+
+    override fun getUsers(): Single<List<User>> {
+        return Single.create { emitter ->
+            database.collection("users").orderBy("gamesWon",Query.Direction.DESCENDING).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val list = documentSnapshot.toObjects(User::class.java)
+                    emitter.onSuccess(list)
+                }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }    }
+
 }

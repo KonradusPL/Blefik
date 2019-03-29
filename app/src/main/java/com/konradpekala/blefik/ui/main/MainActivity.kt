@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.injection.Injector
@@ -14,16 +13,15 @@ import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.login.LoginActivity
 import com.konradpekala.blefik.ui.main.adapters.MainFragmentsAdapter
+import com.konradpekala.blefik.ui.main.ranking.RankingFragment
 import com.konradpekala.blefik.ui.main.rooms.RoomsFragment
-import com.konradpekala.blefik.ui.main.rooms.RoomsMvp
-import com.konradpekala.blefik.ui.main.rooms.RoomsPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_change_name.view.*
 
 class MainActivity : BaseActivity(),MainMvp.View {
 
     private lateinit var mRoomsFragment: RoomsFragment
-    private lateinit var mRankingFragment: Fragment
+    private lateinit var mRankingFragment: RankingFragment
     private lateinit var mFragmentAdapter: MainFragmentsAdapter
 
     private lateinit var mPresenter: MainPresenter<MainMvp.View>
@@ -33,7 +31,7 @@ class MainActivity : BaseActivity(),MainMvp.View {
         setContentView(R.layout.activity_main)
 
         mRoomsFragment = RoomsFragment()
-        mRankingFragment = Fragment()
+        mRankingFragment = RankingFragment()
 
         mPresenter = Injector.getMainPresenter(this,this)
 

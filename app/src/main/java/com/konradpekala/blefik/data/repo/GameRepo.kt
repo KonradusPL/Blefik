@@ -151,6 +151,15 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val auth: FirebaseA
             .observeOn(SchedulerProvider.ui())
     }
 
+    fun updateUserGamesWon(): Completable{
+        val winnerId = mRoom.players[0].id
+        return db.getUserGamesWon(winnerId)
+            .flatMapCompletable { gamesWon: Int ->
+                db.updateUserGamesWon(winnerId,gamesWon+1) }
+            .subscribeOn(SchedulerProvider.io())
+            .observeOn(SchedulerProvider.ui())
+    }
+
     fun isSomeoneBeaten(): Player?{
         for(player in mRoom.players){
             if(player.cardsCount > cardsStuff.maxCardNumber)

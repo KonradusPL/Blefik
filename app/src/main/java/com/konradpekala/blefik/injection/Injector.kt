@@ -4,16 +4,15 @@ import android.content.Context
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.database.FirebaseDatabase
 import com.konradpekala.blefik.data.preferences.SharedPrefs
-import com.konradpekala.blefik.data.repo.GameRepo
-import com.konradpekala.blefik.data.repo.LoginRepository
-import com.konradpekala.blefik.data.repo.MainRepo
-import com.konradpekala.blefik.data.repo.RoomsRepo
+import com.konradpekala.blefik.data.repo.*
 import com.konradpekala.blefik.ui.game.GameMvp
 import com.konradpekala.blefik.ui.game.GamePresenter
 import com.konradpekala.blefik.ui.login.LoginMvp
 import com.konradpekala.blefik.ui.login.LoginPresenter
 import com.konradpekala.blefik.ui.main.MainMvp
 import com.konradpekala.blefik.ui.main.MainPresenter
+import com.konradpekala.blefik.ui.main.ranking.RankingMvp
+import com.konradpekala.blefik.ui.main.ranking.RankingPresenter
 import com.konradpekala.blefik.ui.main.rooms.RoomsMvp
 import com.konradpekala.blefik.ui.main.rooms.RoomsPresenter
 import com.konradpekala.blefik.utils.CardsStuff
@@ -24,11 +23,6 @@ object Injector {
     private var mGamePresenter: GamePresenter<GameMvp.View>? = null
 
     fun getRoomPresenter(view: RoomsMvp.View, ctx: Context): RoomsPresenter<RoomsMvp.View> {
-        /*if(mRoomPresenter == null){
-            mRoomPresenter = RoomsPresenter(view, RoomsRepo(FirebaseDatabase(), SharedPrefs(ctx), PhoneStuff(ctx)))
-        }else
-            mRoomPresenter!!.view = view
-        return mRoomPresenter!!*/
         return RoomsPresenter(
             view,
             RoomsRepo(FirebaseDatabase(), SharedPrefs(ctx), FirebaseAuth())
@@ -36,11 +30,7 @@ object Injector {
     }
 
     fun getGamePresenter(view: GameMvp.View,ctx: Context): GamePresenter<GameMvp.View>{
-        /*if(mGamePresenter == null){
-            mGamePresenter = GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,SharedPrefs(ctx),PhoneStuff(ctx)))
-        }else
-            mGamePresenter!!.view = view
-        return mGamePresenter!!*/
+
         return GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,FirebaseAuth(),PhoneStuff(ctx)))
     }
 
@@ -49,5 +39,8 @@ object Injector {
     }
     fun getMainPresenter(view: MainMvp.View,ctx: Context): MainPresenter<MainMvp.View>{
         return MainPresenter(view, MainRepo(FirebaseDatabase(),FirebaseAuth()))
+    }
+    fun getRankingPresenter(view: RankingMvp.View, ctx: Context): RankingPresenter<RankingMvp.View>{
+        return RankingPresenter(view, RankingRepository(FirebaseDatabase()))
     }
 }

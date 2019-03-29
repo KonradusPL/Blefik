@@ -7,7 +7,7 @@ import com.konradpekala.blefik.ui.main.MainActivity
 
 class MainFragmentsAdapter(fm: FragmentManager,val mainActivity: MainActivity): FragmentStatePagerAdapter(fm) {
 
-    val FRAGMENTS_COUNT = 2
+    private val FRAGMENTS_COUNT = 2
 
     override fun getItem(position: Int): Fragment {
         return when(position){

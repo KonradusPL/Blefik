@@ -21,5 +21,10 @@ interface Database {
     fun updateRoom(room: Room): Completable
     fun updateBid(room: Room): Completable
 
+    fun getUserGamesWon(id: String): Single<Int>
+    fun updateUserGamesWon(id: String, gamesWon: Int): Completable
+
+    fun getUsers(): Single<List<User>>
+
     fun clean()
 }
