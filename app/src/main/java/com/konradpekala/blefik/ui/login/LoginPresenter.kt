@@ -22,6 +22,7 @@ class LoginPresenter<V: LoginMvp.View>(view: V,val repo: LoginRepository): BaseP
         cd.add(repo.signUp(email, password)
             .flatMap { id: String -> repo.createUser(email,password,id,nick) }
             .subscribe({
+                repo.saveUserLocally(nick)
                 view.hideLoading()
                 view.showMessage("Sukces!")
                 view.openMainActivity()
@@ -38,8 +39,8 @@ class LoginPresenter<V: LoginMvp.View>(view: V,val repo: LoginRepository): BaseP
         cd.add(repo.signIn(email, password)
             .flatMap { id: String -> repo.getUserNick(id) }
             .subscribe({  nick: String ->
+                repo.saveUserLocally(nick)
                 view.hideLoading()
-                view.showMessage(nick)
                 view.openMainActivity()
             },{t: Throwable? ->
                 view.hideLoading()

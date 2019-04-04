@@ -21,17 +21,32 @@
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/switchLoginType"/>
 
-    <EditText
-            android:layout_width="0dp"
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPassword"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:hint="Hasło"
-            app:layout_constraintTop_toBottomOf="@+id/fieldEmail"
+            android:gravity="center_horizontal"
+            app:hintEnabled="false"
             android:layout_marginTop="8dp"
-            style="@style/EditTextLogin"
-            android:id="@+id/fieldPassword">
-    </EditText>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fieldEmail"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/white">
+
+        <EditText
+                android:id="@+id/fieldPassword"
+                android:layout_width="match_parent"
+                style="@style/EditTextLogin"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
             android:text="Zaloguj się"
             android:layout_width="wrap_content"
@@ -114,7 +129,7 @@
             android:id="@+id/fieldNick"
             style="@style/EditTextLogin"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/fieldPassword"
+            app:layout_constraintTop_toBottomOf="@+id/layoutPassword"
             android:visibility="visible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

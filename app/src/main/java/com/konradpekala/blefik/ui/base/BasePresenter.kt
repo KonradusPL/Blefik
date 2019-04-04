@@ -2,7 +2,7 @@ package com.konradpekala.blefik.ui.base
 
 import io.reactivex.disposables.CompositeDisposable
 
-open class BasePresenter<V: MvpView>(var view: V): MvpPresenter<V> {
+abstract class BasePresenter<V: MvpView>(var view: V): MvpPresenter<V> {
 
     protected val cd = CompositeDisposable()
 

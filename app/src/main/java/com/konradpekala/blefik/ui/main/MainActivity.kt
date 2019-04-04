@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.dialog_change_name.view.*
 
 class MainActivity : BaseActivity(),MainMvp.View {
 
+
     private lateinit var mRoomsFragment: RoomsFragment
     private lateinit var mRankingFragment: RankingFragment
     private lateinit var mFragmentAdapter: MainFragmentsAdapter
@@ -58,6 +59,10 @@ class MainActivity : BaseActivity(),MainMvp.View {
             R.id.menuLogOut -> mPresenter.onLogOutClick()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun setToolbarTitle(title: String) {
+        toolbarMain.title = "Witaj, $title"
     }
 
     private fun showChangeNameDialog(){

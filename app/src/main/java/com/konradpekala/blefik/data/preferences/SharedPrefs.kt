@@ -14,8 +14,13 @@ class SharedPrefs(context: Context): Preferences {
 
     override fun setUserNick(value: String) {
         mSharedPrefs.edit {
-            putBoolean(IS_USER_LOGGED_IN,true)
             putString(USER_NICK,value)
+        }
+    }
+
+    override fun setIsUserLoggedIn(value: Boolean) {
+        mSharedPrefs.edit{
+            putBoolean(IS_USER_LOGGED_IN,value)
         }
     }
 
