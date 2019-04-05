@@ -5,7 +5,17 @@
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
+
 .DS_Store
 /build
 /captures
 .externalNativeBuild
+
+/.idea/tasks.xml
+/.idea/compiler.xml
+/.idea/copyright/profiles_settings.xml
+/.idea/encodings.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/scopes/scope_settings.xml
+/.idea/vcs.xml
