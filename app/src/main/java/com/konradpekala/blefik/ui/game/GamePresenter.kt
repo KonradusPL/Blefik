@@ -54,6 +54,10 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
             }))
     }
 
+    override fun onCreate() {
+        super.onCreate()
+    }
+
     override fun refreshGame() {
         cd.clear()
         mNeedToRefresh = true

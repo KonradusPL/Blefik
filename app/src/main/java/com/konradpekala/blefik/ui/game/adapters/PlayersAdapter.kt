@@ -4,8 +4,10 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.ui.game.GameMvp
@@ -29,7 +31,11 @@ class PlayersAdapter(val players: ArrayList<Player>, val mvpView: GameMvp.View):
     inner class UserVH(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(player: Player){
 
+            (itemView as MaterialCardView).strokeColor = (if(player.isCurrentPlayer)
+                ContextCompat.getColor(mvpView.getCtx(),R.color.colorAccent)
+            else Color.TRANSPARENT)
             itemView.apply {
+
                 textFullName.text = player.nick
                 textPlayerCards.text = "${player.currentCards.size}"
 
@@ -39,8 +45,9 @@ class PlayersAdapter(val players: ArrayList<Player>, val mvpView: GameMvp.View):
                     .sizeDp(14)
                 textPlayerCards.setCompoundDrawables(null,null,iconCardDrawable,null)
 
-                setBackgroundColor(if(player.isCurrentPlayer) ContextCompat.getColor(context,R.color.colorCurrentPlayer)
-                else Color.WHITE)
+                /*setBackgroundColor(if(player.isCurrentPlayer) ContextCompat.getColor(context,R.color.colorCurrentPlayer)
+                else Color.WHITE)*/
+
                 if(player.phoneOwner && player.isCurrentPlayer){
                     buttonCheck.visibility = View.VISIBLE
                     buttonRaiseBid.visibility = View.VISIBLE

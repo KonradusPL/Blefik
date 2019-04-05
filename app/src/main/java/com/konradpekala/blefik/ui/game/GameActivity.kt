@@ -3,6 +3,7 @@ package com.konradpekala.blefik.ui.game
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -53,13 +54,22 @@ class GameActivity : BaseActivity(),GameMvp.View {
 
         val roomId = intent.getStringExtra("roomId")
         val creatorId = intent.getStringExtra("creatorId")
+        Log.d("onCreate","roomId: $roomId")
+
+        val shouldGameStart = savedInstanceState?.getBoolean("shouldGameStart",true) ?: true
+        Log.d("onCreate","shouldGameStart: " + shouldGameStart.toString())
         //**
         //****
         //******
-        mPresenter.startGame(roomId,creatorId,true)
+        mPresenter.startGame(roomId,creatorId,shouldGameStart)
         //******
         //****
         //**
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("shouldGameStart",false)
     }
 
     private fun initOtherUI(){
