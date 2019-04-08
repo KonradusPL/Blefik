@@ -15,6 +15,7 @@ import com.konradpekala.blefik.ui.login.LoginActivity
 import com.konradpekala.blefik.ui.main.adapters.MainFragmentsAdapter
 import com.konradpekala.blefik.ui.main.ranking.RankingFragment
 import com.konradpekala.blefik.ui.main.rooms.RoomsFragment
+import com.konradpekala.blefik.ui.profile.ProfileActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_change_name.view.*
 
@@ -36,6 +37,7 @@ class MainActivity : BaseActivity(),MainMvp.View {
 
         mPresenter = Injector.getMainPresenter(this,this)
 
+        initButtons()
         setSupportActionBar(toolbarMain)
         initTabsStuff()
 
@@ -48,25 +50,17 @@ class MainActivity : BaseActivity(),MainMvp.View {
         tabLayoutMain.setupWithViewPager(viewPager)
     }
 
+    private fun initButtons(){
+        imageProfile.setOnClickListener {
+            openProfileActivity()
+        }
+    }
+
     override fun setToolbarTitle(title: String) {
         toolbarMain.title = "Witaj, $title"
     }
 
-    private fun showChangeNameDialog(){
-        val customView = LayoutInflater.from(this).inflate(R.layout.dialog_change_name,layoutMain,false)
 
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Zmiana nicku")
-            .setView(customView).create()
-
-        customView.buttonDialogCreate.setOnClickListener {
-            mPresenter.onChangeNickClick(customView.fieldUserName.text.toString())
-            dialog.hide()
-        }
-
-        dialog.show()
-
-    }
 
     override fun openGameActivity(room: Room) {
         val intent = Intent(this, GameActivity::class.java)
@@ -75,6 +69,11 @@ class MainActivity : BaseActivity(),MainMvp.View {
         intent.putExtra("creatorId",room.name)
         startActivity(intent)
         finish()
+    }
+
+    override fun openProfileActivity() {
+        val intent = Intent(this, ProfileActivity::class.java)
+        startActivity(intent)
     }
 
     override fun openLoginActivity() {

@@ -6,4 +6,6 @@ interface ProfileRepository {
     fun saveImage()
     fun getImage()
     fun changeNick(newNick: String): Completable
+    fun getNick(): String
+    fun getEmail(): String
 }

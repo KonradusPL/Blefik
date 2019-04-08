@@ -8,6 +8,7 @@ interface MainMvp {
     interface View: MvpView{
         fun openGameActivity(room: Room)
         fun openLoginActivity()
+        fun openProfileActivity()
         fun setToolbarTitle(title: String)
     }
     interface Presenter<V: View>: MvpPresenter<V>{

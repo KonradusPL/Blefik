@@ -10,6 +10,13 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
     BasePresenter<V>(view),ProfileMvp.Presenter<V> {
 
 
+
+    override fun onCreate() {
+        super.onCreate()
+
+        view.changeNick(profileRepo.getNick())
+    }
+
     override fun onChangeNickClick(newNick: String) {
         cd.add(profileRepo.changeNick(newNick).subscribe({
             view.changeNick(newNick)

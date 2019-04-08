@@ -18,4 +18,12 @@ class ProfileRepositoryImpl(val remote: RemoteProfileRepository,
         return remote.changeNick(newNick)
             .doOnComplete { cache.setUserNick(newNick) }
     }
+
+    override fun getEmail(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getNick(): String {
+        return cache.getUserNick()
+    }
 }
