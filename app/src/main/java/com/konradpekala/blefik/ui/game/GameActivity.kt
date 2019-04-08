@@ -8,6 +8,7 @@ import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.*
@@ -18,7 +19,6 @@ import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
 import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 import com.konradpekala.blefik.ui.game.adapters.createbid.BidsAdapter
 import com.konradpekala.blefik.ui.main.MainActivity
-import com.konradpekala.blefik.ui.main.rooms.RoomsActivity
 import com.konradpekala.blefik.utils.CardsStuff
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
@@ -126,10 +126,6 @@ class GameActivity : BaseActivity(),GameMvp.View {
             mPresenter.refreshGame()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun animatePlayerCardsView(){
-        fabShowPlayerCards.performClick()
     }
 
     private fun initBidsCreatorList(){

@@ -32,7 +32,7 @@ class PlayersAdapter(val players: ArrayList<Player>, val mvpView: GameMvp.View):
         fun bind(player: Player){
 
             (itemView as MaterialCardView).strokeColor = (if(player.isCurrentPlayer)
-                ContextCompat.getColor(mvpView.getCtx(),R.color.colorAccent)
+                ContextCompat.getColor(mvpView.getCtx(),R.color.colorPrimary)
             else Color.TRANSPARENT)
             itemView.apply {
 
