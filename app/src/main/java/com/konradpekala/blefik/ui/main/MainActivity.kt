@@ -48,19 +48,6 @@ class MainActivity : BaseActivity(),MainMvp.View {
         tabLayoutMain.setupWithViewPager(viewPager)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main,menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.menuChangeNick -> showChangeNameDialog()
-            R.id.menuLogOut -> mPresenter.onLogOutClick()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun setToolbarTitle(title: String) {
         toolbarMain.title = "Witaj, $title"
     }

@@ -84,7 +84,6 @@ dependencies {
     implementation 'com.llollox:androidtoggleswitch:2.0.1'
 
 
-
 }
 
 apply plugin: 'com.google.gms.google-services'
