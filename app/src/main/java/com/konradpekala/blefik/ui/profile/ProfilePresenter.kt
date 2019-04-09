@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.ui.profile
 
+import android.util.Log
 import com.konradpekala.blefik.data.repo.auth.AuthRepository
 import com.konradpekala.blefik.data.repo.profile.ProfileRepository
 import com.konradpekala.blefik.ui.base.BasePresenter
@@ -30,7 +31,13 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
         view.openLoginActivity()
     }
 
-    override fun onnewImageChosen(newNick: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onNewImageChosen(path: String) {
+        Log.d("onNewImageChosen",path)
+        cd.add(profileRepo.saveImage(path).subscribe({
+            view.changeProfileImage(path)
+            Log.d("onNewImageChosen","success")
+        },{t: Throwable? ->
+            Log.d("onNewImageChosen",t.toString())
+        }))
     }
 }

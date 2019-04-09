@@ -20,8 +20,8 @@ class RemoteProfileRepository(val remoteDb: FirebaseDatabase,
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun saveImage(imageBitmap: Bitmap): Single<String> {
-        return storage.saveImage(imageBitmap,auth.getUserId())
+    override fun saveImage(imagePath: String): Single<String> {
+        return storage.saveImage(imagePath,auth.getUserId())
     }
 
     override fun getImage(url: String): Single<Bitmap> {

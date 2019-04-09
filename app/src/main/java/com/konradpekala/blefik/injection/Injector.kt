@@ -10,6 +10,7 @@ import com.konradpekala.blefik.data.repo.auth.AuthRepositoryImpl
 import com.konradpekala.blefik.data.repo.profile.LocalProfileRepository
 import com.konradpekala.blefik.data.repo.profile.ProfileRepositoryImpl
 import com.konradpekala.blefik.data.repo.profile.RemoteProfileRepository
+import com.konradpekala.blefik.data.storage.FirebaseStorage
 import com.konradpekala.blefik.ui.game.GameMvp
 import com.konradpekala.blefik.ui.game.GamePresenter
 import com.konradpekala.blefik.ui.login.LoginMvp
@@ -52,7 +53,7 @@ object Injector {
     }
     fun getProfilePresenter(view: ProfileMvp.View, ctx: Context): ProfilePresenter<ProfileMvp.View>{
         return ProfilePresenter(view,ProfileRepositoryImpl(
-            RemoteProfileRepository(FirebaseDatabase(), FirebaseAuth()),
+            RemoteProfileRepository(FirebaseDatabase(), FirebaseAuth(), FirebaseStorage()),
             LocalProfileRepository(), SharedPrefs(ctx)),AuthRepositoryImpl(FirebaseAuth()))
     }
 }

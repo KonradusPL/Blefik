@@ -4,6 +4,8 @@
           package="com.konradpekala.blefik">
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
@@ -21,8 +23,6 @@
                 android:configChanges="orientation"
                 android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ui.main.rooms.RoomsActivity">
-        </activity>
         <activity android:name=".ui.createProfile.CreateProfileActivity">
         </activity>
         <activity android:name=".SplashActivity">
@@ -38,6 +38,10 @@
         </activity>
         <activity android:name=".ui.profile.ProfileActivity">
         </activity>
+
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+                  android:theme="@style/Base.Theme.AppCompat"/>
+
         <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts"/>
     </application>
 
