@@ -8,4 +8,6 @@ interface Preferences {
     fun getUserNick(): String
     fun isUserLoggedIn(): Boolean
     fun setIsUserLoggedIn(value: Boolean)
+    fun setUserEmail(value: String)
+    fun getUserEmail(): String
 }

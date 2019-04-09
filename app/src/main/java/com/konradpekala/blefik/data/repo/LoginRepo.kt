@@ -28,8 +28,9 @@ class LoginRepository(private val mAuth: FirebaseAuth,
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
     }
-    fun saveUserLocally(nick: String){
+    fun saveUserLocally(nick: String, email: String){
         mPrefs.setUserNick(nick)
+        mPrefs.setUserEmail(email)
         mPrefs.setIsUserLoggedIn(true)
     }
 

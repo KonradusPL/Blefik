@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.ui.profile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import com.konradpekala.blefik.data.repo.profile.ProfileRepositoryImpl
 import com.konradpekala.blefik.data.repo.profile.RemoteProfileRepository
 import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.base.BaseActivity
+import com.konradpekala.blefik.ui.login.LoginActivity
 import com.konradpekala.blefik.ui.main.MainMvp
 import com.konradpekala.blefik.ui.main.MainPresenter
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -33,6 +35,9 @@ class ProfileActivity : BaseActivity(),ProfileMvp.View {
         buttonChangeNick.setOnClickListener {
             showChangeNameDialog()
         }
+        buttonLogOut.setOnClickListener{
+            mPresenter.onLogOutClick()
+        }
     }
 
     private fun showChangeNameDialog(){
@@ -52,10 +57,16 @@ class ProfileActivity : BaseActivity(),ProfileMvp.View {
     }
 
     override fun openLoginActivity() {
+        startActivity(Intent(this,LoginActivity::class.java))
+        finish()
     }
 
     override fun changeNick(nick: String) {
         textNickBig.text = nick
         textNickSmall.text = nick
+    }
+
+    override fun changeEmail(email: String) {
+        textEmail.text = email
     }
 }

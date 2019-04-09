@@ -7,6 +7,7 @@ import com.konradpekala.blefik.data.model.User
 class SharedPrefs(context: Context): Preferences {
 
     private val USER_NICK = "USER_NICK"
+    private val USER_EMAIL = "USER_EMAIL"
     private val IS_USER_LOGGED_IN = "IS_USER_LOGGED_IN"
 
 
@@ -32,7 +33,19 @@ class SharedPrefs(context: Context): Preferences {
         TODO()
     }
 
+    override fun setUserEmail(value: String) {
+        mSharedPrefs.edit {
+            putString(USER_EMAIL,value)
+        }
+    }
+
+    override fun getUserEmail(): String {
+        return mSharedPrefs.getString(USER_EMAIL,"") ?: ""
+    }
+
     override fun isUserLoggedIn(): Boolean {
         return mSharedPrefs.getBoolean(IS_USER_LOGGED_IN,false)
     }
+
+
 }

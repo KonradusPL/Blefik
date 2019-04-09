@@ -62,7 +62,7 @@ android:id="@+id/layoutProfile">
                     android:textSize="18sp"/>
             <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/textView5"
+                    android:layout_height="wrap_content" android:id="@+id/textEmail"
                     android:textColor="@color/colorAccent" android:text="konradus2012@gmail.com"/>
         </LinearLayout>
         <LinearLayout
@@ -80,6 +80,19 @@ android:id="@+id/layoutProfile">
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/textNickSmall"
                     android:textColor="@color/colorAccent" tools:text="Konradus2012"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ProfileItem"
+                android:id="@+id/buttonLogOut">
+            <TextView
+                    android:text="Wyloguj się"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/textView6"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
