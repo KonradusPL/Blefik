@@ -4,6 +4,7 @@ import android.util.Log
 import com.konradpekala.blefik.data.repo.auth.AuthRepository
 import com.konradpekala.blefik.data.repo.profile.ProfileRepository
 import com.konradpekala.blefik.ui.base.BasePresenter
+import java.io.File
 
 class ProfilePresenter<V: ProfileMvp.View>(view: V,
                                            val profileRepo: ProfileRepository,
@@ -15,6 +16,12 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
 
         view.changeNick(profileRepo.getNick())
         view.changeEmail(profileRepo.getEmail())
+
+        cd.add(profileRepo.getProfileImage().subscribe({file: File ->
+            view.changeProfileImage(file)
+        },{t: Throwable? ->
+            view.showMessage(t.toString())
+        }))
     }
 
     override fun onChangeNickClick(newNick: String) {
@@ -33,8 +40,8 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
 
     override fun onNewImageChosen(path: String) {
         Log.d("onNewImageChosen",path)
-        cd.add(profileRepo.saveImage(path).subscribe({
-            view.changeProfileImage(path)
+        cd.add(profileRepo.saveImage(path).subscribe({ downLoadUrl: String ->
+            view.changeProfileImage(downLoadUrl)
             Log.d("onNewImageChosen","success")
         },{t: Throwable? ->
             Log.d("onNewImageChosen",t.toString())

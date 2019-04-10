@@ -16,8 +16,10 @@ import com.konradpekala.blefik.ui.main.adapters.MainFragmentsAdapter
 import com.konradpekala.blefik.ui.main.ranking.RankingFragment
 import com.konradpekala.blefik.ui.main.rooms.RoomsFragment
 import com.konradpekala.blefik.ui.profile.ProfileActivity
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_change_name.view.*
+import java.io.File
 
 class MainActivity : BaseActivity(),MainMvp.View {
 
@@ -60,7 +62,14 @@ class MainActivity : BaseActivity(),MainMvp.View {
         toolbarMain.title = "Witaj, $title"
     }
 
-
+    override fun changeProfileImage(file: File) {
+        Picasso.get()
+            .load(file)
+            .placeholder(R.drawable.user_holder)
+            .resize(50,50)
+            .centerCrop()
+            .into(imageProfile)
+    }
 
     override fun openGameActivity(room: Room) {
         val intent = Intent(this, GameActivity::class.java)

@@ -25,8 +25,9 @@ android:id="@+id/layoutProfile">
                 app:civ_border_width="2dp"
                 app:layout_constraintEnd_toEndOf="parent" android:id="@+id/imageProfile"
                 tools:src="@tools:sample/avatars" android:layout_marginTop="24dp"
-                app:layout_constraintTop_toTopOf="parent" android:src="@drawable/user_holder"
-                android:cropToPadding="true" android:adjustViewBounds="false" android:scaleType="centerCrop"/>
+                app:layout_constraintTop_toTopOf="parent"
+                android:cropToPadding="true" android:adjustViewBounds="false" android:scaleType="centerCrop"
+                android:src="@drawable/user_holder"/>
         <TextView
                 android:text="Konradus2012"
                 android:layout_width="0dp"
