@@ -14,7 +14,6 @@ interface MainMvp {
         fun setToolbarTitle(title: String)
     }
     interface Presenter<V: View>: MvpPresenter<V>{
-        fun onChangeNickClick(newNick: String)
-        fun onLogOutClick()
+
     }
 }

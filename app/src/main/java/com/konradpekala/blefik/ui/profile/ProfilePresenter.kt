@@ -25,7 +25,7 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
     }
 
     override fun onChangeNickClick(newNick: String) {
-        cd.add(profileRepo.changeNick(newNick).subscribe({
+        cd.add(profileRepo.setNick(newNick).subscribe({
             view.changeNick(newNick)
             view.showMessage("Powodzenia $newNick!")
         },{t: Throwable? ->
@@ -34,6 +34,7 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
     }
 
     override fun onLogOutClick() {
+        profileRepo.clean()
         authRepo.logOut()
         view.openLoginActivity()
     }
@@ -41,6 +42,7 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
     override fun onNewImageChosen(path: String) {
         Log.d("onNewImageChosen",path)
         cd.add(profileRepo.saveImage(path).subscribe({ downLoadUrl: String ->
+
             view.changeProfileImage(downLoadUrl)
             Log.d("onNewImageChosen","success")
         },{t: Throwable? ->

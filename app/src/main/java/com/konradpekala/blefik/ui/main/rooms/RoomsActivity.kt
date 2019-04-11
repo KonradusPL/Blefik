@@ -28,7 +28,7 @@ class RoomsActivity : BaseActivity(), RoomsMvp.View {
         initList()
         initUI()
 
-        mPresenter.start()
+        mPresenter.onStart()
     }
 
     override fun onDestroy() {

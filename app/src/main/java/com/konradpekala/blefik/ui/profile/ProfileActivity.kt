@@ -13,6 +13,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.dialog_change_name.view.*
 import android.app.Activity
+import android.util.Log
 import com.squareup.picasso.Picasso
 import java.io.File
 
@@ -45,6 +46,11 @@ class ProfileActivity : BaseActivity(),ProfileMvp.View {
                 .setAspectRatio(1,1)
                 .start(this)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("onStart","true")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

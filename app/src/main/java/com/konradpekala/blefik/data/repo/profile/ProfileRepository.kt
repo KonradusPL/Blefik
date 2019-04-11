@@ -6,27 +6,36 @@ import io.reactivex.Single
 import java.io.File
 
 class ProfileRepository(
-    val remote: RemoteProfileRepository,
-    val cache: SharedPrefs) {
+    val remote: IProfileRepository,
+    val cache: SharedPrefs): IProfileRepository {
 
-     fun saveImage(imagePath: String): Single<String> {
-        return remote.saveImage(imagePath)
+    override fun saveImageUrl(url: String): Completable {
+        return remote.saveImageUrl(url)
     }
 
-     fun getProfileImage(): Single<File> {
+    override fun saveImage(imagePath: String): Single<String> {
+        return remote.saveImage(imagePath)
+            .flatMap{downloadUrl: String -> remote.saveImageUrl(downloadUrl).toSingle { downloadUrl }}
+    }
+
+     override fun getProfileImage(): Single<File> {
         return remote.getProfileImage()
     }
 
-     fun changeNick(newNick: String): Completable {
-        return remote.changeNick(newNick)
+     override fun setNick(newNick: String): Completable {
+        return remote.setNick(newNick)
             .doOnComplete { cache.setUserNick(newNick) }
     }
 
-     fun getEmail(): String {
+     override fun getEmail(): String {
         return cache.getUserEmail()
     }
 
-     fun getNick(): String {
+     override fun getNick(): String {
         return cache.getUserNick()
+    }
+
+    override fun clean() {
+        remote.clean()
     }
 }

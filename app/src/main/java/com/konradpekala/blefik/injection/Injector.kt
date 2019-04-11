@@ -44,14 +44,16 @@ object Injector {
         return LoginPresenter(view, LoginRepository(FirebaseAuth(),FirebaseDatabase(),SharedPrefs(ctx.applicationContext)))
     }
     fun getMainPresenter(view: MainMvp.View,ctx: Context): MainPresenter<MainMvp.View>{
-        return MainPresenter(view, MainRepo(FirebaseDatabase(),FirebaseAuth(),SharedPrefs(ctx)),)
+        return MainPresenter(view,
+             ProfileRepository(FirebaseProfileRepository(FirebaseAuth(),FirebaseStorage),SharedPrefs(ctx))
+        )
     }
     fun getRankingPresenter(view: RankingMvp.View, ctx: Context): RankingPresenter<RankingMvp.View>{
         return RankingPresenter(view, RankingRepository(FirebaseDatabase()))
     }
     fun getProfilePresenter(view: ProfileMvp.View, ctx: Context): ProfilePresenter<ProfileMvp.View>{
         return ProfilePresenter(view,ProfileRepository(
-            FirebaseProfileRepository(FirebaseDatabase(), FirebaseAuth(), FirebaseStorage()),
+            FirebaseProfileRepository(FirebaseAuth(), FirebaseStorage),
             SharedPrefs(ctx)),AuthRepositoryImpl(FirebaseAuth()))
     }
 }

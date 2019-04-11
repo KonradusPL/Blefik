@@ -2,6 +2,7 @@ package com.konradpekala.blefik.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -78,6 +79,11 @@ class MainActivity : BaseActivity(),MainMvp.View {
         intent.putExtra("creatorId",room.name)
         startActivity(intent)
         finish()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mPresenter.onStart()
     }
 
     override fun openProfileActivity() {

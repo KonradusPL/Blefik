@@ -17,15 +17,26 @@ import com.google.android.gms.tasks.OnSuccessListener
 
 
 
-class FirebaseStorage {
+object FirebaseStorage {
 
     val profilesStorage = FirebaseStorage.getInstance().getReference("profile_images")
+
+    var localImage: File? = null
+
+    fun clean(){
+        localImage = null
+    }
 
     fun getProfileImage(id: String): Single<File>{
         val profileRef = profilesStorage.child(id)
 
+        if (localImage != null)
+            return Single.just(localImage)
+
         return Single.create { emitter ->
             val localFile = File.createTempFile("images", "jpg")
+
+            localImage = localFile
 
             profileRef.getFile(localFile).addOnSuccessListener { taskSnapshot: FileDownloadTask.TaskSnapshot? ->
                 emitter.onSuccess(localFile)
@@ -36,6 +47,7 @@ class FirebaseStorage {
     }
 
     fun saveImage(path: String,id: String): Single<String> {
+        clean()
         return Single.create { emitter ->
             val stream = FileInputStream(File(path))
 
@@ -56,7 +68,7 @@ class FirebaseStorage {
                     Log.d("saveImagepath",downloadUri.toString())
                     emitter.onSuccess(downloadUri.toString())
                 } else {
-
+                    emitter.onError(Throwable("error saving image"))
                 }
             }
         }

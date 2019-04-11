@@ -31,7 +31,7 @@ class RoomsFragment: BaseFragment<MainMvp.View>(),
         initList()
         initUI()
 
-        mPresenter.start()
+        mPresenter.onStart()
     }
 
     private fun initUI(){

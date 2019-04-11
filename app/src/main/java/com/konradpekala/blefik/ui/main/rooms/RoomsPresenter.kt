@@ -10,8 +10,8 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V, val repo: RoomsRepo): BasePresen
 
     private var gameOpened = false
 
-    override fun start() {
-        super.start()
+    override fun onStart() {
+        super.onStart()
         gameOpened = false
         cd.add(repo.observeRooms()
             .subscribe({room: Room ->

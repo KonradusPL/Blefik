@@ -14,10 +14,5 @@ class MainRepo(val db: FirebaseDatabase,val auth: FirebaseAuth,val prefs: Shared
         auth.logOut()
     }
 
-    fun changeNick(newNick: String): Completable{
-        return db.changeUserNick(auth.getUserId(),newNick)
-            .doOnComplete {prefs.setUserNick(newNick)}
-            .subscribeOn(SchedulerProvider.io())
-            .observeOn(SchedulerProvider.ui())
-    }
+
 }

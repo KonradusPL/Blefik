@@ -5,10 +5,12 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
-interface RemoteProfileRepository {
+interface IProfileRepository {
     fun saveImage(imagePath: String): Single<String>
+    fun saveImageUrl(url: String): Completable
     fun getProfileImage(): Single<File>
-    fun changeNick(newNick: String): Completable
+    fun setNick(newNick: String): Completable
     fun getNick(): String
     fun getEmail(): String
+    fun clean()
 }

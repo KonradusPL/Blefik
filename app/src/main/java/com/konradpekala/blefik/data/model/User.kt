@@ -4,4 +4,5 @@ data class User(var nick: String = "",
                 var id: String = "",
                 var email: String = "",
                 var password: String = "",
-                var gamesWon: Int = 0)
+                var gamesWon: Int = 0,
+                var imageUrl: String = "")
