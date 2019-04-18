@@ -6,9 +6,7 @@ import io.reactivex.Single
 import java.io.File
 
 interface IProfileRepository {
-    fun saveImage(imagePath: String): Single<String>
     fun saveImageUrl(url: String): Completable
-    fun getProfileImage(): Single<File>
     fun setNick(newNick: String): Completable
     fun getNick(): String
     fun getEmail(): String

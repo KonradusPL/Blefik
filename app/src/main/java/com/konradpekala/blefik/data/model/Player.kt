@@ -5,6 +5,7 @@ import java.util.Comparator
 
 data class Player(var id: String = "",
                   var nick: String = "",
+                  var imageUrl: String = "",
                   var currentCards: ArrayList<Card> = ArrayList(),
                   var cardsCount: Int = 0,
                   @get:Exclude var isCurrentPlayer: Boolean = false,
@@ -15,6 +16,7 @@ data class Player(var id: String = "",
         map["nick"] = nick
         map["currentCards"] = mapCards()
         map["cardsCount"] = cardsCount
+        map["imageUrl"] = imageUrl
         return map
     }
 

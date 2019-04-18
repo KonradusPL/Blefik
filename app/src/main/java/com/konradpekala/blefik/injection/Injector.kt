@@ -5,9 +5,12 @@ import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.database.FirebaseDatabase
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.data.repo.*
-import com.konradpekala.blefik.data.repo.auth.AuthRepositoryImpl
+import com.konradpekala.blefik.data.repo.auth.AuthFirebaseRepository
+import com.konradpekala.blefik.data.repo.image.FirebaseImageRepository
+import com.konradpekala.blefik.data.repo.image.ImageRepository
 import com.konradpekala.blefik.data.repo.profile.ProfileRepository
 import com.konradpekala.blefik.data.repo.profile.FirebaseProfileRepository
+import com.konradpekala.blefik.data.repo.profile.LocalImageRepository
 import com.konradpekala.blefik.data.storage.FirebaseStorage
 import com.konradpekala.blefik.ui.game.GameMvp
 import com.konradpekala.blefik.ui.game.GamePresenter
@@ -28,6 +31,7 @@ object Injector {
     private var mRoomPresenter: RoomsPresenter<RoomsMvp.View>? = null
     private var mGamePresenter: GamePresenter<GameMvp.View>? = null
 
+
     fun getRoomPresenter(view: RoomsMvp.View, ctx: Context): RoomsPresenter<RoomsMvp.View> {
         return RoomsPresenter(
             view,
@@ -45,7 +49,9 @@ object Injector {
     }
     fun getMainPresenter(view: MainMvp.View,ctx: Context): MainPresenter<MainMvp.View>{
         return MainPresenter(view,
-             ProfileRepository(FirebaseProfileRepository(FirebaseAuth(),FirebaseStorage),SharedPrefs(ctx))
+             ProfileRepository(FirebaseProfileRepository(FirebaseAuth(),FirebaseStorage),SharedPrefs(ctx)),
+            ImageRepository(FirebaseImageRepository,LocalImageRepository(ctx)),
+            AuthFirebaseRepository(FirebaseAuth())
         )
     }
     fun getRankingPresenter(view: RankingMvp.View, ctx: Context): RankingPresenter<RankingMvp.View>{
@@ -54,6 +60,7 @@ object Injector {
     fun getProfilePresenter(view: ProfileMvp.View, ctx: Context): ProfilePresenter<ProfileMvp.View>{
         return ProfilePresenter(view,ProfileRepository(
             FirebaseProfileRepository(FirebaseAuth(), FirebaseStorage),
-            SharedPrefs(ctx)),AuthRepositoryImpl(FirebaseAuth()))
+            SharedPrefs(ctx)),ImageRepository(FirebaseImageRepository,LocalImageRepository(ctx)),
+            AuthFirebaseRepository(FirebaseAuth()))
     }
 }

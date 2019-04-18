@@ -10,4 +10,6 @@ interface Preferences {
     fun setIsUserLoggedIn(value: Boolean)
     fun setUserEmail(value: String)
     fun getUserEmail(): String
+    fun setProfileImageUrl(value: String)
+    fun getProfileImageUrl(): String
 }

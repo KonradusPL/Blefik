@@ -19,7 +19,8 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val auth: Firebase
     fun addRoom(name: String): Single<String> {
         val creator = prefs.getUserNick()
         val creatorId = auth.getUserId()
-        val player = Player(creatorId,creator)
+        val imageUrl = prefs.getProfileImageUrl()
+        val player = Player(creatorId,creator,imageUrl)
         mCurrentRoom = Room(name = name, creatorId = creatorId,createdTime = Timestamp.now())
         mCurrentRoom?.players?.add(player)
 
@@ -67,8 +68,9 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val auth: Firebase
     private fun getLocalPlayer(): Player{
         val creator = prefs.getUserNick()
         val id = auth.getUserId()
+        val imageUrl = prefs.getProfileImageUrl()
         Log.d("local player","$creator $id")
-        return Player(id,creator)
+        return Player(id,creator,imageUrl)
     }
 
     fun isSameAsChosenBefore(room: Room): Boolean{

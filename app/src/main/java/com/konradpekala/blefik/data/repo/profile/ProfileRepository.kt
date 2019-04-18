@@ -1,6 +1,7 @@
 package com.konradpekala.blefik.data.repo.profile
 
 import com.konradpekala.blefik.data.preferences.SharedPrefs
+import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
@@ -11,15 +12,9 @@ class ProfileRepository(
 
     override fun saveImageUrl(url: String): Completable {
         return remote.saveImageUrl(url)
-    }
-
-    override fun saveImage(imagePath: String): Single<String> {
-        return remote.saveImage(imagePath)
-            .flatMap{downloadUrl: String -> remote.saveImageUrl(downloadUrl).toSingle { downloadUrl }}
-    }
-
-     override fun getProfileImage(): Single<File> {
-        return remote.getProfileImage()
+            .doOnComplete { cache.setProfileImageUrl(url) }
+            .subscribeOn(SchedulerProvider.io())
+            .observeOn(SchedulerProvider.ui())
     }
 
      override fun setNick(newNick: String): Completable {

@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.data.repo.profile
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.storage.FirebaseStorage
@@ -15,10 +16,20 @@ class FirebaseProfileRepository(val auth: FirebaseAuth,
 
 
     override fun saveImageUrl(url: String): Completable {
+        Log.d("saveImageUrl","start")
         return Completable.create { emitter ->
+            Log.d("saveImageUrl",url)
+            Log.d("saveImageUrl",url)
             database.collection("users").document(auth.getUserId()).update("imageUrl",url)
-                .addOnSuccessListener { emitter.onComplete()}
-                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+                .addOnSuccessListener {
+                    Log.d("saveImageUrl","success")
+                    emitter.onComplete()
+                }.addOnCanceledListener {
+                    Log.d("saveImageUrl","cancelled")
+                }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace())
+                    Log.d("saveImageUrl",exception.toString())
+                }
         }
     }
 
@@ -34,13 +45,6 @@ class FirebaseProfileRepository(val auth: FirebaseAuth,
         TODO("cache does work") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun saveImage(imagePath: String): Single<String> {
-        return storage.saveImage(imagePath,auth.getUserId())
-    }
-
-    override fun getProfileImage(): Single<File> {
-        return storage.getProfileImage(auth.getUserId())
-    }
 
     override fun setNick(newNick: String): Completable {
         return Completable.create { emitter ->

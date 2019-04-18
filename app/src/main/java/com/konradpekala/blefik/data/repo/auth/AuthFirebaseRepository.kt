@@ -2,7 +2,11 @@ package com.konradpekala.blefik.data.repo.auth
 
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 
-class AuthRepositoryImpl(val firebaseAuth: FirebaseAuth): AuthRepository {
+class AuthFirebaseRepository(val firebaseAuth: FirebaseAuth): IAuthRepository {
+    override fun getId(): String {
+        return firebaseAuth.getUserId()
+    }
+
     override fun logOut() {
         firebaseAuth.logOut()
     }

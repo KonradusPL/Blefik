@@ -1,6 +1,7 @@
 package com.konradpekala.blefik.data.preferences
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import com.konradpekala.blefik.data.model.User
 
@@ -9,6 +10,7 @@ class SharedPrefs(context: Context): Preferences {
     private val USER_NICK = "USER_NICK"
     private val USER_EMAIL = "USER_EMAIL"
     private val IS_USER_LOGGED_IN = "IS_USER_LOGGED_IN"
+    private val URL_PROFILE_IMAGE = "URL_PROFILE_IMAGE"
 
 
     private val mSharedPrefs = context.getSharedPreferences("shared_preferences",Context.MODE_PRIVATE)
@@ -45,6 +47,17 @@ class SharedPrefs(context: Context): Preferences {
 
     override fun isUserLoggedIn(): Boolean {
         return mSharedPrefs.getBoolean(IS_USER_LOGGED_IN,false)
+    }
+
+    override fun getProfileImageUrl(): String {
+        return mSharedPrefs.getString(URL_PROFILE_IMAGE,"") ?: ""
+    }
+
+    override fun setProfileImageUrl(value: String) {
+        Log.d("setProfileImageUrl",value)
+        mSharedPrefs.edit {
+            putString(URL_PROFILE_IMAGE,value)
+        }
     }
 
 

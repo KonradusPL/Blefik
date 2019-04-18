@@ -13,6 +13,7 @@ import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.ui.game.GameMvp
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_user.view.*
 
 class PlayersAdapter(val players: ArrayList<Player>, val mvpView: GameMvp.View): RecyclerView.Adapter<PlayersAdapter.UserVH>() {
@@ -30,6 +31,14 @@ class PlayersAdapter(val players: ArrayList<Player>, val mvpView: GameMvp.View):
 
     inner class UserVH(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(player: Player){
+
+            if (player.imageUrl.isNotEmpty())
+                Picasso.get()
+                    .load(player.imageUrl)
+                    .placeholder(R.drawable.user_holder)
+                    .resize(100,100)
+                    .centerCrop()
+                    .into(itemView.imageUser)
 
             (itemView as MaterialCardView).strokeColor = (if(player.isCurrentPlayer)
                 ContextCompat.getColor(mvpView.getCtx(),R.color.colorPrimary)

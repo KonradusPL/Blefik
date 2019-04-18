@@ -55,6 +55,7 @@ class FirebaseDatabase: Database {
             map["id"] = player.id
             map["nick"] = player.nick
             map["currentCards"] = player.currentCards
+            map["imageUrl"] = player.imageUrl
 
 
             database.collection("rooms")
