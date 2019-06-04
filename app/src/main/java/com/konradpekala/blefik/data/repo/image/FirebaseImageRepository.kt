@@ -25,6 +25,8 @@ object FirebaseImageRepository: IImageRepository {
         mDownloadUrl = null
     }
 
+    override fun clean() = clearOldImageReference()
+
 
     override fun getProfileImage(id: String): Single<File>{
         val profileRef = profilesStorage.child(id)

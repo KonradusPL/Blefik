@@ -19,6 +19,10 @@ class LocalImageRepository(val ctx: Context): IImageRepository {
 
     override fun getImageUrl(): String = mImagePath ?: ""
 
+    override fun clean() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun getProfileImage(id: String): Single<File> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -39,6 +39,7 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
 
     override fun onLogOutClick() {
         profileRepo.clean()
+        imageRepo.clean()
         authRepo.logOut()
         view.openLoginActivity()
     }

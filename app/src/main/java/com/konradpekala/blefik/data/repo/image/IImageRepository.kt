@@ -8,4 +8,5 @@ interface IImageRepository {
     fun getProfileImage(id: String): Single<File>
     fun saveImage(imagePath: String, id: String): Completable
     fun getImageUrl(): String
+    fun clean()
 }

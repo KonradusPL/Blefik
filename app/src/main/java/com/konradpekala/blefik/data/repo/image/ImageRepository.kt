@@ -27,5 +27,9 @@ class ImageRepository(val remote: IImageRepository,
         return remote.getProfileImage(id)
     }
 
+    fun clean(){
+        remote.clean()
+    }
+
 
 } enum class UrlType{REMOTE,LOCAL}
