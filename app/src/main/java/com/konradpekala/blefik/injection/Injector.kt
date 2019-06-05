@@ -12,6 +12,7 @@ import com.konradpekala.blefik.data.repo.profile.ProfileRepository
 import com.konradpekala.blefik.data.repo.profile.FirebaseProfileRepository
 import com.konradpekala.blefik.data.repo.profile.LocalImageRepository
 import com.konradpekala.blefik.data.storage.FirebaseStorage
+import com.konradpekala.blefik.domain.usecase.SignInUseCase
 import com.konradpekala.blefik.ui.game.GameMvp
 import com.konradpekala.blefik.ui.game.GamePresenter
 import com.konradpekala.blefik.ui.login.LoginMvp
@@ -26,6 +27,7 @@ import com.konradpekala.blefik.ui.profile.ProfileMvp
 import com.konradpekala.blefik.ui.profile.ProfilePresenter
 import com.konradpekala.blefik.utils.CardsStuff
 import com.konradpekala.blefik.utils.PhoneStuff
+import com.konradpekala.blefik.utils.SchedulerProvider
 
 object Injector {
     private var mRoomPresenter: RoomsPresenter<RoomsMvp.View>? = null
@@ -45,7 +47,10 @@ object Injector {
     }
 
     fun getLoginPresenter(view: LoginMvp.View,ctx: Context): LoginPresenter<LoginMvp.View>{
-        return LoginPresenter(view, LoginRepository(FirebaseAuth(),FirebaseDatabase(),SharedPrefs(ctx.applicationContext)))
+        val loginRepository = LoginRepository(FirebaseAuth(),FirebaseDatabase(),SharedPrefs(ctx.applicationContext))
+        return LoginPresenter(view, loginRepository,
+            SignInUseCase(SchedulerProvider.io(),SchedulerProvider.ui(),loginRepository)
+        )
     }
     fun getMainPresenter(view: MainMvp.View,ctx: Context): MainPresenter<MainMvp.View>{
         return MainPresenter(view,

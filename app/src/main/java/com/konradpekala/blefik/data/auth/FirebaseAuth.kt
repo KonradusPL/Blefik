@@ -5,14 +5,14 @@ import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Single
 
-class FirebaseAuth {
+class FirebaseAuth: Auth {
 
     val auth = FirebaseAuth.getInstance()
-    fun isUserLoggedIn():Boolean {
+    override fun isUserLoggedIn():Boolean {
         return auth.currentUser != null
     }
 
-    fun signUp(email: String, password: String): Single<String> {
+    override fun signUp(email: String, password: String): Single<String> {
         return Single.create { emitter ->
             auth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
@@ -27,7 +27,7 @@ class FirebaseAuth {
         }
     }
 
-    fun signIn(email: String, password: String): Single<String> {
+    override fun signIn(email: String, password: String): Single<String> {
         return Single.create { emitter ->
             auth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
@@ -42,9 +42,9 @@ class FirebaseAuth {
         }
     }
 
-    fun logOut(){
+    override fun logOut(){
         auth.signOut()
     }
 
-    fun getUserId() = auth.currentUser?.uid ?: ""
+    override fun getUserId() = auth.currentUser?.uid ?: ""
 }

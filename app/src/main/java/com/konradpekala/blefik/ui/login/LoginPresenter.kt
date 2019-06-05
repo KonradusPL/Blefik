@@ -1,12 +1,18 @@
 package com.konradpekala.blefik.ui.login
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.konradpekala.blefik.R
+import com.konradpekala.blefik.data.model.request.LoginRequest
 import com.konradpekala.blefik.data.repo.LoginRepository
+import com.konradpekala.blefik.domain.usecase.SignInUseCase
 import com.konradpekala.blefik.ui.base.BasePresenter
+import io.reactivex.observers.DisposableSingleObserver
 
-class LoginPresenter<V: LoginMvp.View>(view: V,val repo: LoginRepository): BasePresenter<V>(view),LoginMvp.Presenter<V> {
+class LoginPresenter<V: LoginMvp.View>(view: V,private val repo: LoginRepository,
+                                       private val mSignInUseCase: SignInUseCase ): BasePresenter<V>(view),LoginMvp.Presenter<V> {
 
+    @SuppressLint("CheckResult")
     override fun onSignUpButtonClick(email: String, password: String, nick: String) {
         if (password.length < 6){
             view.showMessage("Hasło jest za krótkie!")
@@ -32,6 +38,20 @@ class LoginPresenter<V: LoginMvp.View>(view: V,val repo: LoginRepository): BaseP
                 view.showMessage("Nie udało się!")
                 view.showMessage(t.toString())
             }))
+
+        view.showLoading()
+        mSignInUseCase.excecute(SignInObserver())
+    }
+
+    private inner class SignInObserver: DisposableSingleObserver<String>(){
+        override fun onError(e: Throwable) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onSuccess(t: String) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
     }
 
     override fun onSignInButtonClick(email: String, password: String) {
@@ -46,6 +66,6 @@ class LoginPresenter<V: LoginMvp.View>(view: V,val repo: LoginRepository): BaseP
                 view.hideLoading()
                 view.showMessage("Nie udało się!")
             }))
-    }
 
+    }
 }

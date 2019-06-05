@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.data.repo
 
+import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.database.FirebaseDatabase
 import com.konradpekala.blefik.data.model.User
@@ -8,7 +9,7 @@ import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 
-class LoginRepository(private val mAuth: FirebaseAuth,
+class LoginRepository(private val mAuth: Auth,
                       private val mDb: FirebaseDatabase,
                       private val mPrefs: SharedPrefs) {
 
