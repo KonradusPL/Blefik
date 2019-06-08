@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.data.repo.image
+package com.konradpekala.blefik.data.repository.image
 
 import io.reactivex.Completable
 import io.reactivex.Single

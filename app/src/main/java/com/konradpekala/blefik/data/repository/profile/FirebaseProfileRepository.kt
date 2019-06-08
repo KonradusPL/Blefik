@@ -1,16 +1,17 @@
-package com.konradpekala.blefik.data.repo.profile
+package com.konradpekala.blefik.data.repository.profile
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.konradpekala.blefik.data.auth.FirebaseAuth
+import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.data.storage.FirebaseStorage
-import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
-import io.reactivex.Single
-import java.io.File
+import javax.inject.Inject
 
-class FirebaseProfileRepository(val auth: FirebaseAuth,
-                                val storage: FirebaseStorage): IProfileRepository {
+class FirebaseProfileRepository @Inject constructor(val auth: FirebaseAuth,
+                                val storage: FirebaseStorage): IProfileRepository.Remote {
+
+    private val TAG = "FirebaseProfileRepo"
 
     private val database = FirebaseFirestore.getInstance()
 
@@ -33,18 +34,9 @@ class FirebaseProfileRepository(val auth: FirebaseAuth,
         }
     }
 
-    override fun getNick(): String {
-        TODO("cache does work") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun clean() {
         storage.clean()
     }
-
-    override fun getEmail(): String {
-        TODO("cache does work") //To change body of created functions use File | Settings | File Templates.
-    }
-
 
     override fun setNick(newNick: String): Completable {
         return Completable.create { emitter ->
@@ -52,6 +44,14 @@ class FirebaseProfileRepository(val auth: FirebaseAuth,
                 .addOnSuccessListener { emitter.onComplete()}
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
         }
+    }
 
+    override fun saveProfile(profile: User): Completable {
+        Log.d(TAG,"saveProfile")
+        return Completable.create { emitter ->
+            database.collection("users").document(profile.id).set(profile)
+                .addOnSuccessListener { emitter.onComplete() }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }
     }
 }

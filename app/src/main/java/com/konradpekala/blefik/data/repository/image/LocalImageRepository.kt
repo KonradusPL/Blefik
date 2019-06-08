@@ -1,7 +1,7 @@
-package com.konradpekala.blefik.data.repo.profile
+package com.konradpekala.blefik.data.repository.image
 
 import android.content.Context
-import com.konradpekala.blefik.data.repo.image.IImageRepository
+import com.konradpekala.blefik.data.repository.image.IImageRepository
 import io.reactivex.Single
 import java.io.File
 import android.content.ContextWrapper

@@ -4,7 +4,7 @@ import android.util.Log
 import com.konradpekala.blefik.data.model.Bid
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.model.UpdateType
-import com.konradpekala.blefik.data.repo.GameRepo
+import com.konradpekala.blefik.data.repository.GameRepo
 import com.konradpekala.blefik.ui.base.BasePresenter
 
 class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<V>(view),

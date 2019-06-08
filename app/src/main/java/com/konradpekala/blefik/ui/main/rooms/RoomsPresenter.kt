@@ -2,7 +2,7 @@ package com.konradpekala.blefik.ui.main.rooms
 
 import android.util.Log
 import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.repo.RoomsRepo
+import com.konradpekala.blefik.data.repository.RoomsRepo
 import com.konradpekala.blefik.ui.base.BasePresenter
 
 class RoomsPresenter<V: RoomsMvp.View>(view: V, val repo: RoomsRepo): BasePresenter<V>(view),
@@ -28,9 +28,9 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V, val repo: RoomsRepo): BasePresen
             }))
     }
 
-    override fun stop() {
+    override fun onStop() {
         Log.d("stopRooms","true")
-        super.stop()
+        super.onStop()
         repo.database.clean()
     }
 

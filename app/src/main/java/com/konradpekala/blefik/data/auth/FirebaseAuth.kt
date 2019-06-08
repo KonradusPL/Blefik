@@ -4,8 +4,11 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Single
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FirebaseAuth: Auth {
+@Singleton
+class FirebaseAuth @Inject constructor(): Auth {
 
     val auth = FirebaseAuth.getInstance()
     override fun isUserLoggedIn():Boolean {

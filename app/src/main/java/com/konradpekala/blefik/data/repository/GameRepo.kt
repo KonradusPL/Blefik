@@ -1,10 +1,9 @@
-package com.konradpekala.blefik.data.repo
+package com.konradpekala.blefik.data.repository
 
 import android.util.Log
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.*
-import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.utils.CardsStuff
 import com.konradpekala.blefik.utils.PhoneStuff
 import com.konradpekala.blefik.utils.SchedulerProvider

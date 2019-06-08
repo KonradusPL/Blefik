@@ -1,9 +1,7 @@
 package com.konradpekala.blefik
 
 import com.konradpekala.blefik.data.auth.FirebaseAuth
-import com.konradpekala.blefik.data.preferences.SharedPrefs
-import com.konradpekala.blefik.data.repo.profile.FirebaseProfileRepository
-import com.konradpekala.blefik.data.repo.profile.ProfileRepository
+import com.konradpekala.blefik.data.repository.profile.FirebaseProfileRepository
 import com.konradpekala.blefik.data.storage.FirebaseStorage
 import org.junit.Test
 

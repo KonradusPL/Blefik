@@ -1,19 +1,21 @@
 package com.konradpekala.blefik.ui.profile
 
 import android.util.Log
-import com.konradpekala.blefik.data.repo.auth.IAuthRepository
-import com.konradpekala.blefik.data.repo.image.IImageRepository
-import com.konradpekala.blefik.data.repo.image.ImageRepository
-import com.konradpekala.blefik.data.repo.image.UrlType
-import com.konradpekala.blefik.data.repo.profile.IProfileRepository
+import com.konradpekala.blefik.data.repository.auth.IAuthRepository
+import com.konradpekala.blefik.data.repository.image.ImageRepository
+import com.konradpekala.blefik.data.repository.image.UrlType
+import com.konradpekala.blefik.data.repository.profile.IProfileRepository
+import com.konradpekala.blefik.data.repository.profile.ProfileRepository
 import com.konradpekala.blefik.ui.base.BasePresenter
 import java.io.File
 
 class ProfilePresenter<V: ProfileMvp.View>(view: V,
-                                           val profileRepo: IProfileRepository,
+                                           val profileRepo: ProfileRepository,
                                            val imageRepo: ImageRepository,
                                            val authRepo: IAuthRepository):
     BasePresenter<V>(view),ProfileMvp.Presenter<V> {
+
+    private val TAG = "ProfilePresenter"
 
     override fun onCreate() {
         super.onCreate()
@@ -33,6 +35,7 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
             view.changeNick(newNick)
             view.showMessage("Powodzenia $newNick!")
         },{t: Throwable? ->
+            Log.e(TAG,t.toString())
             view.showMessage("Nie udało się zmienić na $newNick")
         }))
     }

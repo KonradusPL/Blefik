@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.data.repo.image
+package com.konradpekala.blefik.data.repository.image
 
 import android.util.Log
 import com.konradpekala.blefik.utils.SchedulerProvider

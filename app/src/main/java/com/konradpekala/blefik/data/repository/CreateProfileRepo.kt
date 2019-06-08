@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.data.repo
+package com.konradpekala.blefik.data.repository
 
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.User

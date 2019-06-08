@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.data.repo.auth
+package com.konradpekala.blefik.data.repository.auth
 
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 

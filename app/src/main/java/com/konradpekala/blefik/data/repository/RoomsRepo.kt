@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.data.repo
+package com.konradpekala.blefik.data.repository
 
 import android.util.Log
 import com.google.firebase.Timestamp

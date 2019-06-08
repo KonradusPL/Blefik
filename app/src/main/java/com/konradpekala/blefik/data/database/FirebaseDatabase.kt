@@ -189,11 +189,11 @@ class FirebaseDatabase: Database {
         mRoomsListener?.remove()
     }
 
-    fun createUser(email: String,password: String,id: String, nick: String): Single<String>{
+    fun createUser(email: String,password: String,id: String, nick: String): Completable{
         val user = User(email = email,password = password,id = id,nick = nick)
-        return Single.create { emitter ->
+        return Completable.create { emitter ->
             database.collection("users").document(user.id).set(user)
-                .addOnSuccessListener { emitter.onSuccess("success") }
+                .addOnSuccessListener { emitter.onComplete() }
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
         }
     }

@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.ui.main.ranking
 
 import com.konradpekala.blefik.data.model.User
-import com.konradpekala.blefik.data.repo.RankingRepository
+import com.konradpekala.blefik.data.repository.RankingRepository
 import com.konradpekala.blefik.ui.base.BasePresenter
 
 class RankingPresenter<V: RankingMvp.View>(view: V,val rankingRepository: RankingRepository)

@@ -33,7 +33,7 @@ class RoomsActivity : BaseActivity(), RoomsMvp.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        mPresenter.stop()
+        mPresenter.onStop()
     }
 
     private fun initUI(){

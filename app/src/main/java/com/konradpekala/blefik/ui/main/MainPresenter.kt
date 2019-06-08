@@ -1,8 +1,8 @@
 package com.konradpekala.blefik.ui.main
 
-import com.konradpekala.blefik.data.repo.auth.IAuthRepository
-import com.konradpekala.blefik.data.repo.image.ImageRepository
-import com.konradpekala.blefik.data.repo.profile.ProfileRepository
+import com.konradpekala.blefik.data.repository.auth.IAuthRepository
+import com.konradpekala.blefik.data.repository.image.ImageRepository
+import com.konradpekala.blefik.data.repository.profile.ProfileRepository
 import com.konradpekala.blefik.ui.base.BasePresenter
 import java.io.File
 

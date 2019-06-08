@@ -1,6 +1,5 @@
 package com.konradpekala.blefik.ui.login
 
-import com.konradpekala.blefik.ui.base.MvpPresenter
 import com.konradpekala.blefik.ui.base.MvpView
 
 interface LoginMvp {
@@ -9,7 +8,7 @@ interface LoginMvp {
         fun hideLoading()
         fun openMainActivity()
     }
-    interface Presenter<V: View>: MvpPresenter<V> {
+    interface Presenter {
         fun onSignUpButtonClick(email: String, password: String, nick: String)
         fun onSignInButtonClick(email: String, password: String)
     }

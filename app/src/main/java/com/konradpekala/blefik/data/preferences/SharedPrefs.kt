@@ -4,13 +4,15 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
 import com.konradpekala.blefik.data.model.User
+import javax.inject.Inject
 
-class SharedPrefs(context: Context): Preferences {
+class SharedPrefs @Inject constructor(context: Context): Preferences {
 
     private val USER_NICK = "USER_NICK"
     private val USER_EMAIL = "USER_EMAIL"
     private val IS_USER_LOGGED_IN = "IS_USER_LOGGED_IN"
     private val URL_PROFILE_IMAGE = "URL_PROFILE_IMAGE"
+    private val IS_PROFILE_SAVED = "IS_PROFILE_CREATED"
 
 
     private val mSharedPrefs = context.getSharedPreferences("shared_preferences",Context.MODE_PRIVATE)
@@ -32,7 +34,15 @@ class SharedPrefs(context: Context): Preferences {
     }
 
     override fun setUser(value: User) {
-        TODO()
+        clean()
+        setIsUserLoggedIn(true)
+        setUserEmail(value.email)
+        setUserNick(value.nick)
+    }
+
+    private fun clean(){
+        setIsProfileSavedRemotely(false)
+        setIsUserLoggedIn(false)
     }
 
     override fun setUserEmail(value: String) {
@@ -58,6 +68,16 @@ class SharedPrefs(context: Context): Preferences {
         mSharedPrefs.edit {
             putString(URL_PROFILE_IMAGE,value)
         }
+    }
+
+    override fun setIsProfileSavedRemotely(value: Boolean) {
+        mSharedPrefs.edit {
+            putBoolean(IS_PROFILE_SAVED,value)
+        }
+    }
+
+    override fun isProfileSavedRemotely(): Boolean {
+        return mSharedPrefs.getBoolean(IS_PROFILE_SAVED,false)
     }
 
 

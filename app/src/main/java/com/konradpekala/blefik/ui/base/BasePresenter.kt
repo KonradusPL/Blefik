@@ -13,7 +13,7 @@ abstract class BasePresenter<V: MvpView>(var view: V): MvpPresenter<V> {
     override fun onStart() {
     }
 
-    override fun stop() {
+    override fun onStop() {
         cd.clear()
     }
 }
