@@ -3,9 +3,8 @@ package com.konradpekala.blefik.injection.modules
 import com.konradpekala.blefik.data.repository.image.FirebaseImageRepository
 import com.konradpekala.blefik.data.repository.image.IImageRepository
 import com.konradpekala.blefik.data.repository.image.LocalImageRepository
-import com.konradpekala.blefik.data.repository.profile.FirebaseProfileRepository
-import com.konradpekala.blefik.data.repository.profile.IProfileRepository
-import com.konradpekala.blefik.data.repository.profile.ProfileRepository
+import com.konradpekala.blefik.data.repository.users.FirebaseUserRepository
+import com.konradpekala.blefik.data.repository.users.IUserRepository
 import dagger.Binds
 import dagger.Module
 import javax.inject.Named
@@ -14,7 +13,7 @@ import javax.inject.Named
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindRemoteProfileRepository(repo: FirebaseProfileRepository): IProfileRepository.Remote
+    abstract fun bindRemoteProfileRepository(repo: FirebaseUserRepository): IUserRepository.Remote
 
     @Binds
     @Named("ImageRepoRemote")

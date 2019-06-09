@@ -7,7 +7,9 @@ import io.reactivex.Single
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Singleton
 
+@Singleton
 class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: IImageRepository,
                                           @Named("ImageRepoLocal") val local: IImageRepository) {
 

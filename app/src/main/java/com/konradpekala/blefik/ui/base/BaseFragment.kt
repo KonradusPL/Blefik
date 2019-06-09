@@ -3,8 +3,10 @@ package com.konradpekala.blefik.ui.base
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
+import dagger.android.support.DaggerFragment
 
-open class BaseFragment<V: MvpView>: Fragment(),MvpView {
+
+open class BaseFragment<V: MvpView>: DaggerFragment(),MvpView {
 
     lateinit var parentMvp: V
     lateinit var parentContext: Context

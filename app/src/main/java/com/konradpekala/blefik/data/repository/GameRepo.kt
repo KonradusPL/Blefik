@@ -20,7 +20,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val auth: FirebaseA
                 .updatePhoneOwner(auth.getUserId())
             }
             .doOnNext { room: Room? ->
-                Log.d("onNext vs doOnNext","doOnNext")
+                Log.d("onNegit xt vs doOnNext","doOnNext")
                 mRoom = room!!
             }
             .subscribeOn(SchedulerProvider.io())

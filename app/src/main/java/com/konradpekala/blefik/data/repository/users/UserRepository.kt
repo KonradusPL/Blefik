@@ -1,16 +1,15 @@
-package com.konradpekala.blefik.data.repository.profile
+package com.konradpekala.blefik.data.repository.users
 
 import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.data.preferences.Preferences
-import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.data.repository.utils.RequestType
 import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
-class  ProfileRepository @Inject constructor(
-    val remote: IProfileRepository.Remote,
+class  UserRepository @Inject constructor(
+    val remote: IUserRepository.Remote,
     val cache: Preferences) {
 
     fun saveImageUrl(url: String): Completable {
@@ -20,13 +19,13 @@ class  ProfileRepository @Inject constructor(
             .observeOn(SchedulerProvider.ui())
     }
 
-    fun saveProfile(profile: User, requestType: RequestType): Completable{
+    fun saveUser(user: User, requestType: RequestType): Completable{
 
-        val remoteCompletable = if(requestType == RequestType.FULL) remote.saveProfile(profile)
+        val remoteCompletable = if(requestType == RequestType.FULL) remote.saveUser(user)
         else Completable.complete()
 
         return remoteCompletable.doOnComplete {
-            cache.setUser(profile)
+            cache.setUser(user)
             cache.setIsProfileSavedRemotely(true)
         }
     }
@@ -50,5 +49,11 @@ class  ProfileRepository @Inject constructor(
 
     fun clean() {
         remote.clean()
+    }
+
+    fun getAllUsers(): Single<List<User>>{
+        return remote.getAllUsers()
+            .subscribeOn(SchedulerProvider.io())
+            .observeOn(SchedulerProvider.ui())
     }
 }

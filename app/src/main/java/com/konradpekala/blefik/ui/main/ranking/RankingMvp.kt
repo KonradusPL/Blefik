@@ -14,6 +14,5 @@ interface RankingMvp {
         fun hideLoading()
     }
     interface Presenter<V: View>: MvpPresenter<V>{
-        fun onLoadData()
     }
 }

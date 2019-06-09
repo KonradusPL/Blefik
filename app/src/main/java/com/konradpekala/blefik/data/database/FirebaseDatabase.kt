@@ -245,6 +245,7 @@ class FirebaseDatabase: Database {
                     emitter.onSuccess(list)
                 }
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
-        }    }
+        }
+    }
 
 }

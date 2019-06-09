@@ -1,9 +1,11 @@
 package com.konradpekala.blefik.ui.main.ranking
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.injection.Injector
@@ -15,25 +17,33 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import com.konradpekala.blefik.data.model.User
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 
 class RankingFragment: BaseFragment<MainMvp.View>(),
     RankingMvp.View {
 
     private lateinit var mRankingAdapter: RankingAdapter
-    private lateinit var mPresenter: RankingPresenter<RankingMvp.View>
+
+    @Inject
+    lateinit var mPresenter: RankingPresenter<RankingMvp.View>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_ranking,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mPresenter = Injector.getRankingPresenter(this,parentContext)
-
         initList()
         initUI()
 
-        mPresenter.onLoadData()
+        mPresenter.onAttach(this)
+        mPresenter.onCreate()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mPresenter.onStop()
     }
 
     private fun initUI(){
@@ -45,10 +55,11 @@ class RankingFragment: BaseFragment<MainMvp.View>(),
     }
 
     override fun showLoading() {
-
+        loadingBarRanking.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
+        loadingBarRanking.visibility = View.GONE
     }
 
     private fun initList() {

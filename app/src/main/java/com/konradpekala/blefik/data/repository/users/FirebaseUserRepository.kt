@@ -1,7 +1,8 @@
-package com.konradpekala.blefik.data.repository.profile
+package com.konradpekala.blefik.data.repository.users
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.data.storage.FirebaseStorage
@@ -9,8 +10,8 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
-class FirebaseProfileRepository @Inject constructor(val auth: FirebaseAuth,
-                                val storage: FirebaseStorage): IProfileRepository.Remote {
+class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
+                                                 val storage: FirebaseStorage): IUserRepository.Remote {
 
     private val TAG = "FirebaseProfileRepo"
 
@@ -47,10 +48,10 @@ class FirebaseProfileRepository @Inject constructor(val auth: FirebaseAuth,
         }
     }
 
-    override fun saveProfile(profile: User): Completable {
-        Log.d(TAG,"saveProfile")
+    override fun saveUser(user: User): Completable {
+        Log.d(TAG,"saveUser")
         return Completable.create { emitter ->
-            database.collection("users").document(profile.id).set(profile)
+            database.collection("users").document(user.id).set(user)
                 .addOnSuccessListener { emitter.onComplete() }
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
         }
@@ -65,4 +66,15 @@ class FirebaseProfileRepository @Inject constructor(val auth: FirebaseAuth,
                 }
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
         }    }
+
+    override fun getAllUsers(): Single<List<User>> {
+        return Single.create { emitter ->
+            database.collection("users").orderBy("gamesWon", Query.Direction.DESCENDING).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val list = documentSnapshot.toObjects(User::class.java)
+                    emitter.onSuccess(list)
+                }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }
+    }
 }

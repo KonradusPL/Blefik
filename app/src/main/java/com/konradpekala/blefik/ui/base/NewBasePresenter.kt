@@ -6,10 +6,10 @@ abstract class NewBasePresenter<V: MvpView>: MvpPresenter<V> {
 
     protected val cd = CompositeDisposable()
 
-    protected lateinit var mView: V
+    protected lateinit var view: V
 
     override fun onAttach(view: V) {
-        mView = view
+        this.view = view
     }
 
     override fun onCreate() {
