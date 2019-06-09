@@ -13,7 +13,7 @@ interface MainMvp {
         fun openProfileActivity()
         fun setToolbarTitle(title: String)
     }
-    interface Presenter<V: View>: MvpPresenter<V>{
+    interface Presenter{
 
     }
 }

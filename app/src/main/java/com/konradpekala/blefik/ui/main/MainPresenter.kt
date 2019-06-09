@@ -1,32 +1,34 @@
 package com.konradpekala.blefik.ui.main
 
+import android.util.Log
+import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.repository.auth.IAuthRepository
 import com.konradpekala.blefik.data.repository.image.ImageRepository
 import com.konradpekala.blefik.data.repository.profile.ProfileRepository
+import com.konradpekala.blefik.domain.usecase.GetProfileImageUseCase
 import com.konradpekala.blefik.ui.base.BasePresenter
+import com.konradpekala.blefik.ui.base.NewBasePresenter
 import java.io.File
+import javax.inject.Inject
 
-class MainPresenter<V: MainMvp.View>(
-    view: V,
-    val profileRepo: ProfileRepository,
-    val imageRepo: ImageRepository,
-    val authRepo: IAuthRepository
-): BasePresenter<V>(view),MainMvp.Presenter<V> {
+class MainPresenter<V: MainMvp.View> @Inject constructor(
+    private val mGetProfileImageUseCase: GetProfileImageUseCase)
+    : NewBasePresenter<V>(), MainMvp.Presenter {
+
+    private val TAG = "MainPresenter"
 
     override fun onCreate() {
-        super.onCreate()
-    }
+        mGetProfileImageUseCase.excecute(
+            onSuccess = {file: File ->
+                mView.changeProfileImage(file)
+            },
+            onError = {t: Throwable ->
+                Log.e(TAG,t.message)
+                mView.showMessage("Nie udało się załadować obraz")
+            }
+        )
 
-    override fun onStart() {
-        super.onStart()
-
-        cd.add(imageRepo.getProfileImage(authRepo.getId()).subscribe({file: File ->
-            view.changeProfileImage(file)
-        },{t: Throwable? ->
-            view.showMessage(t.toString())
-        }))
-
-        view.setToolbarTitle(profileRepo.getNick())
+        //view.setToolbarTitle(profileRepo.getNick())
 
     }
 

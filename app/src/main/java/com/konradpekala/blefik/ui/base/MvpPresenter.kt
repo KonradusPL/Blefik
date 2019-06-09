@@ -4,4 +4,5 @@ interface MvpPresenter<V: MvpView> {
     fun onCreate()
     fun onStart()
     fun onStop()
+    fun onAttach(view: V)
 }

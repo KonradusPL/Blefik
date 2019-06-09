@@ -12,9 +12,11 @@ abstract class SingleUseCase<in Parameter, Result>(subscribeScheduler: OnSubscri
 
     abstract fun buildUseCaseSingle(request: Parameter? = null): Single<Result>
 
-    fun excecute(observer: DisposableSingleObserver<Result>,request: Parameter? = null){
+    fun excecute(request: Parameter? = null,
+                 onSuccess: ((r: Result) -> Unit),
+                 onError: ((t: Throwable) -> Unit)){
         val single = buildUseCaseSingleWithSchedulers(request)
-        val disposable = single.subscribeWith(observer)
+        val disposable = single.subscribe(onSuccess,onError)
         addDisposable(disposable)
     }
 

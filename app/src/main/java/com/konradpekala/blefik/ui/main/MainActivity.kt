@@ -18,9 +18,11 @@ import com.konradpekala.blefik.ui.main.ranking.RankingFragment
 import com.konradpekala.blefik.ui.main.rooms.RoomsFragment
 import com.konradpekala.blefik.ui.profile.ProfileActivity
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_change_name.view.*
 import java.io.File
+import javax.inject.Inject
 
 class MainActivity : BaseActivity(),MainMvp.View {
 
@@ -29,21 +31,23 @@ class MainActivity : BaseActivity(),MainMvp.View {
     private lateinit var mRankingFragment: RankingFragment
     private lateinit var mFragmentAdapter: MainFragmentsAdapter
 
-    private lateinit var mPresenter: MainPresenter<MainMvp.View>
+    @Inject
+    lateinit var mPresenter: MainPresenter<MainMvp.View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
+
         setContentView(R.layout.activity_main)
 
         mRoomsFragment = RoomsFragment()
         mRankingFragment = RankingFragment()
 
-        mPresenter = Injector.getMainPresenter(this,this)
-
         initButtons()
         setSupportActionBar(toolbarMain)
         initTabsStuff()
 
+        mPresenter.onAttach(this)
         mPresenter.onCreate()
     }
 

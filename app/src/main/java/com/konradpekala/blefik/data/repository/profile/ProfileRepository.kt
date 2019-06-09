@@ -6,11 +6,12 @@ import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.data.repository.utils.RequestType
 import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
+import io.reactivex.Single
 import javax.inject.Inject
 
-class ProfileRepository @Inject constructor(
+class  ProfileRepository @Inject constructor(
     val remote: IProfileRepository.Remote,
-    val cache: Preferences): IProfileRepository {
+    val cache: Preferences) {
 
     fun saveImageUrl(url: String): Completable {
         return remote.saveImageUrl(url)
@@ -39,8 +40,12 @@ class ProfileRepository @Inject constructor(
         return cache.getUserEmail()
     }
 
-    fun getNick(): String {
-        return cache.getUserNick()
+    fun getNick(id: String): Single<String> {
+        if (cache.getUserNick() != "")
+            return Single.just(cache.getUserNick())
+        else{
+            return remote.getNick(id)
+        }
     }
 
     fun clean() {

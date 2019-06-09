@@ -5,6 +5,7 @@ import com.konradpekala.blefik.injection.modules.*
 import com.konradpekala.blefik.injection.other.ApplicationScope
 import com.konradpekala.blefik.ui.BlefikApplication
 import com.konradpekala.blefik.ui.login.LoginActivity
+import com.konradpekala.blefik.ui.main.MainActivity
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Component
@@ -28,6 +29,7 @@ interface ApplicationComponent {
     }
 
     fun inject(loginActivity: LoginActivity)
+    fun inject(mainActivity: MainActivity)
     fun inject(blefikApplication: BlefikApplication)
 
 }

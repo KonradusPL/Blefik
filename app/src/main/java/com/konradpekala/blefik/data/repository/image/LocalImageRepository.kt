@@ -10,9 +10,10 @@ import io.reactivex.Completable
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileChannel
+import javax.inject.Inject
 
 
-class LocalImageRepository(val ctx: Context): IImageRepository {
+class LocalImageRepository @Inject constructor(val ctx: Context): IImageRepository {
 
     var localImage: File? = null
     private var mImagePath: String? = null

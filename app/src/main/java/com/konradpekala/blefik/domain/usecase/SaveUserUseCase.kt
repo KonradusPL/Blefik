@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.domain.usecase
 
+import android.util.Log
 import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.data.preferences.Preferences
@@ -18,14 +19,18 @@ class SaveUserUseCase @Inject constructor(subscribeScheduler: OnSubscribeSchedul
                       private val preferences: Preferences
 ): CompletableUseCase<User>(subscribeScheduler, observeScheduler) {
 
+    private val TAG ="SaveUserUseCase"
+
     override fun buildUseCaseCompletable(request: User?): Completable {
         val id = auth.getUserId()
         request!!.id = id
 
-        val isUserSaved = preferences.isProfileSavedRemotely()
+        Log.d(TAG,request.nick)
 
-        val requestType = if (isUserSaved) RequestType.LOCAL
-        else RequestType.LOCAL
+        val isUserSavedRemotely = preferences.isProfileSavedRemotely()
+
+        val requestType = if (isUserSavedRemotely) RequestType.LOCAL
+        else RequestType.FULL
 
         return profileRepository.saveProfile(request,requestType)
     }

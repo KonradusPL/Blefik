@@ -12,8 +12,9 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 import java.io.FileInputStream
+import javax.inject.Inject
 
-object FirebaseImageRepository: IImageRepository {
+class FirebaseImageRepository @Inject constructor(): IImageRepository {
 
     val profilesStorage = FirebaseStorage.getInstance().getReference("profile_images")
 

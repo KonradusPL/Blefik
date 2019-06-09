@@ -48,7 +48,7 @@ object Injector {
         return GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,FirebaseAuth(),PhoneStuff(ctx)))
     }
 
-    fun getMainPresenter(view: MainMvp.View,ctx: Context): MainPresenter<MainMvp.View>{
+    /*fun getMainPresenter(view: MainMvp.View,ctx: Context): MainPresenter<MainMvp.View>{
         return MainPresenter(view,
              ProfileRepository(FirebaseProfileRepository(FirebaseAuth(),FirebaseStorage()),SharedPrefs(ctx)),
             ImageRepository(FirebaseImageRepository,
@@ -56,14 +56,14 @@ object Injector {
             ),
             AuthFirebaseRepository(FirebaseAuth())
         )
-    }
+    }*/
     fun getRankingPresenter(view: RankingMvp.View, ctx: Context): RankingPresenter<RankingMvp.View>{
         return RankingPresenter(view, RankingRepository(FirebaseDatabase()))
     }
     fun getProfilePresenter(view: ProfileMvp.View, ctx: Context): ProfilePresenter<ProfileMvp.View>{
         return ProfilePresenter(view,ProfileRepository(
             FirebaseProfileRepository(FirebaseAuth(), FirebaseStorage()),
-            SharedPrefs(ctx)),ImageRepository(FirebaseImageRepository,
+            SharedPrefs(ctx)),ImageRepository(FirebaseImageRepository(),
             LocalImageRepository(ctx)
         ),
             AuthFirebaseRepository(FirebaseAuth()))

@@ -20,7 +20,7 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
     override fun onCreate() {
         super.onCreate()
 
-        view.changeNick(profileRepo.getNick())
+        //view.changeNick(profileRepo.getNick())
         view.changeEmail(profileRepo.getEmail())
 
         cd.add(imageRepo.getProfileImage(authRepo.getId()).subscribe({file: File ->

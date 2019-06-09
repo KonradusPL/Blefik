@@ -5,9 +5,14 @@ import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Named
 
-class ImageRepository(val remote: IImageRepository,
-                      val local: IImageRepository) {
+class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: IImageRepository,
+                                          @Named("ImageRepoLocal") val local: IImageRepository) {
+
+    private val TAG  = "ImageRepository"
+
      fun getImageUrl(urlType: UrlType): String {
         return when (urlType){
              UrlType.REMOTE -> remote.getImageUrl()
@@ -23,7 +28,7 @@ class ImageRepository(val remote: IImageRepository,
     }
 
      fun getProfileImage(id: String): Single<File> {
-        Log.d("ImageRepository","getProfileImage")
+        Log.d(TAG,"getProfileImage")
         return remote.getProfileImage(id)
     }
 

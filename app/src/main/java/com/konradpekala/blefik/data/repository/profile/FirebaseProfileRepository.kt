@@ -6,6 +6,7 @@ import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.data.storage.FirebaseStorage
 import io.reactivex.Completable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class FirebaseProfileRepository @Inject constructor(val auth: FirebaseAuth,
@@ -54,4 +55,14 @@ class FirebaseProfileRepository @Inject constructor(val auth: FirebaseAuth,
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
         }
     }
+
+    override fun getNick(id: String): Single<String> {
+        return Single.create { emitter ->
+            database.collection("users").document(id).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val obj = documentSnapshot.toObject(User::class.java)
+                    emitter.onSuccess(obj!!.nick)
+                }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }    }
 }

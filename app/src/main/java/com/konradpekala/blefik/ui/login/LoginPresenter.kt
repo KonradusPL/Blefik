@@ -57,8 +57,8 @@ class LoginPresenter@Inject constructor(private val mSignInUseCase: SignInUseCas
         view.showLoading()
 
         val loginRequest = LoginRequest(email, password)
-        mSignInUseCase.excecute(loginRequest, {
-            val user = User(email = email, password = password)
+        mSignInUseCase.excecute(loginRequest, { nick: String ->
+            val user = User(email = email, password = password, nick = nick)
             mSaveUserUseCase.excecute(user,{
                 view.hideLoading()
                 view.showMessage("Sukces!")
@@ -66,8 +66,8 @@ class LoginPresenter@Inject constructor(private val mSignInUseCase: SignInUseCas
             },{saveUserError: Throwable ->
                 Log.e(TAG,saveUserError.toString())
             })
-        },{t: Throwable ->
-
+        },{signInError: Throwable ->
+            Log.e(TAG,signInError.toString())
         })
     }
 
