@@ -22,10 +22,9 @@ class RoomsFragment: BaseFragment<MainMvp.View>(),
     RoomsMvp.View {
 
     private lateinit var mRoomsAdapter: RoomsAdapter
-    private lateinit var mPresenter: RoomsPresenter<RoomsMvp.View>
 
     @Inject
-    lateinit var presenter: RankingPresenter<RankingMvp.View>
+    lateinit var mPresenter: RoomsPresenter<RoomsMvp.View>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rooms,container,false)
@@ -35,6 +34,7 @@ class RoomsFragment: BaseFragment<MainMvp.View>(),
         initList()
         initUI()
 
+        mPresenter.onAttach(this)
         mPresenter.onStart()
     }
 

@@ -24,18 +24,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
+    def dagger_version = "2.16"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1-alpha01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-alpha01'
 
-    def dagger_version = "2.16"
+
+    //JUnit 4 framework
+    testImplementation 'junit:junit:4.12'
+    //Robolectric
+    testImplementation 'androidx.test:core:1.0.0'
+    //Mockito
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
 
     //Dagger2
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
@@ -48,8 +60,8 @@ dependencies {
 
     //Kotlin
     implementation 'org.jetbrains.anko:anko-common:0.9'
-    implementation 'androidx.core:core-ktx:1.0.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21'
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
 
     //Iconics
     implementation "com.mikepenz:iconics-core:3.0.4@aar"

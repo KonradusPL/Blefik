@@ -3,15 +3,15 @@ package com.konradpekala.blefik.ui.login
 import android.util.Log
 import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.data.model.request.LoginRequest
-import com.konradpekala.blefik.domain.usecase.SaveUserUseCase
-import com.konradpekala.blefik.domain.usecase.SignInUseCase
-import com.konradpekala.blefik.domain.usecase.SignUpUseCase
+import com.konradpekala.blefik.domain.interactors.SaveUserUseCase
+import com.konradpekala.blefik.domain.interactors.SignInUseCase
+import com.konradpekala.blefik.domain.interactors.SignUpUseCase
 
 import javax.inject.Inject
 
 class LoginPresenter@Inject constructor(private val mSignInUseCase: SignInUseCase,
-                                       private val mSignUpUseCase: SignUpUseCase,
-                                       private val mSaveUserUseCase: SaveUserUseCase
+                                        private val mSignUpUseCase: SignUpUseCase,
+                                        private val mSaveUserUseCase: SaveUserUseCase
 ): LoginMvp.Presenter {
 
     private lateinit var view: LoginMvp.View

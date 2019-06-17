@@ -8,20 +8,19 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FirebaseAuth @Inject constructor(): Auth {
+class FirebaseAuth @Inject constructor(private val auth: FirebaseAuth): Auth {
 
-    val auth = FirebaseAuth.getInstance()
     override fun isUserLoggedIn():Boolean {
         return auth.currentUser != null
     }
 
-    override fun signUp(email: String, password: String): Single<String> {
-        return Single.create { emitter ->
+    override fun signUp(email: String, password: String): Completable{
+        return Completable.create { emitter ->
             auth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
                     if(task.isSuccessful){
                         Log.w("createUserWithEmail:s", task.exception)
-                        emitter.onSuccess(auth.currentUser!!.uid)
+                        emitter.onComplete()
                     }else{
                         Log.w("createUserWithEmail:e", task.exception)
                         emitter.onError(task.exception!!.fillInStackTrace())

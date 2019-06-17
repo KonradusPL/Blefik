@@ -25,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
 
         val preferences = SharedPrefs(this)
 
-        val authFirebase = FirebaseAuth()
+        val authFirebase = FirebaseAuth(com.google.firebase.auth.FirebaseAuth.getInstance())
         val isUserLoggedIn = authFirebase.isUserLoggedIn()
 
         Log.d("onCreate.useremail",preferences.getUserEmail())

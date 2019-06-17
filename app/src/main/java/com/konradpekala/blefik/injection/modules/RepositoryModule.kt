@@ -3,6 +3,8 @@ package com.konradpekala.blefik.injection.modules
 import com.konradpekala.blefik.data.repository.image.FirebaseImageRepository
 import com.konradpekala.blefik.data.repository.image.IImageRepository
 import com.konradpekala.blefik.data.repository.image.LocalImageRepository
+import com.konradpekala.blefik.data.repository.room.FirebaseRoomsRepository
+import com.konradpekala.blefik.data.repository.room.IRoomsRepository
 import com.konradpekala.blefik.data.repository.users.FirebaseUserRepository
 import com.konradpekala.blefik.data.repository.users.IUserRepository
 import dagger.Binds
@@ -22,4 +24,7 @@ abstract class RepositoryModule {
     @Binds
     @Named("ImageRepoLocal")
     abstract fun bindImageRepoLocal(repo: LocalImageRepository): IImageRepository
+
+    @Binds
+    abstract fun bindRoomsRepoRemote(repo: FirebaseRoomsRepository): IRoomsRepository.Remote
 }

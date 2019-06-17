@@ -1,13 +1,12 @@
-package com.konradpekala.blefik.domain.usecase.base
+package com.konradpekala.blefik.domain.interactors.base
 
 import com.konradpekala.blefik.utils.schedulers.OnObserveScheduler
 import com.konradpekala.blefik.utils.schedulers.OnSubscribeScheduler
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.observers.DisposableCompletableObserver
 
-abstract class CompletableUseCase<in Parameter>(subscribeScheduler: OnSubscribeScheduler,
-                                                observeScheduler: OnObserveScheduler
+abstract class CompletableUseCase<in Parameter>(subscribeScheduler: Scheduler,
+                                                observeScheduler: Scheduler
 )
     : BaseUseCase(subscribeScheduler,observeScheduler) {
 
@@ -16,13 +15,18 @@ abstract class CompletableUseCase<in Parameter>(subscribeScheduler: OnSubscribeS
     fun excecute(request: Parameter? = null,
                  onComplete: (() -> Unit),
                  onError: ((t: Throwable) -> Unit)){
-        val completable = buildUseCaseSingleWithSchedulers(request)
+        val completable = buildUseCaseCompletableWithSchedulers(request)
         val disposable = completable.subscribe(onComplete, onError)
         addDisposable(disposable)
     }
-    private fun buildUseCaseSingleWithSchedulers(request: Parameter?): Completable {
+
+    fun raw(request: Parameter? = null): Completable{
+        return buildUseCaseCompletableWithSchedulers(request)
+    }
+
+    private fun buildUseCaseCompletableWithSchedulers(request: Parameter?): Completable {
         return buildUseCaseCompletable(request)
-            .subscribeOn(subscribeScheduler.scheduler)
-            .observeOn(observeScheduler.scheduler)
+            .subscribeOn(subscribeScheduler)
+            .observeOn(observeScheduler)
     }
 }

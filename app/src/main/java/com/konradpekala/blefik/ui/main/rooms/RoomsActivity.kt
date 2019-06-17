@@ -23,7 +23,7 @@ class RoomsActivity : BaseActivity(), RoomsMvp.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rooms)
 
-        mPresenter = Injector.getRoomPresenter(this,applicationContext)
+        //mPresenter = Injector.getRoomPresenter(this,applicationContext)
 
         initList()
         initUI()

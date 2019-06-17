@@ -1,13 +1,14 @@
 package com.konradpekala.blefik.ui.main
 
 import android.util.Log
-import com.konradpekala.blefik.domain.usecase.GetProfileImageUseCase
+import com.konradpekala.blefik.domain.interactors.GetProfileImageUseCase
 import com.konradpekala.blefik.ui.base.NewBasePresenter
 import java.io.File
 import javax.inject.Inject
 
 class MainPresenter<V: MainMvp.View> @Inject constructor(
-    private val mGetProfileImageUseCase: GetProfileImageUseCase)
+    private val mGetProfileImageUseCase: GetProfileImageUseCase
+)
     : NewBasePresenter<V>(), MainMvp.Presenter {
 
     private val TAG = "MainPresenter"

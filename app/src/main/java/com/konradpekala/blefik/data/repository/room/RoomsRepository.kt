@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.data.repository
+package com.konradpekala.blefik.data.repository.room
 
 import android.util.Log
 import com.google.firebase.Timestamp
@@ -11,12 +11,15 @@ import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import javax.inject.Inject
 
-class RoomsRepo(var database: Database,val prefs: Preferences,val auth: FirebaseAuth) {
+class RoomsRepository @Inject constructor(private val prefs: Preferences,
+                                          private val auth: FirebaseAuth,
+                                          private val mRemote: IRoomsRepository.Remote) {
 
     private var mCurrentRoom: Room? = null
 
-    fun addRoom(name: String): Single<String> {
+    /*fun addRoom(name: String): Single<String> {
         val creator = prefs.getUserNick()
         val creatorId = auth.getUserId()
         val imageUrl = prefs.getProfileImageUrl()
@@ -27,33 +30,24 @@ class RoomsRepo(var database: Database,val prefs: Preferences,val auth: Firebase
         return database.addRoom(mCurrentRoom!!)
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
+    }*/
+
+    fun addRoom(room: Room): Completable{
+        return mRemote.addRoom(room)
     }
 
-    fun observeRooms(): Observable<Room> {
-        return database.observeRooms().filter { t: Room ->
-            (Timestamp.now().seconds-t.createdTime!!.seconds)/60 < 10 }
-            .map { t: Room -> t.updateLocallyCreated(auth.getUserId()) }
-            .doOnNext {
-                t: Room? -> Log.d("sekundziki",((Timestamp.now().seconds-t!!.createdTime!!.seconds)/60).toString())
-            }
-            .map { t: Room -> if(mCurrentRoom?.isEqualTo(t) == true) t.updateIsChoosenByPlayer(true) else t}
-            .subscribeOn(SchedulerProvider.io())
-            .observeOn(SchedulerProvider.ui())
+    fun observeRooms(maxLifeLengthInSeconds: Int): Observable<Room> {
+        return mRemote.observeRooms().filter { room: Room ->
+            (Timestamp.now().seconds - room.createdTime!!.seconds)/60 < maxLifeLengthInSeconds }
     }
 
-    fun addUserToRoom(room: Room): Completable{
-        val player = getLocalPlayer()
-        mCurrentRoom = room
-
-        return database.addPlayerToRoom(player, room.roomId)
-            .subscribeOn(SchedulerProvider.io())
-            .observeOn(SchedulerProvider.ui())
+    fun addPlayerToRoom(room: Room, player: Player): Completable{
+        //mCurrentRoom = room
+        return mRemote.addPlayerToRoom(player, room.roomId)
     }
 
     fun changeRoomToStarted(room: Room): Completable{
-        return database.changeRoomToStarted(room)
-            .subscribeOn(SchedulerProvider.io())
-            .observeOn(SchedulerProvider.ui())
+        return mRemote.changeRoomToStarted(room)
     }
 
     fun playerIsInRoom(room: Room): Boolean{

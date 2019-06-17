@@ -2,7 +2,7 @@ package com.konradpekala.blefik.ui.main.ranking
 
 import android.util.Log
 import com.konradpekala.blefik.data.model.User
-import com.konradpekala.blefik.domain.usecase.GetUsersUseCase
+import com.konradpekala.blefik.domain.interactors.GetUsersUseCase
 import com.konradpekala.blefik.ui.base.NewBasePresenter
 import javax.inject.Inject
 

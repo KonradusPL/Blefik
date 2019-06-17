@@ -1,5 +1,8 @@
 package com.konradpekala.blefik.data.repository.users
 
+import android.util.Log
+import com.konradpekala.blefik.data.auth.Auth
+import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.data.preferences.Preferences
 import com.konradpekala.blefik.data.repository.utils.RequestType
@@ -9,51 +12,59 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class  UserRepository @Inject constructor(
-    val remote: IUserRepository.Remote,
-    val cache: Preferences) {
+    private val mRemote: IUserRepository.Remote,
+    private val mCache: Preferences,
+    private val mAuth: Auth) {
 
     fun saveImageUrl(url: String): Completable {
-        return remote.saveImageUrl(url)
-            .doOnComplete { cache.setProfileImageUrl(url) }
+        return mRemote.saveImageUrl(url)
+            .doOnComplete { mCache.setProfileImageUrl(url) }
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
     }
 
     fun saveUser(user: User, requestType: RequestType): Completable{
 
-        val remoteCompletable = if(requestType == RequestType.FULL) remote.saveUser(user)
+        val remoteCompletable = if(requestType == RequestType.FULL) mRemote.saveUser(user)
         else Completable.complete()
 
         return remoteCompletable.doOnComplete {
-            cache.setUser(user)
-            cache.setIsProfileSavedRemotely(true)
+            mCache.setUser(user)
+            mCache.setIsProfileSavedRemotely(true)
         }
     }
 
     fun setNick(newNick: String): Completable {
-        return remote.setNick(newNick)
-            .doOnComplete { cache.setUserNick(newNick) }
+        return mRemote.setNick(newNick)
+            .doOnComplete { mCache.setUserNick(newNick) }
     }
 
     fun getEmail(): String {
-        return cache.getUserEmail()
+        return mCache.getUserEmail()
     }
 
     fun getNick(id: String): Single<String> {
-        if (cache.getUserNick() != "")
-            return Single.just(cache.getUserNick())
+        if (mCache.getUserNick() != "")
+            return Single.just(mCache.getUserNick())
         else{
-            return remote.getNick(id)
+            return mRemote.getNick(id)
         }
     }
 
     fun clean() {
-        remote.clean()
+        mRemote.clean()
     }
 
     fun getAllUsers(): Single<List<User>>{
-        return remote.getAllUsers()
+        return mRemote.getAllUsers()
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
+    }
+
+    fun getLocalPlayer(): Player{
+        val creator = mCache.getUserNick()
+        val id = mAuth.getUserId()
+        val imageUrl = mCache.getProfileImageUrl()
+        return Player(id,creator,imageUrl)
     }
 }

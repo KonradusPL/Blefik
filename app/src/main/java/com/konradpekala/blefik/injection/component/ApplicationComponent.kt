@@ -16,7 +16,8 @@ import javax.inject.Singleton
     FragmentModule::class,
     AuthModule::class,
     PreferencesModule::class,
-    RepositoryModule::class
+    RepositoryModule::class,
+    UtilsModule::class
 ])
 @Singleton
 interface ApplicationComponent {
