@@ -21,7 +21,7 @@ class RankingPresenter<V: RankingMvp.View> @Inject constructor(
             },
             onError = {t: Throwable ->
                 view.hideLoading()
-                Log.e(TAG,t.message)
+                Log.d(TAG,t.message)
             }
         )
     }

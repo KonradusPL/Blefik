@@ -35,8 +35,6 @@ class RankingFragment: BaseFragment<MainMvp.View>(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initList()
-        initUI()
-
         mPresenter.onAttach(this)
         mPresenter.onCreate()
     }
@@ -45,11 +43,6 @@ class RankingFragment: BaseFragment<MainMvp.View>(),
         super.onDestroyView()
         mPresenter.onStop()
     }
-
-    private fun initUI(){
-
-    }
-
     override fun showRankingList(users: List<User>) {
         mRankingAdapter.showUsers(users)
     }
