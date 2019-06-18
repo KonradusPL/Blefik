@@ -19,24 +19,27 @@ import javax.inject.Named
 
 class AddUserToRoomUseCase @Inject constructor(@Named("onSubscribe") subscribeScheduler: Scheduler,
                                                @Named("onObserve") observeScheduler: Scheduler,
-                                               private val mAuth: Auth,
                                                private val mUserRepository: UserRepository,
                                                private val mRoomManager: RoomManager,
                                                private val mGameUtils: GameUtils,
                                                private val mRoomsRepository: RoomsRepository
 ): CompletableUseCase<Room>(subscribeScheduler, observeScheduler) {
 
-
-    override fun buildUseCaseCompletable(request: Room?): Completable {
-        if(mRoomManager.hasSameRoomAs(request!!))
-            return Completable.error(SameRoom())
-
-        if (mGameUtils.isPlayerInRoom(request,mAuth.getUserId()))
-            return Completable.error(PlayerIsInRoom())
-
+    override fun buildUseCaseCompletable(room: Room?): Completable {
         val player = mUserRepository.getLocalPlayer()
 
-        return mRoomsRepository.addPlayerToRoom(request, player)
-            .doOnComplete { mRoomManager.updateCurrentRoom(request) }
+        if(mRoomManager.hasSameRoomAs(room!!))
+            return Completable.error(SameRoom())
+
+        if (mGameUtils.isPlayerInRoom(room,player)){
+            room.isChoosenByPlayer = true
+            mRoomManager.updateCurrentRoom(room)
+            return Completable.complete()
+        }
+
+
+        return mRoomsRepository.addPlayerToRoom(room, player)
+            .doOnComplete { mRoomManager.updateCurrentRoom(room) }
     }
+
 }

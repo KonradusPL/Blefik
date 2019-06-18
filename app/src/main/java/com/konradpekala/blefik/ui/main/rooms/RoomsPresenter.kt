@@ -3,6 +3,7 @@ package com.konradpekala.blefik.ui.main.rooms
 import android.util.Log
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.repository.room.RoomsRepository
+import com.konradpekala.blefik.domain.error_models.BaseError
 import com.konradpekala.blefik.domain.error_models.EmptyRoom
 import com.konradpekala.blefik.domain.error_models.PlayerIsInRoom
 import com.konradpekala.blefik.domain.error_models.SameRoom
@@ -35,27 +36,10 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mReposito
                     gameOpened = true
                     view.openGameActivity(room)
                 }
-                //if(room.isChoosenByPlayer)
-                   // mRepository.updateCurrentRoom(room)
                 view.getListAdapter().updateRooms(room)
             },onError = {error: Throwable ->
                 Log.d(TAG,"mObserveRoomsUseCase${error.message}")
             })
-
-        //Observer below observes changes made in rooms
-        /*cd.add(mRepository.observeRooms()
-            .subscribe({room: Room ->
-                if(room.isChoosenByPlayer && room.started && !gameOpened) {
-                    gameOpened = true
-                    view.openGameActivity(room)
-                }
-                if(room.isChoosenByPlayer)
-                    mRepository.updateCurrentRoom(room)
-                view.getListAdapter().updateRooms(room)
-
-            },{t: Throwable? ->
-                //view.showMessage(t.toString())
-            }))*/
     }
 
     override fun onStop() {
@@ -81,14 +65,7 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mReposito
                 Log.d(TAG,"onAddRoomClick:${error.message}")
                 view.showMessage(":(")
             })
-
-        /*cd.add(mRepository.addRoom(name)
-            .subscribe({t: String? ->
-                view.showMessage("Udało się!")
-            },{t: Throwable? ->
-                view.showMessage(":(")
-            }))*/
-    }
+}
 
     override fun onRoomClick(room: Room) {
        /* if(mRepository.isSameAsChosenBefore(room))
@@ -114,13 +91,11 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mReposito
 
         mAddUserToRoomUseCase.excecute(room,
             onComplete = {
+                view.getListAdapter().showRoomLoading(room)
                 Log.d(TAG,"mAddUserToRoomUseCase:success")
             },onError = {error: Throwable ->
                 Log.d(TAG,"mAddUserToRoomUseCase:${error.message}")
-                when(error){
-                    SameRoom() -> view.showMessage("Już wybrałeś ten pokój!")
-                    PlayerIsInRoom() -> view.showMessage("Już jesteś w tym pokoku!")
-                }
+                view.showMessage((error as BaseError).getUIMessage())
             })
     }
 
@@ -129,10 +104,8 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mReposito
             onComplete = {
 
             },onError = {error: Throwable ->
-                when(error){
-                    EmptyRoom() -> view.showMessage("Do gry potrzeba conajmniej 2 graczy")
-                    else -> view.showMessage("Nie udało się stworzyć gry :(")
-            }}
+                view.showMessage((error as BaseError).getUIMessage())
+            }
         )
     }
 }

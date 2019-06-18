@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.domain.error_models
 
-class EmptyRoom: BaseError() {
+class FailedCreatingGame: BaseError() {
     override fun getUIMessage(): String {
-        return "Do gry potrzeba conajmniej 2 graczy"
+        return "Nie udało się stworzyć gry :("
     }
 }

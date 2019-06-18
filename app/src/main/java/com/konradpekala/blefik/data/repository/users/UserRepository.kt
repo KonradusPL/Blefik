@@ -16,6 +16,8 @@ class  UserRepository @Inject constructor(
     private val mCache: Preferences,
     private val mAuth: Auth) {
 
+    private var mLocalPlayer: Player? = null
+
     fun saveImageUrl(url: String): Completable {
         return mRemote.saveImageUrl(url)
             .doOnComplete { mCache.setProfileImageUrl(url) }
@@ -51,6 +53,8 @@ class  UserRepository @Inject constructor(
         }
     }
 
+    fun getNickLocally() = mCache.getUserNick()
+
     fun clean() {
         mRemote.clean()
     }
@@ -62,9 +66,12 @@ class  UserRepository @Inject constructor(
     }
 
     fun getLocalPlayer(): Player{
-        val creator = mCache.getUserNick()
-        val id = mAuth.getUserId()
-        val imageUrl = mCache.getProfileImageUrl()
-        return Player(id,creator,imageUrl)
+        if(mLocalPlayer == null){
+            val creator = mCache.getUserNick()
+            val id = mAuth.getUserId()
+            val imageUrl = mCache.getProfileImageUrl()
+            mLocalPlayer = Player(id,creator,imageUrl)
+        }
+        return mLocalPlayer!!
     }
 }
