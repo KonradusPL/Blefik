@@ -3,7 +3,7 @@ package com.konradpekala.blefik.data.preferences
 import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import javax.inject.Inject
 
 class SharedPrefs @Inject constructor(context: Context): Preferences {
@@ -38,6 +38,14 @@ class SharedPrefs @Inject constructor(context: Context): Preferences {
         setIsUserLoggedIn(true)
         setUserEmail(value.email)
         setUserNick(value.nick)
+    }
+
+    override fun getUser(): User {
+        val user = User()
+        user.email = getUserEmail()
+        user.nick = getUserNick()
+        user.image.url = getProfileImageUrl()
+        return user
     }
 
     private fun clean(){

@@ -15,18 +15,22 @@ import kotlinx.android.synthetic.main.dialog_change_name.view.*
 import android.app.Activity
 import android.util.Log
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjection
 import java.io.File
+import javax.inject.Inject
 
 
 class ProfileActivity : BaseActivity(),ProfileMvp.View {
 
-    private lateinit var mPresenter: ProfilePresenter<ProfileMvp.View>
+    @Inject
+    lateinit var mPresenter: ProfilePresenter<ProfileMvp.View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
         setContentView(R.layout.activity_profile)
 
-        mPresenter = Injector.getProfilePresenter(this,this)
+        mPresenter.onAttach(this)
 
         initButtons()
 

@@ -29,35 +29,12 @@ object Injector {
 
     private val mAuth = com.google.firebase.auth.FirebaseAuth.getInstance()
 
-    /*fun getRoomPresenter(view: RoomsMvp.View, ctx: Context): RoomsPresenter<RoomsMvp.View> {
-        return RoomsPresenter(
-            view,
-            RoomsRepository(
-                FirebaseDatabase(),
-                SharedPrefs(ctx),
-                FirebaseAuth()
-            )
-        )
-    }*/
-
     fun getGamePresenter(view: GameMvp.View,ctx: Context): GamePresenter<GameMvp.View>{
 
         return GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,FirebaseAuth(mAuth),PhoneStuff(ctx)))
     }
 
-    /*fun getMainPresenter(view: MainMvp.View,ctx: Context): MainPresenter<MainMvp.View>{
-        return MainPresenter(view,
-             UserRepository(FirebaseUserRepository(FirebaseAuth(),FirebaseStorage()),SharedPrefs(ctx)),
-            ImageRepository(FirebaseImageRepository,
-                LocalImageRepository(ctx)
-            ),
-            AuthFirebaseRepository(FirebaseAuth())
-        )
-    }*/
-    /*fun getRankingPresenter(view: RankingMvp.View, ctx: Context): RankingPresenter<RankingMvp.View>{
-        return RankingPresenter(view, RankingRepository(FirebaseDatabase()))
-    }*/
-    fun getProfilePresenter(view: ProfileMvp.View, ctx: Context): ProfilePresenter<ProfileMvp.View>{
+    /*fun getProfilePresenter(view: ProfileMvp.View, ctx: Context): ProfilePresenter<ProfileMvp.View>{
         return ProfilePresenter(view,UserRepository(
             FirebaseUserRepository(FirebaseAuth(mAuth), FirebaseStorage()),
             SharedPrefs(ctx), FirebaseAuth(mAuth)
@@ -65,5 +42,5 @@ object Injector {
             LocalImageRepository(ctx)
         ),
             AuthFirebaseRepository(FirebaseAuth(mAuth)))
-    }
+    }*/
 }

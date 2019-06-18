@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.ui.main.ranking.RankingMvp
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_ranking.view.*
@@ -22,9 +22,9 @@ class RankingAdapter(val users: ArrayList<User>, val mvpView: RankingMvp.View)
                 textPosition.text = (layoutPosition+1).toString()
                 textGamesWon.text = "Wygrane gry: ${user.gamesWon}"
 
-                if (user.imageUrl.isNotEmpty())
+                if (user.image.url.isNotEmpty())
                     Picasso.get()
-                        .load(user.imageUrl)
+                        .load(user.image.url)
                         .placeholder(R.drawable.user_holder)
                         .resize(100,100)
                         .centerCrop()

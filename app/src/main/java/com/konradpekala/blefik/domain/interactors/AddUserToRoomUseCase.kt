@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.domain.interactors.add_user_to_room
+package com.konradpekala.blefik.domain.interactors
 
 import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.manager.RoomManager

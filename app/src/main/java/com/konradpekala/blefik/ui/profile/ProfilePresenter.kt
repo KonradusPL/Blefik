@@ -1,32 +1,39 @@
 package com.konradpekala.blefik.ui.profile
 
 import android.util.Log
+import com.konradpekala.blefik.data.auth.Auth
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.repository.auth.IAuthRepository
 import com.konradpekala.blefik.data.repository.image.ImageRepository
 import com.konradpekala.blefik.data.repository.image.UrlType
 import com.konradpekala.blefik.data.repository.users.UserRepository
-import com.konradpekala.blefik.ui.base.BasePresenter
-import java.io.File
+import com.konradpekala.blefik.domain.interactors.GetLocalUserUseCase
+import com.konradpekala.blefik.ui.base.NewBasePresenter
+import javax.inject.Inject
 
-class ProfilePresenter<V: ProfileMvp.View>(view: V,
-                                           private val userRepo: UserRepository,
-                                           private val imageRepo: ImageRepository,
-                                           private val authRepo: IAuthRepository):
-    BasePresenter<V>(view),ProfileMvp.Presenter<V> {
+class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
+    private val userRepo: UserRepository,
+    private val imageRepo: ImageRepository,
+    private val mAuth: Auth,
+    private val mGetLocalUserUseCase: GetLocalUserUseCase
+):
+    NewBasePresenter<V>(),ProfileMvp.Presenter<V> {
 
     private val TAG = "ProfilePresenter"
 
     override fun onCreate() {
         super.onCreate()
 
-        view.changeNick(userRepo.getNickLocally())
-        view.changeEmail(userRepo.getEmail())
-
-        cd.add(imageRepo.getProfileImage(authRepo.getId()).subscribe({file: File ->
-            view.changeProfileImage(file)
-        },{t: Throwable? ->
-            view.showMessage(t.toString())
-        }))
+        mGetLocalUserUseCase.excecute(
+            onSuccess = { user: User ->
+                Log.d(TAG,"mGetLocalUserUseCase: success")
+                view.changeNick(user.nick)
+                view.changeEmail(user.email)
+                view.changeProfileImage(user.image.file!!)
+            },onError = {error: Throwable ->
+                Log.d(TAG,"mGetLocalUserUseCase: ${error.message}")
+            }
+        )
     }
 
     override fun onChangeNickClick(newNick: String) {
@@ -42,13 +49,13 @@ class ProfilePresenter<V: ProfileMvp.View>(view: V,
     override fun onLogOutClick() {
         userRepo.clean()
         imageRepo.clean()
-        authRepo.logOut()
+        mAuth.logOut()
         view.openLoginActivity()
     }
 
     override fun onNewImageChosen(path: String) {
         Log.d("onNewImageChosen",path)
-        cd.add(imageRepo.saveImage(path,authRepo.getId())
+        cd.add(imageRepo.saveImage(path,mAuth.getUserId())
             .andThen{userRepo.saveImageUrl(imageRepo.getImageUrl(UrlType.REMOTE)).subscribe({
                 view.changeProfileImage(imageRepo.getImageUrl(UrlType.REMOTE))
                 Log.d("onNewImageChosen",imageRepo.getImageUrl(UrlType.REMOTE))

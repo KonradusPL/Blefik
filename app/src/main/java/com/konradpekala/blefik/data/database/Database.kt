@@ -1,9 +1,8 @@
 package com.konradpekala.blefik.data.database
 
-import com.konradpekala.blefik.data.model.Bid
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single

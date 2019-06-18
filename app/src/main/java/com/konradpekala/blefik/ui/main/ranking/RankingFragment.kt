@@ -5,19 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.base.BaseFragment
 import com.konradpekala.blefik.ui.main.MainMvp
 import com.konradpekala.blefik.ui.main.adapters.RankingAdapter
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
-import com.konradpekala.blefik.data.model.User
-import dagger.android.AndroidInjection
+import com.konradpekala.blefik.data.model.user.User
 import javax.inject.Inject
 
 

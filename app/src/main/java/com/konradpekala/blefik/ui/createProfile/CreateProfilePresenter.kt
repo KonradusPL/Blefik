@@ -1,6 +1,6 @@
 package com.konradpekala.blefik.ui.createProfile
 
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.repository.CreateProfileRepo
 import com.konradpekala.blefik.ui.base.BasePresenter
 
@@ -15,7 +15,7 @@ class CreateProfilePresenter<V: CreateProfileMvp.View>(view: V, val repo: Create
             return
         }
 
-        cd.add(repo.addUser(User(nick,"","","")).subscribe {
+        cd.add(repo.addUser(User(nick, "", "", "")).subscribe {
             view.showMessage("Udało się !")
             view.openRoomActivity()
         })

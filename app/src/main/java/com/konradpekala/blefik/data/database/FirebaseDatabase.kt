@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.konradpekala.blefik.data.model.*
+import com.konradpekala.blefik.data.model.user.User
 import io.reactivex.*
 
 class FirebaseDatabase: Database {
@@ -190,7 +191,8 @@ class FirebaseDatabase: Database {
     }
 
     fun createUser(email: String,password: String,id: String, nick: String): Completable{
-        val user = User(email = email,password = password,id = id,nick = nick)
+        val user =
+            User(email = email, password = password, id = id, nick = nick)
         return Completable.create { emitter ->
             database.collection("users").document(user.id).set(user)
                 .addOnSuccessListener { emitter.onComplete() }

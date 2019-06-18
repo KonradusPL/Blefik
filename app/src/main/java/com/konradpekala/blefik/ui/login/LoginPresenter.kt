@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.ui.login
 
 import android.util.Log
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.model.request.LoginRequest
 import com.konradpekala.blefik.domain.interactors.SaveUserUseCase
 import com.konradpekala.blefik.domain.interactors.SignInUseCase

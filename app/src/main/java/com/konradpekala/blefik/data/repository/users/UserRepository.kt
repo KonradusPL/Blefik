@@ -1,17 +1,18 @@
 package com.konradpekala.blefik.data.repository.users
 
-import android.util.Log
 import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.model.Player
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.Preferences
 import com.konradpekala.blefik.data.repository.utils.RequestType
 import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class  UserRepository @Inject constructor(
+@Singleton
+class UserRepository @Inject constructor(
     private val mRemote: IUserRepository.Remote,
     private val mCache: Preferences,
     private val mAuth: Auth) {
@@ -26,7 +27,6 @@ class  UserRepository @Inject constructor(
     }
 
     fun saveUser(user: User, requestType: RequestType): Completable{
-
         val remoteCompletable = if(requestType == RequestType.FULL) mRemote.saveUser(user)
         else Completable.complete()
 
@@ -34,6 +34,21 @@ class  UserRepository @Inject constructor(
             mCache.setUser(user)
             mCache.setIsProfileSavedRemotely(true)
         }
+    }
+
+    fun getUser(id: String): Single<User>{
+        if(isUserIdLocal(id)){
+            val cachedUser = mCache.getUser()
+            if (cachedUser.email.isNotEmpty()){
+                cachedUser.id = id
+                return Single.just(cachedUser)
+            }
+        }
+        return mRemote.getUser(id)
+    }
+
+    private fun isUserIdLocal(id: String): Boolean {
+        return id == mAuth.getUserId()
     }
 
     fun setNick(newNick: String): Completable {

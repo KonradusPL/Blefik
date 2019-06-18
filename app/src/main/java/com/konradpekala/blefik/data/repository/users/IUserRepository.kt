@@ -1,6 +1,6 @@
 package com.konradpekala.blefik.data.repository.users
 
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -12,5 +12,6 @@ interface IUserRepository {
         fun clean()
         fun saveUser(user: User): Completable
         fun getAllUsers(): Single<List<User>>
+        fun getUser(id: String): Single<User>
     }
 }

@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.data.repository
 
 import com.konradpekala.blefik.data.database.Database
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import io.reactivex.Completable
 

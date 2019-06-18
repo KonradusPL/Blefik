@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.konradpekala.blefik.data.auth.FirebaseAuth
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.storage.FirebaseStorage
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -65,7 +65,8 @@ class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
                     emitter.onSuccess(obj!!.nick)
                 }
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
-        }    }
+        }
+    }
 
     override fun getAllUsers(): Single<List<User>> {
         return Single.create { emitter ->
@@ -73,6 +74,17 @@ class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
                 .addOnSuccessListener { documentSnapshot ->
                     val list = documentSnapshot.toObjects(User::class.java)
                     emitter.onSuccess(list)
+                }
+                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+        }
+    }
+
+    override fun getUser(id: String): Single<User> {
+        return Single.create { emitter ->
+            database.collection("users").document(id).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val obj = documentSnapshot.toObject(User::class.java)
+                    emitter.onSuccess(obj!!)
                 }
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
         }

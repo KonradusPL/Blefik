@@ -1,12 +1,13 @@
 package com.konradpekala.blefik.data.preferences
 
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 
 interface Preferences {
     fun setUserNick(value: String)
     fun getUserNick(): String
 
     fun setUser(value: User)
+    fun getUser(): User
 
     fun isUserLoggedIn(): Boolean
     fun setIsUserLoggedIn(value: Boolean)

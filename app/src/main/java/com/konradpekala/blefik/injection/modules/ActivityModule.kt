@@ -5,6 +5,7 @@ import android.content.Context
 import com.konradpekala.blefik.ui.login.LoginActivity
 import com.konradpekala.blefik.ui.login.LoginMvp
 import com.konradpekala.blefik.ui.main.MainActivity
+import com.konradpekala.blefik.ui.profile.ProfileActivity
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -17,6 +18,9 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector()
     abstract fun contributeMainActivity(): MainActivity
+
+    @ContributesAndroidInjector()
+    abstract fun contributeProfileActivity(): ProfileActivity
 
     @Binds
     abstract fun bindContext(application: Application): Context
