@@ -73,4 +73,5 @@ class LoginActivity : BaseActivity(),LoginMvp.View {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
+
 }

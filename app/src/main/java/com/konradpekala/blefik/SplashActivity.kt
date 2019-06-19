@@ -28,9 +28,6 @@ class SplashActivity : AppCompatActivity() {
         val authFirebase = FirebaseAuth(com.google.firebase.auth.FirebaseAuth.getInstance())
         val isUserLoggedIn = authFirebase.isUserLoggedIn()
 
-        Log.d("onCreate.useremail",preferences.getUserEmail())
-        Log.d("onCreate.usernick",preferences.getUserNick())
-
         if(isUserLoggedIn)
             openMainActivity()
         else
@@ -38,11 +35,8 @@ class SplashActivity : AppCompatActivity() {
 
     }
     private fun openMainActivity(){
+        Log.d("openMainActivity",R.integer.main_activity_code.toString())
         startActivity(Intent(this, MainActivity::class.java))
-        finish()
-    }
-    private fun openCreateProfileActivity(){
-        startActivity(Intent(this,CreateProfileActivity::class.java))
         finish()
     }
     private fun openLoginActivity(){

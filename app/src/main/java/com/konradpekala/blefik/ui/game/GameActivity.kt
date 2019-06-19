@@ -8,7 +8,6 @@ import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.*
@@ -185,14 +184,15 @@ class GameActivity : BaseActivity(),GameMvp.View {
             .setTitle("Wyjście z gry")
             .setMessage("Jesteś pewien że chcesz wyjść z gry?")
             .setPositiveButton("Tak!") { _, _ ->
-                openRoomActivity()
+                openMainActivity()
             }.setNegativeButton("Nigdy(͡°͜ʖ͡°)"){ _, _ ->  }
             .create()
             .show()
     }
 
-    override fun openRoomActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
+    override fun openMainActivity() {
+        val code = resources.getInteger(R.integer.main_activity_code)
+        startActivityForResult(Intent(this, MainActivity::class.java),code)
         finish()
     }
 

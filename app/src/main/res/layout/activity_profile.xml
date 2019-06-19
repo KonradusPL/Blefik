@@ -64,7 +64,7 @@ android:id="@+id/layoutProfile">
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/textEmail"
-                    android:textColor="@color/colorAccent" android:text="konradus2012@gmail.com"/>
+                    android:textColor="@color/colorAccent" tools:text="konradus2012@gmail.com"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="vertical"

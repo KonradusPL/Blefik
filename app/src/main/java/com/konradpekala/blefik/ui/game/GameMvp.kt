@@ -15,7 +15,7 @@ interface GameMvp {
         fun animateBidChanges()
         fun openBidCreator()
         fun closeBidCreator()
-        fun openRoomActivity()
+        fun openMainActivity()
     }
 
     interface Presenter<V: View>: MvpPresenter<V>{

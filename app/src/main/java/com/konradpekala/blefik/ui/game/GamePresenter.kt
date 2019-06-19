@@ -44,7 +44,7 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                     UpdateType.PlayerBeaten -> {
                         if (room.players.size == 1){
                             view.showMessage("${room.players[0].nick} wygrał!")
-                            view.openRoomActivity()
+                            view.openMainActivity()
                         }
                     }
                     else -> {}
@@ -122,7 +122,7 @@ class GamePresenter<V: GameMvp.View>(view: V,val repo: GameRepo): BasePresenter<
                     if(repo.getRoom()!!.players.size == 1)
                         cd.add(repo.updateUserGamesWon()
                             .subscribe({
-                                view.openRoomActivity()
+                                view.openMainActivity()
                             },{
                                 //Error when updating winner's games won
                             }))

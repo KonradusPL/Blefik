@@ -87,8 +87,9 @@ class ProfileActivity : BaseActivity(),ProfileMvp.View {
     }
 
     override fun openLoginActivity() {
+        val intent = Intent(this,LoginActivity::class.java)
+        setResult(Activity.RESULT_OK,intent)
         startActivity(Intent(this,LoginActivity::class.java))
-        finishActivity()
         finish()
     }
 

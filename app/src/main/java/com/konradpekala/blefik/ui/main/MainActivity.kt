@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.ui.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,7 @@ import javax.inject.Inject
 
 class MainActivity : BaseActivity(),MainMvp.View {
 
+    private val TAG = "MainActivity"
 
     private lateinit var mRoomsFragment: RoomsFragment
     private lateinit var mRankingFragment: RankingFragment
@@ -85,14 +87,29 @@ class MainActivity : BaseActivity(),MainMvp.View {
         finish()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG,"onDestroy")
+    }
+
     override fun onStart() {
         super.onStart()
         mPresenter.onStart()
     }
 
     override fun openProfileActivity() {
+        val code = resources.getInteger(R.integer.main_to_profile_code)
         val intent = Intent(this, ProfileActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent,code)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val mainToProfileCode = resources.getInteger(R.integer.main_to_profile_code)
+
+        if(requestCode == mainToProfileCode && resultCode == Activity.RESULT_OK)
+            finish()
     }
 
     override fun openLoginActivity() {
