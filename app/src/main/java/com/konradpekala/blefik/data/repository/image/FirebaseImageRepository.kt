@@ -12,39 +12,32 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 import java.io.FileInputStream
+import java.lang.Exception
 import javax.inject.Inject
 
 class FirebaseImageRepository @Inject constructor(): IImageRepository {
 
     val profilesStorage = FirebaseStorage.getInstance().getReference("profile_images")
 
-    var localImage: File? = null
     private var mDownloadUrl: String? = null
 
     fun clearOldImageReference(){
-        localImage = null
         mDownloadUrl = null
     }
 
     override fun clean() = clearOldImageReference()
 
-
     override fun getProfileImage(id: String): Single<File>{
         val profileRef = profilesStorage.child(id)
-
-        if (localImage != null)
-            return Single.just(localImage)
 
         return Single.create { emitter ->
             val localFile = File.createTempFile("images", "jpg")
 
-            localImage = localFile
-
             profileRef.getFile(localFile).addOnSuccessListener { taskSnapshot: FileDownloadTask.TaskSnapshot? ->
                 emitter.onSuccess(localFile)
-            }.addOnFailureListener(OnFailureListener {
-                // Handle any errors
-            })
+            }.addOnFailureListener { exception: Exception ->
+                emitter.onError(exception)
+            }
         }
     }
 
@@ -61,7 +54,7 @@ class FirebaseImageRepository @Inject constructor(): IImageRepository {
             uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                 if (!task.isSuccessful) {
                     task.exception?.let {
-                        throw it
+                        emitter.onError(it)
                     }
                 }
                 return@Continuation profileReference.downloadUrl

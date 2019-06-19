@@ -64,10 +64,14 @@ class LoginPresenter@Inject constructor(private val mSignInUseCase: SignInUseCas
                 view.showMessage("Sukces!")
                 view.openMainActivity()
             },{saveUserError: Throwable ->
-                Log.e(TAG,saveUserError.toString())
+                view.hideLoading()
+                view.showMessage("Błąd zapisu użutkownika. Spróbuj jeszcze raz")
+                Log.d(TAG,saveUserError.toString())
             })
         },{signInError: Throwable ->
-            Log.e(TAG,signInError.toString())
+            view.hideLoading()
+            view.showMessage("Błędne dane logowania!")
+            Log.d(TAG,signInError.toString())
         })
     }
 

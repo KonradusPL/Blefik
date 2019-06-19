@@ -13,6 +13,8 @@ import javax.inject.Singleton
 class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: IImageRepository,
                                           @Named("ImageRepoLocal") val local: IImageRepository) {
 
+    private var mCachedImageFile: File? = null
+
     private val TAG  = "ImageRepository"
 
      fun getImageUrl(urlType: UrlType): String {
@@ -30,11 +32,15 @@ class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: 
     }
 
      fun getProfileImage(id: String): Single<File> {
-        Log.d(TAG,"getProfileImage")
+         if (mCachedImageFile != null)
+             return Single.just(mCachedImageFile)
         return remote.getProfileImage(id)
+            .doOnSuccess { imageFile: File? -> mCachedImageFile = imageFile }
     }
 
     fun clean(){
+        mCachedImageFile?.delete()
+        mCachedImageFile = null
         remote.clean()
     }
 
