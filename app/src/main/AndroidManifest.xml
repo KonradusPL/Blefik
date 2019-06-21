@@ -27,7 +27,7 @@
         </activity>
         <activity android:name=".ui.createProfile.CreateProfileActivity">
         </activity>
-        <activity android:name=".SplashActivity">
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

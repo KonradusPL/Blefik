@@ -1,4 +1,4 @@
-package com.konradpekala.blefik
+package com.konradpekala.blefik.ui.splash
 
 import android.content.Intent
 import android.graphics.Color
@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.preferences.SharedPrefs
-import com.konradpekala.blefik.ui.createProfile.CreateProfileActivity
 import com.konradpekala.blefik.ui.login.LoginActivity
 import com.konradpekala.blefik.ui.main.MainActivity
 import es.dmoral.toasty.Toasty
@@ -19,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         Toasty.Config.getInstance()
-            .setInfoColor(ContextCompat.getColor(this,R.color.colorAccent))
+            .setInfoColor(ContextCompat.getColor(this, R.color.colorAccent))
             .setTextColor(Color.WHITE)
             .apply()
 
@@ -35,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
 
     }
     private fun openMainActivity(){
-        Log.d("openMainActivity",R.integer.main_activity_code.toString())
+        Log.d("openMainActivity", R.integer.main_activity_code.toString())
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
