@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.konradpekala.blefik.data.auth.FirebaseAuth
+import com.konradpekala.blefik.data.model.Image
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.storage.FirebaseStorage
 import io.reactivex.Completable
@@ -19,11 +20,14 @@ class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
 
 
     override fun saveImageUrl(url: String): Completable {
-        Log.d("saveImageUrl","start")
+        Log.d(TAG,"saveImageUrl")
+
+        val image = Image()
+        image.url = url
+
         return Completable.create { emitter ->
             Log.d("saveImageUrl",url)
-            Log.d("saveImageUrl",url)
-            database.collection("users").document(auth.getUserId()).update("imageUrl",url)
+            database.collection("users").document(auth.getUserId()).update("image",image)
                 .addOnSuccessListener {
                     Log.d("saveImageUrl","success")
                     emitter.onComplete()

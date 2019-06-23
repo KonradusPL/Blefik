@@ -3,7 +3,6 @@ package com.konradpekala.blefik.ui.profile
 import android.util.Log
 import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.model.user.User
-import com.konradpekala.blefik.data.repository.auth.IAuthRepository
 import com.konradpekala.blefik.data.repository.image.ImageRepository
 import com.konradpekala.blefik.data.repository.image.UrlType
 import com.konradpekala.blefik.data.repository.users.UserRepository
@@ -27,9 +26,14 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
         mGetLocalUserUseCase.excecute(
             onSuccess = { user: User ->
                 Log.d(TAG,"mGetLocalUserUseCase: success")
-                view.changeNick(user.nick)
-                view.changeEmail(user.email)
-                view.changeProfileImage(user.image.file!!)
+                try {
+                    view.changeNick(user.nick)
+                    view.changeEmail(user.email)
+                    view.changeProfileImage(user.image.url)
+                }catch (e: Exception){
+                    Log.d(TAG,e.toString())
+                }
+
             },onError = {error: Throwable ->
                 Log.d(TAG,"mGetLocalUserUseCase: ${error.message}")
             }
@@ -53,9 +57,9 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
         view.openLoginActivity()
     }
 
-    override fun onNewImageChosen(path: String) {
-        Log.d("onNewImageChosen",path)
-        cd.add(imageRepo.saveImage(path,mAuth.getUserId())
+    override fun onNewImageChosen(imagePath: String) {
+        Log.d(TAG, imagePath)
+        cd.add(imageRepo.saveImage(imagePath,mAuth.getUserId())
             .andThen{userRepo.saveImageUrl(imageRepo.getImageUrl(UrlType.REMOTE)).subscribe({
                 view.changeProfileImage(imageRepo.getImageUrl(UrlType.REMOTE))
                 Log.d("onNewImageChosen",imageRepo.getImageUrl(UrlType.REMOTE))

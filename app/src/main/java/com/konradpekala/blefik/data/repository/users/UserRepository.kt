@@ -72,6 +72,8 @@ class UserRepository @Inject constructor(
 
     fun clean() {
         mRemote.clean()
+        mLocalPlayer = null
+        mCache.removeUser()
     }
 
     fun getAllUsers(): Single<List<User>>{

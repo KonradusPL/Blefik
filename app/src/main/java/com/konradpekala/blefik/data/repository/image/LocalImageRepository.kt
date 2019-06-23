@@ -24,7 +24,7 @@ class LocalImageRepository @Inject constructor(val ctx: Context): IImageReposito
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getProfileImage(id: String): Single<File> {
+    override fun getImage(id: String): Single<File> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

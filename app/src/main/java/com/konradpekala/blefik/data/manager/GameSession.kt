@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RoomManager @Inject constructor( ){
+class GameSession @Inject constructor( ){
 
     val isGameStarted = false
     val isLocallyCreated = false

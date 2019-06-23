@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.data.repository.image
 
-import android.util.Log
-import com.konradpekala.blefik.utils.SchedulerProvider
+import com.konradpekala.blefik.data.base.FileStorage
+import com.konradpekala.blefik.data.model.Image
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
@@ -10,38 +10,37 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: IImageRepository,
+class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: FileStorage,
                                           @Named("ImageRepoLocal") val local: IImageRepository) {
-
-    private var mCachedImageFile: File? = null
 
     private val TAG  = "ImageRepository"
 
-     fun getImageUrl(urlType: UrlType): String {
+    private var mCachedImage: Image? = null
+
+    fun getImageUrl(urlType: UrlType): String {
         return when (urlType){
-             UrlType.REMOTE -> remote.getImageUrl()
-             UrlType.LOCAL -> local.getImageUrl()
+             UrlType.REMOTE -> remote.getFilePath().blockingGet()
+             UrlType.LOCAL -> "error"
          }
     }
 
      fun saveImage(imagePath: String, id: String): Completable {
-        return remote.saveImage(imagePath,id)/*.concatWith{
-            local.saveImage(imagePath,id)
-        }*/.subscribeOn(SchedulerProvider.io())
-            .observeOn(SchedulerProvider.ui())
+         val file = File(imagePath)
+         return remote.saveFile(file,id)
     }
 
-     fun getProfileImage(id: String): Single<File> {
-         if (mCachedImageFile != null)
-             return Single.just(mCachedImageFile)
-        return remote.getProfileImage(id)
-            .doOnSuccess { imageFile: File? -> mCachedImageFile = imageFile }
+     fun getImageFile(name: String): Single<File> {
+         mCachedImage?.let {
+             return Single.just(it.file)
+         }
+         return remote.getFile(name)
+            .doOnSuccess { imageFile: File? -> mCachedImage?.file = imageFile }
     }
 
     fun clean(){
-        mCachedImageFile?.delete()
-        mCachedImageFile = null
-        remote.clean()
+        mCachedImage?.clear()
+        mCachedImage = null
+        //remote.clean()
     }
 
 

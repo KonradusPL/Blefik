@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.login.LoginActivity
 import com.theartofdev.edmodo.cropper.CropImage

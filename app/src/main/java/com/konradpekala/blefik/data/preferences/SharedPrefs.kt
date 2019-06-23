@@ -8,6 +8,8 @@ import javax.inject.Inject
 
 class SharedPrefs @Inject constructor(context: Context): Preferences {
 
+    private val TAG = "SharedPrefs"
+
     private val USER_NICK = "USER_NICK"
     private val USER_EMAIL = "USER_EMAIL"
     private val IS_USER_LOGGED_IN = "IS_USER_LOGGED_IN"
@@ -34,10 +36,12 @@ class SharedPrefs @Inject constructor(context: Context): Preferences {
     }
 
     override fun setUser(value: User) {
+        Log.d(TAG,"setUser: $value")
         clean()
         setIsUserLoggedIn(true)
         setUserEmail(value.email)
         setUserNick(value.nick)
+        setProfileImageUrl(value.image.url)
     }
 
     override fun getUser(): User {
@@ -45,7 +49,16 @@ class SharedPrefs @Inject constructor(context: Context): Preferences {
         user.email = getUserEmail()
         user.nick = getUserNick()
         user.image.url = getProfileImageUrl()
+        Log.d(TAG,"user: $user")
         return user
+    }
+
+    override fun removeUser() {
+        setIsProfileSavedRemotely(false)
+        setIsUserLoggedIn(false)
+        setProfileImageUrl("")
+        setUserEmail("")
+        setUserNick("")
     }
 
     private fun clean(){

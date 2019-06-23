@@ -15,23 +15,18 @@ import javax.inject.Named
 class SaveUserUseCase @Inject constructor(@Named("onSubscribe") subscribeScheduler: Scheduler,
                                           @Named("onObserve") observeScheduler: Scheduler,
                                           private val userRepository: UserRepository,
-                                          private val auth: Auth,
                                           private val preferences: Preferences
 ): CompletableUseCase<User>(subscribeScheduler, observeScheduler) {
 
     private val TAG ="SaveUserUseCase"
 
     override fun buildUseCaseCompletable(request: User?): Completable {
-        Log.d(TAG,request!!.nick)
-
-        val id = auth.getUserId()
-        request.id = id
-
-        val isUserSavedRemotely = preferences.isProfileSavedRemotely()
-
-        val requestType = if (isUserSavedRemotely) RequestType.LOCAL
+        Log.d(TAG,request.toString())
+        val requestType = if (isUserSavedRemotely()) RequestType.LOCAL
         else RequestType.FULL
 
-        return userRepository.saveUser(request,requestType)
+        return userRepository.saveUser(request!!,requestType)
     }
+
+    private fun isUserSavedRemotely() = preferences.isProfileSavedRemotely()
 }

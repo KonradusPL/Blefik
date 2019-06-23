@@ -9,6 +9,8 @@ interface Preferences {
     fun setUser(value: User)
     fun getUser(): User
 
+    fun removeUser()
+
     fun isUserLoggedIn(): Boolean
     fun setIsUserLoggedIn(value: Boolean)
 

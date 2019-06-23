@@ -3,8 +3,6 @@ package com.konradpekala.blefik.domain.interactors
 import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.repository.image.ImageRepository
 import com.konradpekala.blefik.domain.interactors.base.SingleUseCase
-import com.konradpekala.blefik.utils.schedulers.OnObserveScheduler
-import com.konradpekala.blefik.utils.schedulers.OnSubscribeScheduler
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import java.io.File
@@ -18,6 +16,6 @@ class GetProfileImageUseCase @Inject constructor(@Named("onSubscribe") subscribe
     : SingleUseCase<Unit, File>(subscribeScheduler,observeScheduler) {
 
     override fun buildUseCaseSingle(request: Unit?): Single<File> {
-        return imageRepository.getProfileImage(auth.getUserId())
+        return imageRepository.getImageFile(auth.getUserId())
     }
 }

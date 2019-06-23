@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
+import com.konradpekala.blefik.data.base.FileStorage
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
@@ -15,7 +16,9 @@ import java.io.FileInputStream
 import java.lang.Exception
 import javax.inject.Inject
 
-class FirebaseImageRepository @Inject constructor(): IImageRepository {
+class FirebaseImageStorage @Inject constructor(): FileStorage {
+
+    private val TAG = "FirebaseImageStorage"
 
     val profilesStorage = FirebaseStorage.getInstance().getReference("profile_images")
 
@@ -25,10 +28,11 @@ class FirebaseImageRepository @Inject constructor(): IImageRepository {
         mDownloadUrl = null
     }
 
-    override fun clean() = clearOldImageReference()
+    fun clean() = clearOldImageReference()
 
-    override fun getProfileImage(id: String): Single<File>{
-        val profileRef = profilesStorage.child(id)
+    override fun getFile(fileName: String): Single<File>{
+        val profileRef = profilesStorage.child(fileName)
+        Log.d(TAG,profileRef.path)
 
         return Single.create { emitter ->
             val localFile = File.createTempFile("images", "jpg")
@@ -41,16 +45,17 @@ class FirebaseImageRepository @Inject constructor(): IImageRepository {
         }
     }
 
-    override fun getImageUrl() = mDownloadUrl ?: ""
+    override fun getFilePath(): Single<String> = Single.just(mDownloadUrl)
 
-    override fun saveImage(imagePath: String, id: String): Completable {
+    override fun saveFile(file: File, lastPathSegment: String): Completable {
         clearOldImageReference()
+
+        val stream = FileInputStream(file)
+
+        val profileReference = profilesStorage.child(lastPathSegment)
+        val uploadTask = profileReference.putStream(stream)
+
         return Completable.create { emitter ->
-            val stream = FileInputStream(File(imagePath))
-
-            val profileReference = profilesStorage.child(id)
-            val uploadTask = profileReference.putStream(stream)
-
             uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                 if (!task.isSuccessful) {
                     task.exception?.let {
@@ -61,13 +66,13 @@ class FirebaseImageRepository @Inject constructor(): IImageRepository {
             }).addOnCompleteListener { task ->
 
                 if (task.isSuccessful) {
-                    val downloadUri = task.result
-                    mDownloadUrl = downloadUri.toString()
-                    Log.d("saveImagepath",downloadUri.toString())
+                    val result = task.result
+                    mDownloadUrl = result.toString()
+                    Log.d(TAG,result.toString())
                     emitter.onComplete()
                 } else {
                     emitter.onError(Throwable("error saving image"))
-                    Log.d("saveImage",task.exception.toString())
+                    Log.d(TAG,task.exception.toString())
                 }
             }
         }
