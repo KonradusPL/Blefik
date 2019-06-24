@@ -1,12 +1,14 @@
 package com.konradpekala.blefik.data.repository.users
 
 import android.util.Log
+import com.google.android.gms.tasks.OnCanceledListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.model.Image
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.storage.FirebaseStorage
+import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
@@ -14,7 +16,7 @@ import javax.inject.Inject
 class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
                                                  val storage: FirebaseStorage): IUserRepository.Remote {
 
-    private val TAG = "FirebaseProfileRepo"
+    private val TAG = "saveUser"
 
     private val database = FirebaseFirestore.getInstance()
 
@@ -53,11 +55,15 @@ class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
     }
 
     override fun saveUser(user: User): Completable {
-        Log.d(TAG,"saveUser")
+        Log.d(TAG,"saveUser: $user")
         return Completable.create { emitter ->
-            database.collection("users").document(user.id).set(user)
+            Log.d(TAG,"saveUser: completable.create")
+            database.collection("users").document("123").set(user)
+                .addOnCanceledListener {Log.d(TAG,"saveUser: cancelled")}
                 .addOnSuccessListener { emitter.onComplete() }
-                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+                .addOnCompleteListener { Log.d(TAG,"saveUser: completed") }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG,exception.toString()) }
         }
     }
 

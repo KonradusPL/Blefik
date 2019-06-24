@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.data.repository.users
 
+import android.util.Log
 import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.user.User
@@ -17,6 +18,8 @@ class UserRepository @Inject constructor(
     private val mCache: Preferences,
     private val mAuth: Auth) {
 
+    private val TAG = "UserRepository"
+
     private var mLocalPlayer: Player? = null
 
     fun saveImageUrl(url: String): Completable {
@@ -27,10 +30,13 @@ class UserRepository @Inject constructor(
     }
 
     fun saveUser(user: User, requestType: RequestType): Completable{
+        user.id = mAuth.getUserId()
+
         val remoteCompletable = if(requestType == RequestType.FULL) mRemote.saveUser(user)
         else Completable.complete()
 
         return remoteCompletable.doOnComplete {
+            Log.d(TAG,"remoteCompletable.doOnComplete")
             mCache.setUser(user)
             mCache.setIsProfileSavedRemotely(true)
         }

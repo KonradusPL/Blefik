@@ -29,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
         val isUserLoggedIn = authFirebase.isUserLoggedIn()
 
         if(isUserLoggedIn)
-            openMainActivity()
+            openLoginActivity()
         else
             openLoginActivity()
 

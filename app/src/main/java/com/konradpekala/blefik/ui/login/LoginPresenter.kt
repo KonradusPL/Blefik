@@ -3,6 +3,7 @@ package com.konradpekala.blefik.ui.login
 import android.util.Log
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.model.request.LoginRequest
+import com.konradpekala.blefik.data.model.request.RegisterRequest
 import com.konradpekala.blefik.domain.interactors.SaveUserUseCase
 import com.konradpekala.blefik.domain.interactors.SignInUseCase
 import com.konradpekala.blefik.domain.interactors.SignUpUseCase
@@ -33,22 +34,16 @@ class LoginPresenter@Inject constructor(private val mSignInUseCase: SignInUseCas
             return
         }
 
-        val loginRequest = LoginRequest(email, password)
-
+        val registerRequest = RegisterRequest(email, password, nick)
         view.showLoading()
-        mSignUpUseCase.excecute(loginRequest, {
-            val user = User(nick = nick, email = email, password = password)
-            mSaveUserUseCase.excecute(user,{
-                view.hideLoading()
-                view.showMessage("Sukces!")
-                view.openMainActivity()
-            },{saveUserError: Throwable ->
-                view.hideLoading()
-                Log.e(TAG,saveUserError.toString())
-            })
+
+        mSignUpUseCase.excecute(registerRequest, {
+            view.hideLoading()
+            view.showMessage("Sukces!")
+            view.openMainActivity()
         },{ signUpError: Throwable ->
             view.hideLoading()
-            Log.e(TAG,signUpError.toString())
+            Log.d(TAG,signUpError.toString())
         })
     }
 

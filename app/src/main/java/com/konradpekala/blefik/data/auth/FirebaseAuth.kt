@@ -1,6 +1,7 @@
 package com.konradpekala.blefik.data.auth
 
 import android.util.Log
+import android.util.TimeUtils
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -19,7 +20,8 @@ class FirebaseAuth @Inject constructor(private val auth: FirebaseAuth): Auth {
             auth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
                     if(task.isSuccessful){
-                        Log.w("createUserWithEmail:s", task.exception)
+                        Log.d("createUserWithEmail", "success")
+                        Log.d("createUserWithEmail",System.currentTimeMillis().toString())
                         emitter.onComplete()
                     }else{
                         Log.w("createUserWithEmail:e", task.exception)

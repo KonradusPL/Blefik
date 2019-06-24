@@ -92,6 +92,7 @@ class SharedPrefs @Inject constructor(context: Context): Preferences {
     }
 
     override fun setIsProfileSavedRemotely(value: Boolean) {
+        Log.d(TAG,"setIsProfileSavedRemotely")
         mSharedPrefs.edit {
             putBoolean(IS_PROFILE_SAVED,value)
         }

@@ -3,6 +3,7 @@ package com.konradpekala.blefik.ui
 import android.app.Activity
 import android.app.Application
 import androidx.fragment.app.Fragment
+import com.google.firebase.FirebaseApp
 import com.konradpekala.blefik.injection.component.ApplicationComponent
 import com.konradpekala.blefik.injection.component.DaggerApplicationComponent
 import dagger.android.AndroidInjector
@@ -34,5 +35,7 @@ class BlefikApplication: Application(), HasActivityInjector,HasSupportFragmentIn
             .application(this)
             .build()
             .inject(this)
+
+        FirebaseApp.initializeApp(this)
     }
 }

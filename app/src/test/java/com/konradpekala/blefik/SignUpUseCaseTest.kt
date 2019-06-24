@@ -2,9 +2,15 @@ package com.konradpekala.blefik
 
 import android.content.Context
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseUser
 import com.konradpekala.blefik.data.auth.FirebaseAuth
 import com.konradpekala.blefik.data.model.request.LoginRequest
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.SharedPrefs
+import com.konradpekala.blefik.data.repository.users.FirebaseUserRepository
+import com.konradpekala.blefik.data.repository.users.UserRepository
+import com.konradpekala.blefik.data.storage.FirebaseStorage
+import com.konradpekala.blefik.domain.interactors.SaveUserUseCase
 import com.konradpekala.blefik.domain.interactors.SignUpUseCase
 import com.konradpekala.blefik.utils.SchedulerProvider
 import com.konradpekala.blefik.utils.schedulers.OnObserveScheduler
@@ -44,6 +50,7 @@ class SignUpUseCaseTest {
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
+        FirebaseApp.initializeApp(mockContext)
     }
 
     @Test
@@ -57,21 +64,38 @@ class SignUpUseCaseTest {
         `when`(auth.signUp(TEST_EMAIL,TEST_PASSWORD))
             .then{ Completable.complete()}
 
-        val signUpUseCase = SignUpUseCase(
+        /*val signUpUseCase = SignUpUseCase(
             testScheduler,
             testScheduler,
             auth,
-            preferences)
+            preferences,
+            SaveUserUseCase()
+        )*/
 
         val loginRequest = LoginRequest(TEST_EMAIL,TEST_PASSWORD)
 
-        val testObserver = signUpUseCase.raw(loginRequest)
-            .test()
+        //val testObserver = signUpUseCase.raw(loginRequest)
+            //.test()
 
-        testObserver.awaitTerminalEvent()
+        //testObserver.awaitTerminalEvent()
 
-        testObserver.assertComplete()
+       // testObserver.assertComplete()
+    }
+
+    @Test
+    fun saveUserToDatabase(){
+        val auth = FirebaseAuth(mockAuth)
+        val preferences = SharedPrefs(mockContext)
+        val remoteUserRepository = FirebaseUserRepository(auth, FirebaseStorage())
+
+        val userRepository = UserRepository(remoteUserRepository,preferences,auth)
+
+        val testScheduler = TestScheduler()
+        val saveUserUseCase = SaveUserUseCase(testScheduler,testScheduler,userRepository,preferences)
+
+        val testUser = User("Test50","iljdilasdas","email","password")
 
 
+        val response = saveUserUseCase.raw(testUser).blockingGet()
     }
 }

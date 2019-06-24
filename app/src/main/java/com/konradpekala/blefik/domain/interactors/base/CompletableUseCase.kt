@@ -21,7 +21,7 @@ abstract class CompletableUseCase<in Parameter>(subscribeScheduler: Scheduler,
     }
 
     fun raw(request: Parameter? = null): Completable{
-        return buildUseCaseCompletableWithSchedulers(request)
+        return buildUseCaseCompletable(request)
     }
 
     private fun buildUseCaseCompletableWithSchedulers(request: Parameter?): Completable {
