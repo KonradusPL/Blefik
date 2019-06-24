@@ -4,6 +4,9 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -21,30 +24,44 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
+    def dagger_version = "2.16"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1-alpha01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-alpha01'
 
-    //Daggerek kochaniutki, śliczniutki
-    implementation 'com.google.dagger:dagger-android:2.15'
-    implementation 'com.google.dagger:dagger-android-support:2.11' // if you use the support libraries
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+
+    //JUnit 4 framework
+    testImplementation 'junit:junit:4.12'
+    //Robolectric
+    testImplementation 'androidx.test:core:1.0.0'
+    //Mockito
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+
+    //Dagger2
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0-alpha01'
 
     //Kotlin
     implementation 'org.jetbrains.anko:anko-common:0.9'
-    implementation 'androidx.core:core-ktx:1.0.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21'
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
 
     //Iconics
     implementation "com.mikepenz:iconics-core:3.0.4@aar"
@@ -56,6 +73,8 @@ dependencies {
     //RxJava,RxAndroid
     implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+
 
     //Firebase
     implementation 'com.google.firebase:firebase-core:16.0.8'
