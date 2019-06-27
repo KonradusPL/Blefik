@@ -26,13 +26,9 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
         mGetLocalUserUseCase.excecute(
             onSuccess = { user: User ->
                 Log.d(TAG,"mGetLocalUserUseCase: success")
-                try {
-                    view.changeNick(user.nick)
-                    view.changeEmail(user.email)
-                    view.changeProfileImage(user.image.url)
-                }catch (e: Exception){
-                    Log.d(TAG,e.toString())
-                }
+                view.changeNick(user.nick)
+                view.changeEmail(user.email)
+                view.changeProfileImage(user.image.url)
 
             },onError = {error: Throwable ->
                 Log.d(TAG,"mGetLocalUserUseCase: ${error.message}")
