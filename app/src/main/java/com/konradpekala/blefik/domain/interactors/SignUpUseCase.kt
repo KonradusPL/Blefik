@@ -25,8 +25,8 @@ class SignUpUseCase @Inject constructor(@Named("onSubscribe") subscribeScheduler
         mapRequestToUser(request!!,user)
 
         return mAuth.signUp(request.email,request.password)
-            //.doOnComplete { mPreferences.setIsProfileSavedRemotely(false) }
-            .andThen { Completable.defer { mSaveUserUseCase.raw(user) } }
+            .doOnComplete { mPreferences.setIsProfileSavedRemotely(false) }
+            .andThen( Completable.defer { mSaveUserUseCase.raw(user) } )
 
     }
 

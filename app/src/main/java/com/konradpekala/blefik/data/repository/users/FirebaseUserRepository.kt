@@ -58,7 +58,7 @@ class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
         Log.d(TAG,"saveUser: $user")
         return Completable.create { emitter ->
             Log.d(TAG,"saveUser: completable.create")
-            database.collection("users").document("123").set(user)
+            database.collection("users").document(user.id).set(user)
                 .addOnCanceledListener {Log.d(TAG,"saveUser: cancelled")}
                 .addOnSuccessListener { emitter.onComplete() }
                 .addOnCompleteListener { Log.d(TAG,"saveUser: completed") }
