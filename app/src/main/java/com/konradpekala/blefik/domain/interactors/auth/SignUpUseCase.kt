@@ -1,10 +1,11 @@
-package com.konradpekala.blefik.domain.interactors
+package com.konradpekala.blefik.domain.interactors.auth
 
 import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.request.RegisterRequest
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.Preferences
 import com.konradpekala.blefik.domain.interactors.base.CompletableUseCase
+import com.konradpekala.blefik.domain.interactors.user.SaveUserUseCase
 import io.reactivex.*
 import javax.inject.Inject
 import javax.inject.Named

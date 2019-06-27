@@ -30,7 +30,7 @@ class FirebaseImageStorage @Inject constructor(): FileStorage {
 
     fun clean() = clearOldImageReference()
 
-    override fun getFile(fileName: String): Single<File>{
+    override fun downloadFile(fileName: String): Single<File>{
         val profileRef = profilesStorage.child(fileName)
         Log.d(TAG,profileRef.path)
 
@@ -47,7 +47,7 @@ class FirebaseImageStorage @Inject constructor(): FileStorage {
 
     override fun getFilePath(): Single<String> = Single.just(mDownloadUrl)
 
-    override fun saveFile(file: File, lastPathSegment: String): Completable {
+    override fun uploadFile(file: File, lastPathSegment: String): Completable {
         clearOldImageReference()
 
         val stream = FileInputStream(file)

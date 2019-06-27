@@ -9,7 +9,7 @@ import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.data.repository.users.FirebaseUserRepository
 import com.konradpekala.blefik.data.repository.users.UserRepository
 import com.konradpekala.blefik.data.storage.FirebaseStorage
-import com.konradpekala.blefik.domain.interactors.SaveUserUseCase
+import com.konradpekala.blefik.domain.interactors.user.SaveUserUseCase
 import io.reactivex.Completable
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
@@ -82,7 +82,12 @@ class SignUpUseCaseTest {
         val userRepository = UserRepository(remoteUserRepository,preferences,auth)
 
         val testScheduler = TestScheduler()
-        val saveUserUseCase = SaveUserUseCase(testScheduler,testScheduler,userRepository,preferences)
+        val saveUserUseCase = SaveUserUseCase(
+            testScheduler,
+            testScheduler,
+            userRepository,
+            preferences
+        )
 
         val testUser = User("Test50","iljdilasdas","email","password")
 

@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.domain.interactors
+package com.konradpekala.blefik.domain.interactors.user
 
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.repository.users.UserRepository

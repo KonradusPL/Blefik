@@ -1,12 +1,11 @@
 package com.konradpekala.blefik.ui.login
 
 import android.util.Log
-import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.model.request.LoginRequest
 import com.konradpekala.blefik.data.model.request.RegisterRequest
-import com.konradpekala.blefik.domain.interactors.SaveUserUseCase
-import com.konradpekala.blefik.domain.interactors.SignInUseCase
-import com.konradpekala.blefik.domain.interactors.SignUpUseCase
+import com.konradpekala.blefik.domain.interactors.user.SaveUserUseCase
+import com.konradpekala.blefik.domain.interactors.auth.SignInUseCase
+import com.konradpekala.blefik.domain.interactors.auth.SignUpUseCase
 
 import javax.inject.Inject
 

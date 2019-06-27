@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.domain.interactors
+package com.konradpekala.blefik.domain.interactors.room
 
 import com.google.firebase.Timestamp
 import com.konradpekala.blefik.data.auth.UserSession

@@ -10,8 +10,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: FileStorage,
-                                          @Named("ImageRepoLocal") val local: IImageRepository) {
+class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: FileStorage) {
 
     private val TAG  = "ImageRepository"
 
@@ -24,16 +23,16 @@ class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: 
          }
     }
 
-     fun saveImage(imagePath: String, id: String): Completable {
+     fun uploadImageWithUserIdAsName(imagePath: String, id: String): Completable {
          val file = File(imagePath)
-         return remote.saveFile(file,id)
+         return remote.uploadFile(file,id)
     }
 
      fun getImageFile(name: String): Single<File> {
          mCachedImage?.let {
              return Single.just(it.file)
          }
-         return remote.getFile(name)
+         return remote.downloadFile(name)
             .doOnSuccess { imageFile: File? -> mCachedImage?.file = imageFile }
     }
 

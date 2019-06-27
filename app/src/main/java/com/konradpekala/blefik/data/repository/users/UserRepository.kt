@@ -25,8 +25,6 @@ class UserRepository @Inject constructor(
     fun saveImageUrl(url: String): Completable {
         return mRemote.saveImageUrl(url)
             .doOnComplete { mCache.setProfileImageUrl(url) }
-            .subscribeOn(SchedulerProvider.io())
-            .observeOn(SchedulerProvider.ui())
     }
 
     fun saveUser(user: User, requestType: RequestType): Completable{

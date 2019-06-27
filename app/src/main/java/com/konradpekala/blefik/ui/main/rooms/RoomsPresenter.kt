@@ -4,10 +4,10 @@ import android.util.Log
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.repository.room.RoomsRepository
 import com.konradpekala.blefik.domain.error_models.BaseError
-import com.konradpekala.blefik.domain.interactors.AddRoomUseCase
-import com.konradpekala.blefik.domain.interactors.ChangeRoomToStartUseCase
-import com.konradpekala.blefik.domain.interactors.ObserveRoomsUseCase
-import com.konradpekala.blefik.domain.interactors.AddUserToRoomUseCase
+import com.konradpekala.blefik.domain.interactors.room.AddRoomUseCase
+import com.konradpekala.blefik.domain.interactors.room.ChangeRoomToStartUseCase
+import com.konradpekala.blefik.domain.interactors.room.ObserveRoomsUseCase
+import com.konradpekala.blefik.domain.interactors.user.AddUserToRoomUseCase
 import com.konradpekala.blefik.ui.base.NewBasePresenter
 import javax.inject.Inject
 
@@ -15,7 +15,8 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mReposito
                                                            private val mObserveRoomsUseCase: ObserveRoomsUseCase,
                                                            private val mAddRoomUseCase: AddRoomUseCase,
                                                            private val mAddUserToRoomUseCase: AddUserToRoomUseCase,
-                                                           private val mChangeRoomToStartUseCase: ChangeRoomToStartUseCase)
+                                                           private val mChangeRoomToStartUseCase: ChangeRoomToStartUseCase
+)
     : NewBasePresenter<V>(), RoomsMvp.Presenter<V> {
 
     private val TAG = "RoomsPresenter"

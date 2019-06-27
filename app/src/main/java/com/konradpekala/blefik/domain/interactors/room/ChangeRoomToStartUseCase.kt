@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.domain.interactors
+package com.konradpekala.blefik.domain.interactors.room
 
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.repository.room.RoomsRepository

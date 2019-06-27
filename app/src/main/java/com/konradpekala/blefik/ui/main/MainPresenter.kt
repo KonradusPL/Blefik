@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.ui.main
 
 import android.util.Log
-import com.konradpekala.blefik.domain.interactors.GetProfileImageUseCase
+import com.konradpekala.blefik.domain.interactors.user.GetProfileImageUseCase
 import com.konradpekala.blefik.ui.base.NewBasePresenter
 import java.io.File
 import javax.inject.Inject

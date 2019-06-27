@@ -6,7 +6,8 @@ import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.repository.image.ImageRepository
 import com.konradpekala.blefik.data.repository.image.UrlType
 import com.konradpekala.blefik.data.repository.users.UserRepository
-import com.konradpekala.blefik.domain.interactors.GetLocalUserUseCase
+import com.konradpekala.blefik.domain.interactors.user.GetLocalUserUseCase
+import com.konradpekala.blefik.domain.interactors.user.UpdateImageUseCase
 import com.konradpekala.blefik.ui.base.NewBasePresenter
 import javax.inject.Inject
 
@@ -14,7 +15,8 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     private val userRepo: UserRepository,
     private val imageRepo: ImageRepository,
     private val mUserSession: UserSession,
-    private val mGetLocalUserUseCase: GetLocalUserUseCase
+    private val mGetLocalUserUseCase: GetLocalUserUseCase,
+    private val mUpdateImageUseCase: UpdateImageUseCase
 ):
     NewBasePresenter<V>(),ProfileMvp.Presenter<V> {
 
@@ -29,7 +31,6 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
                 view.changeNick(user.nick)
                 view.changeEmail(user.email)
                 view.changeProfileImage(user.image.url)
-
             },onError = {error: Throwable ->
                 Log.d(TAG,"mGetLocalUserUseCase: ${error.message}")
             }
@@ -55,14 +56,14 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
 
     override fun onNewImageChosen(imagePath: String) {
         Log.d(TAG, imagePath)
-        cd.add(imageRepo.saveImage(imagePath,mUserSession.getUserId())
-            .andThen{userRepo.saveImageUrl(imageRepo.getImageUrl(UrlType.REMOTE)).subscribe({
-                view.changeProfileImage(imageRepo.getImageUrl(UrlType.REMOTE))
-                Log.d("onNewImageChosen",imageRepo.getImageUrl(UrlType.REMOTE))
-                Log.d("onNewImageChosen","success")
-            },{t: Throwable? ->
-                Log.d("onNewImageChosen",t.toString())
-            })}.subscribe {  })
+
+        mUpdateImageUseCase.excecute(imagePath,{
+            view.changeProfileImage(imageRepo.getImageUrl(UrlType.REMOTE))
+            Log.d("onNewImageChosen",imageRepo.getImageUrl(UrlType.REMOTE))
+            Log.d("onNewImageChosen","success")
+        },{t: Throwable ->
+            Log.d("onNewImageChosen",t.toString())
+        })
 
     }
 }
