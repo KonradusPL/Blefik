@@ -2,26 +2,23 @@ package com.konradpekala.blefik.data.repository.room
 
 import android.util.Log
 import com.google.firebase.Timestamp
-import com.konradpekala.blefik.data.auth.FirebaseAuth
-import com.konradpekala.blefik.data.database.Database
+import com.konradpekala.blefik.data.auth.FirebaseUserSession
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.preferences.Preferences
-import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import javax.inject.Inject
 
 class RoomsRepository @Inject constructor(private val prefs: Preferences,
-                                          private val auth: FirebaseAuth,
+                                          private val userSession: FirebaseUserSession,
                                           private val mRemote: IRoomsRepository.Remote) {
 
     private var mCurrentRoom: Room? = null
 
     /*fun addRoom(name: String): Single<String> {
         val creator = prefs.getUserNick()
-        val creatorId = auth.getUserId()
+        val creatorId = userSession.getUserId()
         val imageUrl = prefs.getProfileImageUrl()
         val player = Player(creatorId,creator,imageUrl)
         mCurrentRoom = Room(name = name, creatorId = creatorId,createdTime = Timestamp.now())
@@ -61,7 +58,7 @@ class RoomsRepository @Inject constructor(private val prefs: Preferences,
 
     private fun getLocalPlayer(): Player{
         val creator = prefs.getUserNick()
-        val id = auth.getUserId()
+        val id = userSession.getUserId()
         val imageUrl = prefs.getProfileImageUrl()
         Log.d("local player","$creator $id")
         return Player(id,creator,imageUrl)

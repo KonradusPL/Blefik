@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.data.repository
 
 import android.util.Log
-import com.konradpekala.blefik.data.auth.FirebaseAuth
+import com.konradpekala.blefik.data.auth.FirebaseUserSession
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.*
 import com.konradpekala.blefik.utils.CardsStuff
@@ -10,14 +10,14 @@ import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-class GameRepo(val db: Database, val cardsStuff: CardsStuff, val auth: FirebaseAuth, val phoneStuff: PhoneStuff) {
+class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: FirebaseUserSession, val phoneStuff: PhoneStuff) {
 
     private lateinit var mRoom: Room
 
     fun observeRoom(id: String): Observable<Room>{
         return db.observeRoom(id)
             .map { t: Room -> t.sortPlayers().updateCurrentPlayer()
-                .updatePhoneOwner(auth.getUserId())
+                .updatePhoneOwner(userSession.getUserId())
             }
             .doOnNext { room: Room? ->
                 Log.d("onNegit xt vs doOnNext","doOnNext")
@@ -72,7 +72,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val auth: FirebaseA
 
     fun getPlayer(): Player? {
         for(player in mRoom!!.players){
-            if(player.id == auth.getUserId())
+            if(player.id == userSession.getUserId())
                 return player
         }
         return null

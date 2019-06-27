@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Single
 
-interface Auth {
+interface UserSession {
 
     fun isUserLoggedIn():Boolean
 

@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.auth.FirebaseAuth
+import com.konradpekala.blefik.data.auth.FirebaseUserSession
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.ui.login.LoginActivity
 import com.konradpekala.blefik.ui.main.MainActivity
@@ -25,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
 
         val preferences = SharedPrefs(this)
 
-        val authFirebase = FirebaseAuth(com.google.firebase.auth.FirebaseAuth.getInstance())
+        val authFirebase = FirebaseUserSession(com.google.firebase.auth.FirebaseAuth.getInstance())
         val isUserLoggedIn = authFirebase.isUserLoggedIn()
 
         if(isUserLoggedIn)

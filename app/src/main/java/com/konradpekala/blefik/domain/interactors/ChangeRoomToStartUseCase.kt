@@ -1,14 +1,9 @@
 package com.konradpekala.blefik.domain.interactors
 
-import com.konradpekala.blefik.data.auth.Auth
 import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.model.request.LoginRequest
-import com.konradpekala.blefik.data.preferences.Preferences
 import com.konradpekala.blefik.data.repository.room.RoomsRepository
 import com.konradpekala.blefik.domain.error_models.EmptyRoom
 import com.konradpekala.blefik.domain.interactors.base.CompletableUseCase
-import com.konradpekala.blefik.utils.schedulers.OnObserveScheduler
-import com.konradpekala.blefik.utils.schedulers.OnSubscribeScheduler
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import javax.inject.Inject

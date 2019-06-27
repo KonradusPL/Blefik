@@ -1,19 +1,17 @@
 package com.konradpekala.blefik.data.repository.users
 
 import android.util.Log
-import com.google.android.gms.tasks.OnCanceledListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.konradpekala.blefik.data.auth.FirebaseAuth
+import com.konradpekala.blefik.data.auth.FirebaseUserSession
 import com.konradpekala.blefik.data.model.Image
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.storage.FirebaseStorage
-import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
-class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
+class FirebaseUserRepository @Inject constructor(val userSession: FirebaseUserSession,
                                                  val storage: FirebaseStorage): IUserRepository.Remote {
 
     private val TAG = "saveUser"
@@ -29,7 +27,7 @@ class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
 
         return Completable.create { emitter ->
             Log.d("saveImageUrl",url)
-            database.collection("users").document(auth.getUserId()).update("image",image)
+            database.collection("users").document(userSession.getUserId()).update("image",image)
                 .addOnSuccessListener {
                     Log.d("saveImageUrl","success")
                     emitter.onComplete()
@@ -48,7 +46,7 @@ class FirebaseUserRepository @Inject constructor(val auth: FirebaseAuth,
 
     override fun setNick(newNick: String): Completable {
         return Completable.create { emitter ->
-            database.collection("users").document(auth.getUserId()).update("nick",newNick)
+            database.collection("users").document(userSession.getUserId()).update("nick",newNick)
                 .addOnSuccessListener { emitter.onComplete()}
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
         }

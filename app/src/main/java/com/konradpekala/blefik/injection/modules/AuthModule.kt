@@ -1,8 +1,7 @@
 package com.konradpekala.blefik.injection.modules
 
-import com.konradpekala.blefik.data.auth.Auth
-import com.konradpekala.blefik.data.auth.FirebaseAuth
-import dagger.Binds
+import com.konradpekala.blefik.data.auth.UserSession
+import com.konradpekala.blefik.data.auth.FirebaseUserSession
 import dagger.Module
 import dagger.Provides
 
@@ -10,5 +9,5 @@ import dagger.Provides
  class AuthModule {
     @Provides  fun provideFirebaseAuth() = com.google.firebase.auth.FirebaseAuth.getInstance()
 
-    @Provides fun provideAuth(auth: com.google.firebase.auth.FirebaseAuth): Auth = FirebaseAuth(auth)
+    @Provides fun provideAuth(auth: com.google.firebase.auth.FirebaseAuth): UserSession = FirebaseUserSession(auth)
 }

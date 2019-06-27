@@ -1,8 +1,6 @@
 package com.konradpekala.blefik.domain.interactors
 
-import android.util.Log
-import com.konradpekala.blefik.data.auth.Auth
-import com.konradpekala.blefik.data.model.request.LoginRequest
+import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.request.RegisterRequest
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.Preferences
@@ -13,7 +11,7 @@ import javax.inject.Named
 
 class SignUpUseCase @Inject constructor(@Named("onSubscribe") subscribeScheduler: Scheduler,
                                         @Named("onObserve") observeScheduler: Scheduler,
-                                        private val mAuth: Auth,
+                                        private val mUserSession: UserSession,
                                         private val mPreferences: Preferences,
                                         private val mSaveUserUseCase: SaveUserUseCase
 ): CompletableUseCase<RegisterRequest>(subscribeScheduler, observeScheduler) {
@@ -24,7 +22,7 @@ class SignUpUseCase @Inject constructor(@Named("onSubscribe") subscribeScheduler
         val user = User()
         mapRequestToUser(request!!,user)
 
-        return mAuth.signUp(request.email,request.password)
+        return mUserSession.signUp(request.email,request.password)
             .doOnComplete { mPreferences.setIsProfileSavedRemotely(false) }
             .andThen( Completable.defer { mSaveUserUseCase.raw(user) } )
 

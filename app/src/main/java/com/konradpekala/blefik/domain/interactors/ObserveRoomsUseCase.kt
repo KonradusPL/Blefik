@@ -1,6 +1,6 @@
 package com.konradpekala.blefik.domain.interactors
 
-import com.konradpekala.blefik.data.auth.Auth
+import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.manager.GameSession
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.repository.room.RoomsRepository
@@ -17,12 +17,12 @@ class ObserveRoomsUseCase @Inject constructor(@Named("onSubscribe") subscribeSch
                                               @Named("onObserve") observeScheduler: Scheduler,
                                               private val mRoomsRepository: RoomsRepository,
                                               private val mGameSession: GameSession,
-                                              private val mAuth: Auth)
+                                              private val mUserSession: UserSession)
     : ObservableUseCase<Unit, Room>(subscribeScheduler, observeScheduler) {
 
     override fun buildUseCaseObservable(params: Unit?): Observable<Room> {
         return mRoomsRepository.observeRooms(MAX_ROOM_LIFE_LENGTH)
-            .map { room: Room -> room.updateLocallyCreated(mAuth.getUserId()) }
+            .map { room: Room -> room.updateLocallyCreated(mUserSession.getUserId()) }
             .map { room: Room -> room.updateIsChoosenByPlayer(mGameSession.checkIfRoomIsChoosen(room)) }
             .doOnNext { room: Room -> if (room.isChoosenByPlayer) mGameSession.updateCurrentRoom(room) }
     }

@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.injection
 
 import android.content.Context
-import com.konradpekala.blefik.data.auth.FirebaseAuth
+import com.konradpekala.blefik.data.auth.FirebaseUserSession
 import com.konradpekala.blefik.data.database.FirebaseDatabase
 import com.konradpekala.blefik.data.repository.*
 import com.konradpekala.blefik.ui.game.GameMvp
@@ -19,16 +19,16 @@ object Injector {
 
     fun getGamePresenter(view: GameMvp.View,ctx: Context): GamePresenter<GameMvp.View>{
 
-        return GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,FirebaseAuth(mAuth),PhoneStuff(ctx)))
+        return GamePresenter(view, GameRepo(FirebaseDatabase(),CardsStuff,FirebaseUserSession(mAuth),PhoneStuff(ctx)))
     }
 
     /*fun getProfilePresenter(view: ProfileMvp.View, ctx: Context): ProfilePresenter<ProfileMvp.View>{
         return ProfilePresenter(view,UserRepository(
-            FirebaseUserRepository(FirebaseAuth(mAuth), FirebaseStorage()),
-            SharedPrefs(ctx), FirebaseAuth(mAuth)
+            FirebaseUserRepository(FirebaseUserSession(mAuth), FirebaseStorage()),
+            SharedPrefs(ctx), FirebaseUserSession(mAuth)
         ),ImageRepository(FirebaseImageStorage(),
             LocalImageRepository(ctx)
         ),
-            AuthFirebaseRepository(FirebaseAuth(mAuth)))
+            AuthFirebaseRepository(FirebaseUserSession(mAuth)))
     }*/
 }

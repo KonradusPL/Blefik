@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.data.repository.users
 
 import android.util.Log
-import com.konradpekala.blefik.data.auth.Auth
+import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.Preferences
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(
     private val mRemote: IUserRepository.Remote,
     private val mCache: Preferences,
-    private val mAuth: Auth) {
+    private val mUserSession: UserSession) {
 
     private val TAG = "UserRepository"
 
@@ -30,7 +30,7 @@ class UserRepository @Inject constructor(
     }
 
     fun saveUser(user: User, requestType: RequestType): Completable{
-        user.id = mAuth.getUserId()
+        user.id = mUserSession.getUserId()
 
         val remoteCompletable = if(requestType == RequestType.FULL) mRemote.saveUser(user)
         else Completable.complete()
@@ -54,7 +54,7 @@ class UserRepository @Inject constructor(
     }
 
     private fun isUserIdLocal(id: String): Boolean {
-        return id == mAuth.getUserId()
+        return id == mUserSession.getUserId()
     }
 
     fun setNick(newNick: String): Completable {
@@ -91,7 +91,7 @@ class UserRepository @Inject constructor(
     fun getLocalPlayer(): Player{
         if(mLocalPlayer == null){
             val creator = mCache.getUserNick()
-            val id = mAuth.getUserId()
+            val id = mUserSession.getUserId()
             val imageUrl = mCache.getProfileImageUrl()
             mLocalPlayer = Player(id,creator,imageUrl)
         }

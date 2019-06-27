@@ -2,8 +2,7 @@ package com.konradpekala.blefik
 
 import android.content.Context
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseUser
-import com.konradpekala.blefik.data.auth.FirebaseAuth
+import com.konradpekala.blefik.data.auth.FirebaseUserSession
 import com.konradpekala.blefik.data.model.request.LoginRequest
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.SharedPrefs
@@ -11,23 +10,15 @@ import com.konradpekala.blefik.data.repository.users.FirebaseUserRepository
 import com.konradpekala.blefik.data.repository.users.UserRepository
 import com.konradpekala.blefik.data.storage.FirebaseStorage
 import com.konradpekala.blefik.domain.interactors.SaveUserUseCase
-import com.konradpekala.blefik.domain.interactors.SignUpUseCase
-import com.konradpekala.blefik.utils.SchedulerProvider
-import com.konradpekala.blefik.utils.schedulers.OnObserveScheduler
-import com.konradpekala.blefik.utils.schedulers.OnSubscribeScheduler
 import io.reactivex.Completable
-import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.mock
-import org.assertj.core.api.Assertions.assertThat
 import org.mockito.runners.MockitoJUnitRunner
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoRule
 import org.junit.Rule
 import org.mockito.Mockito.`when`
 
@@ -58,7 +49,7 @@ class SignUpUseCaseTest {
 
         val testScheduler = TestScheduler()
 
-        val auth = FirebaseAuth(mockAuth)
+        val auth = FirebaseUserSession(mockAuth)
         val preferences = SharedPrefs(mockContext)
 
         `when`(auth.signUp(TEST_EMAIL,TEST_PASSWORD))
@@ -67,7 +58,7 @@ class SignUpUseCaseTest {
         /*val signUpUseCase = SignUpUseCase(
             testScheduler,
             testScheduler,
-            auth,
+            userSession,
             preferences,
             SaveUserUseCase()
         )*/
@@ -84,7 +75,7 @@ class SignUpUseCaseTest {
 
     @Test
     fun saveUserToDatabase(){
-        val auth = FirebaseAuth(mockAuth)
+        val auth = FirebaseUserSession(mockAuth)
         val preferences = SharedPrefs(mockContext)
         val remoteUserRepository = FirebaseUserRepository(auth, FirebaseStorage())
 

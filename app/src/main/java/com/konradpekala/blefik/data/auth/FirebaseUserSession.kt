@@ -1,7 +1,6 @@
 package com.konradpekala.blefik.data.auth
 
 import android.util.Log
-import android.util.TimeUtils
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -9,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FirebaseAuth @Inject constructor(private val auth: FirebaseAuth): Auth {
+class FirebaseUserSession @Inject constructor(private val auth: FirebaseAuth): UserSession {
 
     override fun isUserLoggedIn():Boolean {
         return auth.currentUser != null

@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.ui.profile
 
 import android.util.Log
-import com.konradpekala.blefik.data.auth.Auth
+import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.repository.image.ImageRepository
 import com.konradpekala.blefik.data.repository.image.UrlType
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     private val userRepo: UserRepository,
     private val imageRepo: ImageRepository,
-    private val mAuth: Auth,
+    private val mUserSession: UserSession,
     private val mGetLocalUserUseCase: GetLocalUserUseCase
 ):
     NewBasePresenter<V>(),ProfileMvp.Presenter<V> {
@@ -53,13 +53,13 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     override fun onLogOutClick() {
         userRepo.clean()
         imageRepo.clean()
-        mAuth.logOut()
+        mUserSession.logOut()
         view.openLoginActivity()
     }
 
     override fun onNewImageChosen(imagePath: String) {
         Log.d(TAG, imagePath)
-        cd.add(imageRepo.saveImage(imagePath,mAuth.getUserId())
+        cd.add(imageRepo.saveImage(imagePath,mUserSession.getUserId())
             .andThen{userRepo.saveImageUrl(imageRepo.getImageUrl(UrlType.REMOTE)).subscribe({
                 view.changeProfileImage(imageRepo.getImageUrl(UrlType.REMOTE))
                 Log.d("onNewImageChosen",imageRepo.getImageUrl(UrlType.REMOTE))
