@@ -1,4 +1,4 @@
 package com.konradpekala.blefik.utils.schedulers
 
-class UserUtils {
-}
+
+enum class ValueToUpdate{EMAIL,NICK}

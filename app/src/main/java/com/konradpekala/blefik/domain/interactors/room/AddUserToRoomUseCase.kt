@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.domain.interactors.user
+package com.konradpekala.blefik.domain.interactors.room
 
 import com.konradpekala.blefik.data.manager.GameSession
 import com.konradpekala.blefik.data.model.Room

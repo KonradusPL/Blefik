@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.data.repository
 
 import android.util.Log
-import com.konradpekala.blefik.data.auth.FirebaseUserSession
+import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.*
 import com.konradpekala.blefik.utils.CardsStuff
@@ -10,7 +10,7 @@ import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: FirebaseUserSession, val phoneStuff: PhoneStuff) {
+class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: UserSession, val phoneStuff: PhoneStuff) {
 
     private lateinit var mRoom: Room
 

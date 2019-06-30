@@ -21,7 +21,7 @@ import com.konradpekala.blefik.ui.profile.ProfileActivity
 import com.squareup.picasso.Picasso
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_change_name.view.*
+import kotlinx.android.synthetic.main.dialog_update_user_value.view.*
 import java.io.File
 import javax.inject.Inject
 

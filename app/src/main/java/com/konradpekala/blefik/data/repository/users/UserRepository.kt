@@ -7,6 +7,7 @@ import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.Preferences
 import com.konradpekala.blefik.data.repository.utils.RequestType
 import com.konradpekala.blefik.utils.SchedulerProvider
+import com.konradpekala.blefik.utils.schedulers.ValueToUpdate
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
@@ -56,23 +57,13 @@ class UserRepository @Inject constructor(
     }
 
     fun setNick(newNick: String): Completable {
-        return mRemote.setNick(newNick)
+        return mRemote.updateValue(newNick,ValueToUpdate.NICK)
             .doOnComplete { mCache.setUserNick(newNick) }
     }
-
-    fun getEmail(): String {
-        return mCache.getUserEmail()
+    fun setEmail(newEmail: String): Completable {
+        return mRemote.updateValue(newEmail,ValueToUpdate.EMAIL)
+            .doOnComplete { mCache.setUserEmail(newEmail) }
     }
-
-    fun getNick(id: String): Single<String> {
-        if (mCache.getUserNick() != "")
-            return Single.just(mCache.getUserNick())
-        else{
-            return mRemote.getNick(id)
-        }
-    }
-
-    fun getNickLocally() = mCache.getUserNick()
 
     fun clean() {
         mRemote.clean()

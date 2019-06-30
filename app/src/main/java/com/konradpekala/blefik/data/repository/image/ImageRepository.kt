@@ -16,10 +16,10 @@ class ImageRepository @Inject constructor(@Named("ImageRepoRemote") val remote: 
 
     private var mCachedImage: Image? = null
 
-    fun getImageUrl(urlType: UrlType): String {
+    fun getImageUrl(urlType: UrlType): Single<String> {
         return when (urlType){
-             UrlType.REMOTE -> remote.getFilePath().blockingGet()
-             UrlType.LOCAL -> "error"
+             UrlType.REMOTE -> remote.getFilePath()
+             UrlType.LOCAL -> Single.error(Throwable("local saving not supported yet"))
          }
     }
 

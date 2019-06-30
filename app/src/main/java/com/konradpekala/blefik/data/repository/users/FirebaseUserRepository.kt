@@ -3,21 +3,23 @@ package com.konradpekala.blefik.data.repository.users
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.konradpekala.blefik.data.auth.FirebaseUserSession
+import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.Image
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.storage.FirebaseStorage
+import com.konradpekala.blefik.utils.schedulers.ValueToUpdate
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
-class FirebaseUserRepository @Inject constructor(val userSession: FirebaseUserSession,
+class FirebaseUserRepository @Inject constructor(val userSession: UserSession,
                                                  val storage: FirebaseStorage): IUserRepository.Remote {
 
     private val TAG = "saveUser"
 
     private val database = FirebaseFirestore.getInstance()
 
+    private val mUserValueMapper = FirebaseUserUpdateTypeMapper()
 
     override fun saveImageUrl(url: String): Completable {
         Log.d(TAG,"saveImageUrl")
@@ -60,6 +62,19 @@ class FirebaseUserRepository @Inject constructor(val userSession: FirebaseUserSe
                 .addOnCanceledListener {Log.d(TAG,"saveUser: cancelled")}
                 .addOnSuccessListener { emitter.onComplete() }
                 .addOnCompleteListener { Log.d(TAG,"saveUser: completed") }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG,exception.toString()) }
+        }
+    }
+
+    override fun updateValue(value: Any, valueType: ValueToUpdate): Completable {
+        val valueName = mUserValueMapper.map(valueType)
+
+        Log.d(TAG,"updateValue: $value")
+        return Completable.create { emitter ->
+            Log.d(TAG,"updateValue: completable.create")
+            database.collection("users").document(userSession.getUserId()).update(valueName,value)
+                .addOnSuccessListener { emitter.onComplete() }
                 .addOnFailureListener { exception ->
                     Log.d(TAG,exception.toString()) }
         }

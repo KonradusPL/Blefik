@@ -22,9 +22,14 @@
     <string name="name">Nazwa</string>
     <string name="level">Poziom:</string>
     <string name="distance">Dystanc:</string>
-    <string name="change_name">Zmień nazwe</string>
-    <string name="new_name">Nowa nazwa</string>
-    <string name="changing_name">Zmiana nazwy</string>
+
+    <string name="update_nick">Zmień nazwę</string>
+    <string name="new_nick">Nowy nick</string>
+    <string name="changing_nick">Zmiana nicku</string>
+
+    <string name="update_email">Zmień email</string>
+    <string name="new_email">Nowy email</string>
+    <string name="changing_email">Zmiana emailu</string>
 
     <string name="reached_dest">Właśnie dotarłeś do celu!</string>
 </resources>

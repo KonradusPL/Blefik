@@ -7,7 +7,7 @@ import com.konradpekala.blefik.domain.error_models.BaseError
 import com.konradpekala.blefik.domain.interactors.room.AddRoomUseCase
 import com.konradpekala.blefik.domain.interactors.room.ChangeRoomToStartUseCase
 import com.konradpekala.blefik.domain.interactors.room.ObserveRoomsUseCase
-import com.konradpekala.blefik.domain.interactors.user.AddUserToRoomUseCase
+import com.konradpekala.blefik.domain.interactors.room.AddUserToRoomUseCase
 import com.konradpekala.blefik.ui.base.NewBasePresenter
 import javax.inject.Inject
 

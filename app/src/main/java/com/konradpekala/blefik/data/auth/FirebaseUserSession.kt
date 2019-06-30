@@ -23,10 +23,24 @@ class FirebaseUserSession @Inject constructor(private val auth: FirebaseAuth): U
                         Log.d("createUserWithEmail",System.currentTimeMillis().toString())
                         emitter.onComplete()
                     }else{
-                        Log.w("createUserWithEmail:e", task.exception)
+                        Log.d("createUserWithEmail:e", task.exception.toString())
                         emitter.onError(task.exception!!.fillInStackTrace())
                     }
                 }
+        }
+    }
+
+    override fun updateEmail(email: String): Completable {
+        return Completable.create { emitter ->
+            auth.currentUser!!.updateEmail(email).addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    Log.d("updateEmail", "success")
+                    emitter.onComplete()
+                }else{
+                    Log.d("updateEmail", task.exception.toString())
+                    emitter.onError(task.exception!!.fillInStackTrace())
+                }
+            }
         }
     }
 
@@ -35,10 +49,10 @@ class FirebaseUserSession @Inject constructor(private val auth: FirebaseAuth): U
             auth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
                     if(task.isSuccessful){
-                        Log.w("createUserWithEmail:s", task.exception)
+                        Log.d("createUserWithEmail:s", task.exception.toString())
                         emitter.onSuccess(auth.currentUser!!.uid)
                     }else{
-                        Log.w("createUserWithEmail:e", task.exception)
+                        Log.d("createUserWithEmail:e", task.exception.toString())
                         emitter.onError(task.exception!!.fillInStackTrace())
                     }
                 }

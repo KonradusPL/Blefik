@@ -64,7 +64,6 @@ class FirebaseImageStorage @Inject constructor(): FileStorage {
                 }
                 return@Continuation profileReference.downloadUrl
             }).addOnCompleteListener { task ->
-
                 if (task.isSuccessful) {
                     val result = task.result
                     mDownloadUrl = result.toString()

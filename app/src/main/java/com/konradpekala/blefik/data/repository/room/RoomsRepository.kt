@@ -2,7 +2,7 @@ package com.konradpekala.blefik.data.repository.room
 
 import android.util.Log
 import com.google.firebase.Timestamp
-import com.konradpekala.blefik.data.auth.FirebaseUserSession
+import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.Room
 import com.konradpekala.blefik.data.preferences.Preferences
@@ -11,7 +11,7 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class RoomsRepository @Inject constructor(private val prefs: Preferences,
-                                          private val userSession: FirebaseUserSession,
+                                          private val userSession: UserSession,
                                           private val mRemote: IRoomsRepository.Remote) {
 
     private var mCurrentRoom: Room? = null

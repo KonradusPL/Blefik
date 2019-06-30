@@ -14,6 +14,7 @@ interface ProfileMvp {
     }
     interface Presenter<V: View>: MvpPresenter<V>{
         fun onChangeNickClick(newNick: String)
+        fun onChangeEmailClick(newEmail: String)
         fun onNewImageChosen(imagePath: String)
         fun onLogOutClick()
     }

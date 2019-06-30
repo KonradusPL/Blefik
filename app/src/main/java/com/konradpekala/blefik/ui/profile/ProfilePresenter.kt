@@ -6,17 +6,18 @@ import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.repository.image.ImageRepository
 import com.konradpekala.blefik.data.repository.image.UrlType
 import com.konradpekala.blefik.data.repository.users.UserRepository
+import com.konradpekala.blefik.domain.UserUpdateRequest
 import com.konradpekala.blefik.domain.interactors.user.GetLocalUserUseCase
 import com.konradpekala.blefik.domain.interactors.user.UpdateImageUseCase
+import com.konradpekala.blefik.domain.interactors.user.UpdateUserUseCase
 import com.konradpekala.blefik.ui.base.NewBasePresenter
+import com.konradpekala.blefik.utils.schedulers.ValueToUpdate
 import javax.inject.Inject
 
 class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
-    private val userRepo: UserRepository,
-    private val imageRepo: ImageRepository,
-    private val mUserSession: UserSession,
     private val mGetLocalUserUseCase: GetLocalUserUseCase,
-    private val mUpdateImageUseCase: UpdateImageUseCase
+    private val mUpdateImageUseCase: UpdateImageUseCase,
+    private val mUpdateUserUseCase: UpdateUserUseCase
 ):
     NewBasePresenter<V>(),ProfileMvp.Presenter<V> {
 
@@ -38,28 +39,39 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     }
 
     override fun onChangeNickClick(newNick: String) {
-        cd.add(userRepo.setNick(newNick).subscribe({
+        val request = UserUpdateRequest(newNick,ValueToUpdate.NICK)
+
+        mUpdateUserUseCase.excecute(request,{
             view.changeNick(newNick)
             view.showMessage("Powodzenia $newNick!")
-        },{t: Throwable? ->
+        },{t: Throwable ->
             Log.e(TAG,t.toString())
             view.showMessage("Nie udało się zmienić na $newNick")
-        }))
+        })
+    }
+
+    override fun onChangeEmailClick(newEmail: String) {
+        val request = UserUpdateRequest(newEmail,ValueToUpdate.EMAIL)
+
+        mUpdateUserUseCase.excecute(request,{
+            view.changeEmail(newEmail)
+            view.showMessage("Twój email to teraz $newEmail")
+        },{t: Throwable ->
+            Log.e(TAG,t.toString())
+            view.showMessage("Nie udało się zmienić emailu na $newEmail")
+        })
     }
 
     override fun onLogOutClick() {
-        userRepo.clean()
-        imageRepo.clean()
-        mUserSession.logOut()
         view.openLoginActivity()
     }
 
     override fun onNewImageChosen(imagePath: String) {
         Log.d(TAG, imagePath)
 
-        mUpdateImageUseCase.excecute(imagePath,{
-            view.changeProfileImage(imageRepo.getImageUrl(UrlType.REMOTE))
-            Log.d("onNewImageChosen",imageRepo.getImageUrl(UrlType.REMOTE))
+        mUpdateImageUseCase.excecute(imagePath,{ remoteImageUrl: String ->
+            view.changeProfileImage(remoteImageUrl)
+            Log.d("onNewImageChosen",remoteImageUrl)
             Log.d("onNewImageChosen","success")
         },{t: Throwable ->
             Log.d("onNewImageChosen",t.toString())

@@ -10,10 +10,10 @@ interface UserSession {
     fun isUserLoggedIn():Boolean
 
     fun signUp(email: String, password: String): Completable
-
     fun signIn(email: String, password: String): Single<String>
-
     fun logOut()
 
     fun getUserId(): String
+
+    fun updateEmail(email: String): Completable
 }
