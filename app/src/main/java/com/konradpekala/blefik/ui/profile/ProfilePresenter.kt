@@ -7,6 +7,7 @@ import com.konradpekala.blefik.data.repository.image.ImageRepository
 import com.konradpekala.blefik.data.repository.image.UrlType
 import com.konradpekala.blefik.data.repository.users.UserRepository
 import com.konradpekala.blefik.domain.UserUpdateRequest
+import com.konradpekala.blefik.domain.interactors.auth.LogOutUseCase
 import com.konradpekala.blefik.domain.interactors.user.GetLocalUserUseCase
 import com.konradpekala.blefik.domain.interactors.user.UpdateImageUseCase
 import com.konradpekala.blefik.domain.interactors.user.UpdateUserUseCase
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     private val mGetLocalUserUseCase: GetLocalUserUseCase,
     private val mUpdateImageUseCase: UpdateImageUseCase,
-    private val mUpdateUserUseCase: UpdateUserUseCase
+    private val mUpdateUserUseCase: UpdateUserUseCase,
+    private val mLogOutUseCase: LogOutUseCase
 ):
     NewBasePresenter<V>(),ProfileMvp.Presenter<V> {
 
@@ -63,6 +65,7 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     }
 
     override fun onLogOutClick() {
+        mLogOutUseCase.execute()
         view.openLoginActivity()
     }
 

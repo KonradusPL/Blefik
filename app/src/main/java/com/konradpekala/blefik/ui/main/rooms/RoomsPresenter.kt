@@ -46,7 +46,7 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mReposito
         mObserveRoomsUseCase.dispose()
         mAddUserToRoomUseCase.dispose()
         mAddRoomUseCase.dispose()
-        //mRepository.database.clean()
+        //mRepository.database.cleanCache()
     }
 
     override fun onAddRoomClick() {

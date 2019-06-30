@@ -10,17 +10,21 @@ class GameSession @Inject constructor( ){
     val isGameStarted = false
     val isLocallyCreated = false
 
-    private var mChoosenRoom: Room = Room()
+    private var mChoosenRoom: Room? = Room()
 
     fun checkIfRoomIsChoosen(room: Room): Boolean{
-        return mChoosenRoom.name==room.name && mChoosenRoom.creatorId == room.creatorId
+        return mChoosenRoom!!.name==room.name && mChoosenRoom!!.creatorId == room.creatorId
     }
 
     fun updateCurrentRoom(room: Room){
-        mChoosenRoom = room
+        mChoosenRoom = room.copy()
     }
 
     fun hasSameRoomAs(room: Room): Boolean{
-        return mChoosenRoom.roomId == room.roomId && mChoosenRoom.name == room.name
+        return mChoosenRoom!!.roomId == room.roomId && mChoosenRoom!!.name == room.name
+    }
+
+    fun cleanCache(){
+        mChoosenRoom = null
     }
 }
