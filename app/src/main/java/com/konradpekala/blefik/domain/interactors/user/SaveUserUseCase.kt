@@ -22,7 +22,6 @@ class SaveUserUseCase @Inject constructor(@Named("onSubscribe") subscribeSchedul
     override fun buildUseCaseCompletable(request: User?): Completable {
         Log.d(TAG,request.toString())
         Log.d(TAG,"isUserSavedRemotely: ${isUserSavedRemotely()}")
-        Log.d("SaveUserUseCase",System.currentTimeMillis().toString())
         val requestType = if (isUserSavedRemotely()) RequestType.LOCAL
         else RequestType.FULL
 

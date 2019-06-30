@@ -24,6 +24,8 @@ class GetLocalUserUseCase @Inject constructor(@Named("onSubscribe") subscribeSch
         return mUserRepository.getUser(mUserSession.getUserId())
     }
 
+    /*At this time GetLocalUserUseCase doesn't download image file since
+    //downloading time is very long*/
     private fun joinImageFileWithUser( user: User): Single<User>{
       return mImageRepository.getImageFile(user.id)
           .map { file: File ->  UserBuilder.withUser(user).withImageFile(file).build()}
