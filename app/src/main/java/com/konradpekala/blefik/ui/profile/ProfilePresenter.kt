@@ -19,8 +19,7 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     private val mGetLocalUserUseCase: GetLocalUserUseCase,
     private val mUpdateImageUseCase: UpdateImageUseCase,
     private val mUpdateUserUseCase: UpdateUserUseCase,
-    private val mLogOutUseCase: LogOutUseCase
-):
+    private val mLogOutUseCase: LogOutUseCase):
     NewBasePresenter<V>(),ProfileMvp.Presenter<V> {
 
     private val TAG = "ProfilePresenter"

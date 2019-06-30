@@ -4,13 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import com.konradpekala.blefik.R
 import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.login.LoginActivity
@@ -21,7 +16,6 @@ import com.konradpekala.blefik.ui.profile.ProfileActivity
 import com.squareup.picasso.Picasso
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_update_user_value.view.*
 import java.io.File
 import javax.inject.Inject
 
