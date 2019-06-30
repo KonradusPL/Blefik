@@ -13,31 +13,36 @@ import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.preferences.SharedPrefs
 import com.konradpekala.blefik.ui.login.LoginActivity
 import com.konradpekala.blefik.ui.main.MainActivity
+import dagger.android.AndroidInjection
 import es.dmoral.toasty.Toasty
+import javax.inject.Inject
 
 class SplashActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var mUserSession: UserSession
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
 
-        Toasty.Config.getInstance()
-            .setInfoColor(ContextCompat.getColor(this, R.color.colorAccent))
-            .setTextColor(Color.WHITE)
-            .apply()
+        applyToastsConfig()
 
-        val preferences = SharedPrefs(this)
-
-        val authFirebase = FirebaseUserSession(FirebaseAuth.getInstance())
-        val isUserLoggedIn = authFirebase.isUserLoggedIn()
-
-        if(isUserLoggedIn)
+        if(mUserSession.isUserLoggedIn())
             openMainActivity()
         else
             openLoginActivity()
 
     }
+
+    private fun applyToastsConfig() {
+        Toasty.Config.getInstance()
+            .setInfoColor(ContextCompat.getColor(this, R.color.colorAccent))
+            .setTextColor(Color.WHITE)
+            .apply()
+    }
+
     private fun openMainActivity(){
-        Log.d("openMainActivity", R.integer.main_activity_code.toString())
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
