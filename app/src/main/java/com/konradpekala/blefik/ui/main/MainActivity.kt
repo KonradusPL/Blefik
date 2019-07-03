@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.model.Room
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.login.LoginActivity

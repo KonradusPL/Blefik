@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.domain.interactors.room
 
-import com.konradpekala.blefik.data.manager.GameSession
-import com.konradpekala.blefik.data.model.Room
+import com.konradpekala.blefik.data.gamesession.GameSession
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.data.repository.room.RoomsRepository
 import com.konradpekala.blefik.data.repository.users.UserRepository
 import com.konradpekala.blefik.domain.error_models.SameRoom

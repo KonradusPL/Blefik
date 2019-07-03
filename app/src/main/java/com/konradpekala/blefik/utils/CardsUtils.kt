@@ -4,22 +4,22 @@ import com.konradpekala.blefik.data.model.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-object CardsStuff {
+object CardsUtils {
 
     var maxCardNumber = 4
 
-    val wysokaKarta = "Wysoka karta"
-    val para = "Para"
-    val dwiePary = "Dwie pary"
-    val trojka = "Trójka"
-    val strit = "Strit"
-    val kolor = "Kolor"
-    val full = "Full"
-    val kareta = "Kareta"
-    val poker = "Poker"
-    val pokerKrolewski = "Poker królewski"
+    const val wysokaKarta = "Wysoka karta"
+    const val para = "Para"
+    const val dwiePary = "Dwie pary"
+    const val trojka = "Trójka"
+    const val strit = "Strit"
+    const val kolor = "Kolor"
+    const val full = "Full"
+    const val kareta = "Kareta"
+    const val poker = "Poker"
+    const val pokerKrolewski = "Poker królewski"
 
-    fun allCards() = arrayListOf(
+    fun allPlayableCards() = arrayListOf(
         Card(CardNumber.Ace,CardColor.Club),
         Card(CardNumber.Ace,CardColor.Diamond),
         Card(CardNumber.Ace,CardColor.Spade),
@@ -66,7 +66,7 @@ object CardsStuff {
     }
 
     fun cardsForNewRound(players: ArrayList<Player>, firstRound: Boolean){
-        val temporaryArray = ArrayList(allCards())
+        val temporaryArray = ArrayList(allPlayableCards())
         val random = Random()
 
         for(player in players){

@@ -1,7 +1,10 @@
-package com.konradpekala.blefik.data.model
+package com.konradpekala.blefik.data.model.room
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
+import com.konradpekala.blefik.data.model.Bid
+import com.konradpekala.blefik.data.model.Player
+import com.konradpekala.blefik.data.model.SortByNick
 import java.util.*
 
 data class Room(
@@ -15,22 +18,8 @@ data class Room(
     @get:Exclude var roomId: String = "",
     @get:Exclude var status: Status = Status.Added,
     @get:Exclude var locallyCreated: Boolean = false,
-    var started: Boolean = false,
+    var hasGameStarted: Boolean = false,
     var players: ArrayList<Player> = ArrayList()){
-
-    fun toMap(): HashMap<String,Any>{
-        val hashMap = HashMap<String,Any>()
-        hashMap["name"] = name
-        hashMap["creatorId"] = creatorId
-        hashMap["updateType"] = updateType
-        hashMap["currentPlayer"] = currentPlayer
-        hashMap["started"] = started
-        hashMap["players"] = players
-        return hashMap
-    }
-    override fun toString(): String {
-        return "name: $name, status: $status, isChoosenByPlayer: $isChoosenByPlayer"
-    }
 
     constructor(room: Room) : this() {
         name = room.name
@@ -38,14 +27,11 @@ data class Room(
         updateType = room.updateType
         currentPlayer = room.currentPlayer
         currentBid = room.currentBid
-        started = room.started
+        hasGameStarted = room.hasGameStarted
         players = ArrayList(room.players)
         roomId = room.roomId
     }
 
-    fun isEqualTo(newRoom: Room): Boolean{
-        return name==newRoom.name && creatorId == newRoom.creatorId
-    }
 
     fun playerMap(): ArrayList<HashMap<String,Any>>{
         val arrayList = ArrayList<HashMap<String,Any>>()
@@ -56,34 +42,36 @@ data class Room(
         return arrayList
     }
 
-    fun sortPlayers(): Room{
-        Collections.sort(players,SortByNick())
-        return this
+    fun updateCardsForGivenPlayer(player: Player){
+        for (p in players){
+            if (player.id == p.id)
+                player.currentCards = p.currentCards
+        }
     }
 
-    fun updateCurrentPlayer(): Room{
+    fun sortPlayers() {
+        Collections.sort(players, SortByNick())
+    }
+
+    fun updateCurrentPlayer(){
         if(currentPlayer < players.size && currentPlayer >= 0)
             players[currentPlayer].isCurrentPlayer = true
-        return this
     }
 
-    fun updateLocallyCreated(creatorId: String): Room{
+    fun updateLocallyCreated(creatorId: String) {
         if(this.creatorId == creatorId)
             locallyCreated = true
-        return this
     }
 
-    fun updateIsChoosenByPlayer(value: Boolean): Room{
+    fun setIsChosenByPlayer(value: Boolean) {
         isChoosenByPlayer = value
-        return this
     }
 
-    fun updatePhoneOwner(phoneId: String): Room{
+    fun findAndMarkPhoneOwner(userId: String) {
         for(player in players){
-            if (player.id == phoneId)
+            if (player.id == userId)
                 player.phoneOwner = true
         }
-        return this
     }
 
 }

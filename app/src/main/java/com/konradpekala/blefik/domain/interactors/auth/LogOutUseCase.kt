@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.domain.interactors.auth
 
 import com.konradpekala.blefik.data.auth.UserSession
-import com.konradpekala.blefik.data.manager.GameSession
+import com.konradpekala.blefik.data.gamesession.GameSession
 import com.konradpekala.blefik.data.preferences.Preferences
 import com.konradpekala.blefik.data.repository.image.ImageRepository
 

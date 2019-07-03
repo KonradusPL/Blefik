@@ -3,6 +3,8 @@ package com.konradpekala.blefik.data.repository.users
 import android.util.Log
 import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.Player
+import com.konradpekala.blefik.data.model.room.Room
+import com.konradpekala.blefik.data.model.room.UpdateType
 import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.data.preferences.Preferences
 import com.konradpekala.blefik.data.repository.utils.RequestType
@@ -86,4 +88,11 @@ class UserRepository @Inject constructor(
         }
         return mLocalPlayer!!
     }
+
+    fun updateGamesWon(id: String, newGamesWonNumber: Int): Completable{
+        return mRemote.updateValue(newGamesWonNumber,ValueToUpdate.GAMES_WON)
+    }
+
+    fun getGamesWon(id: String) = mRemote.getUserGamesWon(id)
+
 }

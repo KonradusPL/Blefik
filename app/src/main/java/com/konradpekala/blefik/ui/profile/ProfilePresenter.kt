@@ -1,12 +1,8 @@
 package com.konradpekala.blefik.ui.profile
 
 import android.util.Log
-import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.user.User
-import com.konradpekala.blefik.data.repository.image.ImageRepository
-import com.konradpekala.blefik.data.repository.image.UrlType
-import com.konradpekala.blefik.data.repository.users.UserRepository
-import com.konradpekala.blefik.domain.UserUpdateRequest
+import com.konradpekala.blefik.domain.model.UserUpdateRequest
 import com.konradpekala.blefik.domain.interactors.auth.LogOutUseCase
 import com.konradpekala.blefik.domain.interactors.user.GetLocalUserUseCase
 import com.konradpekala.blefik.domain.interactors.user.UpdateImageUseCase
@@ -40,7 +36,7 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     }
 
     override fun onChangeNickClick(newNick: String) {
-        val request = UserUpdateRequest(newNick,ValueToUpdate.NICK)
+        val request = UserUpdateRequest(newNick, ValueToUpdate.NICK)
 
         mUpdateUserUseCase.excecute(request,{
             view.changeNick(newNick)
@@ -52,7 +48,7 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
     }
 
     override fun onChangeEmailClick(newEmail: String) {
-        val request = UserUpdateRequest(newEmail,ValueToUpdate.EMAIL)
+        val request = UserUpdateRequest(newEmail, ValueToUpdate.EMAIL)
 
         mUpdateUserUseCase.excecute(request,{
             view.changeEmail(newEmail)

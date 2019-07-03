@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.model.Status
+import com.konradpekala.blefik.data.model.room.Room
+import com.konradpekala.blefik.data.model.room.Status
 import com.konradpekala.blefik.ui.main.rooms.RoomsMvp
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
@@ -93,7 +93,7 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
             if(room.roomId == newRoom.roomId){
                 itemFound = true
                 val index = rooms.indexOf(room)
-                if(newRoom.status == Status.Removed || newRoom.started){
+                if(newRoom.status == Status.Removed || newRoom.hasGameStarted){
                     rooms.remove(room)
                     notifyItemRemoved(index)
                 }else if(newRoom.status == Status.Changed){
@@ -102,7 +102,7 @@ class RoomsAdapter(val rooms: ArrayList<Room>, val mvpView: RoomsMvp.View)
                 }
             }
         }
-        if(!itemFound && !newRoom.started){
+        if(!itemFound && !newRoom.hasGameStarted){
             rooms.add(newRoom)
             notifyItemInserted(rooms.size-1)
         }

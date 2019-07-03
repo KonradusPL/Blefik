@@ -1,7 +1,7 @@
 package com.konradpekala.blefik.utils
 
 import com.konradpekala.blefik.data.model.Player
-import com.konradpekala.blefik.data.model.Room
+import com.konradpekala.blefik.data.model.room.Room
 import javax.inject.Inject
 import javax.inject.Singleton
 

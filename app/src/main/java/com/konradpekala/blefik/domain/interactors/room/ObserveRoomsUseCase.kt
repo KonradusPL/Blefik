@@ -1,8 +1,8 @@
 package com.konradpekala.blefik.domain.interactors.room
 
 import com.konradpekala.blefik.data.auth.UserSession
-import com.konradpekala.blefik.data.manager.GameSession
-import com.konradpekala.blefik.data.model.Room
+import com.konradpekala.blefik.data.gamesession.GameSession
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.data.repository.room.RoomsRepository
 import com.konradpekala.blefik.domain.interactors.base.ObservableUseCase
 import io.reactivex.Observable
@@ -21,9 +21,19 @@ class ObserveRoomsUseCase @Inject constructor(@Named("onSubscribe") subscribeSch
     : ObservableUseCase<Unit, Room>(subscribeScheduler, observeScheduler) {
 
     override fun buildUseCaseObservable(params: Unit?): Observable<Room> {
-        return mRoomsRepository.observeRooms(MAX_ROOM_LIFE_LENGTH)
-            .map { room: Room -> room.updateLocallyCreated(mUserSession.getUserId()) }
-            .map { room: Room -> room.updateIsChoosenByPlayer(mGameSession.checkIfRoomIsChoosen(room)) }
-            .doOnNext { room: Room -> if (room.isChoosenByPlayer) mGameSession.updateCurrentRoom(room) }
+        return mRoomsRepository.observeAllRooms(MAX_ROOM_LIFE_LENGTH)
+            .map { room: Room -> getModifiedRoom(room) }
+    }
+
+    private fun getModifiedRoom(room: Room): Room{
+        val isRoomChosenByPlayer = mGameSession.hasSameRoomAs(room)
+        if (isRoomChosenByPlayer){
+            room.setIsChosenByPlayer(isRoomChosenByPlayer)
+            mGameSession.updateCurrentRoom(room)
+        }
+
+        room.updateLocallyCreated(mUserSession.getUserId())
+
+        return room
     }
 }

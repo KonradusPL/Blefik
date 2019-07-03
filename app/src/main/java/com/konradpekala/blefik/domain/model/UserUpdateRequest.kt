@@ -1,4 +1,4 @@
-package com.konradpekala.blefik.domain
+package com.konradpekala.blefik.domain.model
 
 import com.konradpekala.blefik.utils.schedulers.ValueToUpdate
 

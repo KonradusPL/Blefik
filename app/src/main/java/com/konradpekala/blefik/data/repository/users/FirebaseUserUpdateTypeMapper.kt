@@ -8,6 +8,7 @@ class FirebaseUserUpdateTypeMapper @Inject constructor(): UserUpdateTypeMapper {
         return when(valueToUpdate){
             ValueToUpdate.EMAIL -> "email"
             ValueToUpdate.NICK -> "nick"
+            ValueToUpdate.GAMES_WON -> "gamesWon"
         }
     }
 }

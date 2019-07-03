@@ -2,6 +2,7 @@ package com.konradpekala.blefik.injection.modules
 
 import android.app.Application
 import android.content.Context
+import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.login.LoginActivity
 import com.konradpekala.blefik.ui.login.LoginMvp
 import com.konradpekala.blefik.ui.main.MainActivity
@@ -25,6 +26,9 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector()
     abstract fun contributeSplashActivity(): SplashActivity
+
+    @ContributesAndroidInjector()
+    abstract fun contributeGameActivity(): GameActivity
 
     @Binds
     abstract fun bindContext(application: Application): Context

@@ -1,7 +1,6 @@
 package com.konradpekala.blefik.ui.main
 
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.ui.base.MvpPresenter
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.ui.base.MvpView
 import java.io.File
 

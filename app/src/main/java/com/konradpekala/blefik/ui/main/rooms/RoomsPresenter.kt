@@ -1,21 +1,21 @@
 package com.konradpekala.blefik.ui.main.rooms
 
 import android.util.Log
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.repository.room.RoomsRepository
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.domain.error_models.BaseError
 import com.konradpekala.blefik.domain.interactors.room.AddRoomUseCase
 import com.konradpekala.blefik.domain.interactors.room.ChangeRoomToStartUseCase
 import com.konradpekala.blefik.domain.interactors.room.ObserveRoomsUseCase
 import com.konradpekala.blefik.domain.interactors.room.AddUserToRoomUseCase
 import com.konradpekala.blefik.ui.base.NewBasePresenter
+import org.jetbrains.anko.getStackTraceString
 import javax.inject.Inject
 
-class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mRepository: RoomsRepository,
-                                                           private val mObserveRoomsUseCase: ObserveRoomsUseCase,
-                                                           private val mAddRoomUseCase: AddRoomUseCase,
-                                                           private val mAddUserToRoomUseCase: AddUserToRoomUseCase,
-                                                           private val mChangeRoomToStartUseCase: ChangeRoomToStartUseCase
+class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(
+    private val mObserveRoomsUseCase: ObserveRoomsUseCase,
+    private val mAddRoomUseCase: AddRoomUseCase,
+    private val mAddUserToRoomUseCase: AddUserToRoomUseCase,
+    private val mChangeRoomToStartUseCase: ChangeRoomToStartUseCase
 )
     : NewBasePresenter<V>(), RoomsMvp.Presenter<V> {
 
@@ -30,13 +30,14 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mReposito
         mObserveRoomsUseCase.execute(
             onNext = {room: Room ->
                 Log.d(TAG,"mObserveRoomsUseCase:onNext")
-                if(room.isChoosenByPlayer && room.started && !gameOpened) {
+                if(room.isChoosenByPlayer && room.hasGameStarted && !gameOpened) {
                     gameOpened = true
                     view.openGameActivity(room)
                 }
                 view.getListAdapter().updateRooms(room)
             },onError = {error: Throwable ->
-                Log.d(TAG,"mObserveRoomsUseCase${error.message}")
+                Log.d(TAG,"mObserveRoomsUseCase ${error}")
+                Log.d(TAG,"mObserveRoomsUseCase ${error.getStackTraceString()}")
             })
     }
 
@@ -66,26 +67,6 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(private val mReposito
 }
 
     override fun onRoomClick(room: Room) {
-       /* if(mRepository.isSameAsChosenBefore(room))
-            return
-
-        if (mRepository.playerIsInRoom(room)){
-            Log.d("onRoomClick","hasPlayer")
-            room.isChoosenByPlayer = true
-            view.getListAdapter().showRoomLoading(room)
-            mRepository.updateCurrentRoom(room)
-            return
-        }
-
-        view.getListAdapter().removeRoomsLoading()
-        Log.d("onRoomClick","qweqweqwe")
-
-        cd.add(mRepository.addPlayerToRoom(room)
-            .subscribe({
-                Log.d("onRoomClick","success")
-            },{t: Throwable? ->
-                Log.d("onRoomClick",t.toString())
-            }))*/
 
         mAddUserToRoomUseCase.excecute(room,
             onComplete = {

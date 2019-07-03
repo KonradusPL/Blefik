@@ -1,23 +1,25 @@
 package com.konradpekala.blefik.data.repository
 
-import android.util.Log
 import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.database.Database
 import com.konradpekala.blefik.data.model.*
-import com.konradpekala.blefik.utils.CardsStuff
-import com.konradpekala.blefik.utils.PhoneStuff
+import com.konradpekala.blefik.data.model.room.Room
+import com.konradpekala.blefik.data.model.room.UpdateType
+import com.konradpekala.blefik.utils.CardsUtils
 import com.konradpekala.blefik.utils.SchedulerProvider
 import io.reactivex.Completable
-import io.reactivex.Observable
 
-class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: UserSession, val phoneStuff: PhoneStuff) {
+class GameRepo(val db: Database,
+               val cardsStuff: CardsUtils,
+               val userSession: UserSession) {
 
     private lateinit var mRoom: Room
 
-    fun observeRoom(id: String): Observable<Room>{
+    /*fun observeRoom(id: String): Observable<Room>{
         return db.observeRoom(id)
-            .map { t: Room -> t.sortPlayers().updateCurrentPlayer()
-                .updatePhoneOwner(userSession.getUserId())
+            .map { t: Room -> t.sortPlayers()
+                .updateCurrentPlayer()
+                .findAndMarkPhoneOwner(userSession.getUserId())
             }
             .doOnNext { room: Room? ->
                 Log.d("onNegit xt vs doOnNext","doOnNext")
@@ -25,7 +27,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: Us
             }
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
-    }
+    }*/
 
     fun makeNewRound(firstRound: Boolean): Completable{
         val room = mRoom.copy()
@@ -59,7 +61,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: Us
             .observeOn(SchedulerProvider.ui())
     }
 
-    fun updateBid(bid: Bid): Completable{
+    /*fun updateBid(bid: Bid): Completable{
         //val room = Room(mRoom)
         val room = mRoom.copy()
         room.updateType = UpdateType.NewBid
@@ -68,7 +70,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: Us
         return db.updateBid(room)
             .subscribeOn(SchedulerProvider.io())
             .observeOn(SchedulerProvider.ui())
-    }
+    }*/
 
     fun getPlayer(): Player? {
         for(player in mRoom!!.players){
@@ -78,34 +80,6 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: Us
         return null
     }
 
-    fun isBidProperlyCreated(bid: Bid): Boolean{
-        if(bid.pickingType == BidPickingType.OneCard && bid.firstCardNumber != CardNumber.None)
-            return true
-        else if (bid.pickingType == BidPickingType.TwoCards &&
-            bid.firstCardNumber != CardNumber.None &&
-            bid.secondCardNumber != CardNumber.None &&
-            bid.firstCardNumber.name != bid.secondCardNumber.name)
-            return true
-        else if (bid.pickingType == BidPickingType.Color &&
-            bid.color != CardColor.None)
-            return true
-        else if(bid.pickingType == BidPickingType.Set &&
-            bid.firstCardNumber != CardNumber.None)
-            return true
-        return false
-    }
-
-    fun isNewBidHigher(bid: Bid):Boolean{
-
-        if(mRoom.currentBid == null)
-            return true
-        else if(bid.power > mRoom.currentBid!!.power)
-            return true
-        else if(bid.power == mRoom.currentBid!!.power
-        && bid.firstCardNumber.ordinal > mRoom.currentBid!!.firstCardNumber.ordinal)
-            return true
-        return false
-    }
 
     fun playerIsCreator(): Boolean{
         return getPlayer()!!.id == mRoom.creatorId
@@ -127,7 +101,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: Us
         return cardsStuff.isBidInCards(cardsList,mRoom.currentBid!!)
     }
 
-    fun addCardToPlayer(hasCheckerWon: Boolean){
+    fun addCardToLoser(hasCheckerWon: Boolean){
         val loserIndex: Int
         if(hasCheckerWon){
             loserIndex = if (mRoom.currentPlayer == 0) mRoom.players.size-1
@@ -150,7 +124,7 @@ class GameRepo(val db: Database, val cardsStuff: CardsStuff, val userSession: Us
             .observeOn(SchedulerProvider.ui())
     }
 
-    fun updateUserGamesWon(): Completable{
+    fun updateGamesWonByWinner(): Completable{
         val winnerId = mRoom.players[0].id
         return db.getUserGamesWon(winnerId)
             .flatMapCompletable { gamesWon: Int ->

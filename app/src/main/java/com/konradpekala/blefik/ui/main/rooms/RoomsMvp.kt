@@ -1,6 +1,6 @@
 package com.konradpekala.blefik.ui.main.rooms
 
-import com.konradpekala.blefik.data.model.Room
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.ui.base.MvpPresenter
 import com.konradpekala.blefik.ui.base.MvpView
 import com.konradpekala.blefik.ui.main.adapters.RoomsAdapter

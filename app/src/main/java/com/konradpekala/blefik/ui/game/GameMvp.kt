@@ -8,7 +8,7 @@ import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 
 interface GameMvp {
     interface View: MvpView{
-        fun getPresenter(): GameMvp.Presenter<GameMvp.View>
+        fun getPresenter(): GamePresenter<View>
         fun getBidAdapter(): CardsAdapter
         fun getPlayerCardsAdapter(): CardsAdapter
         fun getPlayersAdapter(): PlayersAdapter

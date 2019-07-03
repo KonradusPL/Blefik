@@ -102,6 +102,10 @@ class FirebaseUserRepository @Inject constructor(val userSession: UserSession,
         }
     }
 
+    override fun getUserGamesWon(id: String): Single<Int>{
+        return getUser(id).map { user: User -> user.gamesWon }
+    }
+
     override fun getUser(id: String): Single<User> {
         return Single.create { emitter ->
             database.collection("users").document(id).get()
