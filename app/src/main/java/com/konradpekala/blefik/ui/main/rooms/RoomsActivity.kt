@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.injection.Injector
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.main.adapters.RoomsAdapter
@@ -23,7 +22,7 @@ class RoomsActivity : BaseActivity(), RoomsMvp.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rooms)
 
-        mPresenter = Injector.getRoomPresenter(this,applicationContext)
+        //mPresenter = Injector.getRoomPresenter(this,applicationContext)
 
         initList()
         initUI()
@@ -33,7 +32,7 @@ class RoomsActivity : BaseActivity(), RoomsMvp.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        mPresenter.stop()
+        mPresenter.onStop()
     }
 
     private fun initUI(){

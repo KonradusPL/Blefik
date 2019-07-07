@@ -2,8 +2,8 @@ package com.konradpekala.blefik.data.database
 
 import com.konradpekala.blefik.data.model.Bid
 import com.konradpekala.blefik.data.model.Player
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.room.Room
+import com.konradpekala.blefik.data.model.user.User
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -19,7 +19,7 @@ interface Database {
 
     fun observeRoom(id: String): Observable<Room>
     fun updateRoom(room: Room): Completable
-    fun updateBid(room: Room): Completable
+    fun updateBid(bid: Bid, roomId: String): Completable
 
     fun getUserGamesWon(id: String): Single<Int>
     fun updateUserGamesWon(id: String, gamesWon: Int): Completable

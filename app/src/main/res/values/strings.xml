@@ -23,9 +23,14 @@
     <string name="name">Name</string>
     <string name="level">Level:</string>
     <string name="distance">Distance:</string>
-    <string name="change_name">Change name</string>
-    <string name="new_name">New name</string>
-    <string name="changing_name">Changing name</string>
+
+    <string name="update_nick">Update nick</string>
+    <string name="new_nick">New name</string>
+    <string name="changing_nick">Changing nick</string>
+
+    <string name="update_email">Update email</string>
+    <string name="new_email">New email</string>
+    <string name="changing_email">Changing email</string>
 
     <string name="reached_dest">You have just reached your destination!</string>
 </resources>

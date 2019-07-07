@@ -1,11 +1,26 @@
 package com.konradpekala.blefik.ui.login
 
 import android.util.Log
-import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.repo.LoginRepository
-import com.konradpekala.blefik.ui.base.BasePresenter
+import com.konradpekala.blefik.data.model.request.LoginRequest
+import com.konradpekala.blefik.data.model.request.RegisterRequest
+import com.konradpekala.blefik.domain.interactors.user.SaveUserUseCase
+import com.konradpekala.blefik.domain.interactors.auth.SignInUseCase
+import com.konradpekala.blefik.domain.interactors.auth.SignUpUseCase
 
-class LoginPresenter<V: LoginMvp.View>(view: V,val repo: LoginRepository): BasePresenter<V>(view),LoginMvp.Presenter<V> {
+import javax.inject.Inject
+
+class LoginPresenter@Inject constructor(private val mSignInUseCase: SignInUseCase,
+                                        private val mSignUpUseCase: SignUpUseCase,
+                                        private val mSaveUserUseCase: SaveUserUseCase
+): LoginMvp.Presenter {
+
+    private lateinit var view: LoginMvp.View
+
+    val TAG = "LoginPresenter"
+
+    fun onAttach(view: LoginMvp.View){
+        this.view = view
+    }
 
     override fun onSignUpButtonClick(email: String, password: String, nick: String) {
         if (password.length < 6){
@@ -18,34 +33,39 @@ class LoginPresenter<V: LoginMvp.View>(view: V,val repo: LoginRepository): BaseP
             return
         }
 
+        val registerRequest = RegisterRequest(email, password, nick)
         view.showLoading()
-        cd.add(repo.signUp(email, password)
-            .flatMap { id: String -> repo.createUser(email,password,id,nick) }
-            .subscribe({
-                repo.saveUserLocally(nick,email)
-                view.hideLoading()
-                view.showMessage("Sukces!")
-                view.openMainActivity()
-            },{t: Throwable? ->
-                Log.d("onSignUpButtonClick",t.toString())
-                view.hideLoading()
-                view.showMessage("Nie udało się!")
-                view.showMessage(t.toString())
-            }))
+
+        mSignUpUseCase.excecute(registerRequest, {
+            view.hideLoading()
+            view.showMessage("Sukces!")
+            view.openMainActivity()
+        },{ signUpError: Throwable ->
+            view.hideLoading()
+            Log.d(TAG,signUpError.toString())
+        })
     }
+
 
     override fun onSignInButtonClick(email: String, password: String) {
         view.showLoading()
-        cd.add(repo.signIn(email, password)
-            .flatMap { id: String -> repo.getUserNick(id) }
-            .subscribe({  nick: String ->
-                repo.saveUserLocally(nick,email)
-                view.hideLoading()
-                view.openMainActivity()
-            },{t: Throwable? ->
-                view.hideLoading()
-                view.showMessage("Nie udało się!")
-            }))
+
+        val loginRequest = LoginRequest(email, password)
+        mSignInUseCase.excecute(loginRequest, {
+            view.hideLoading()
+            view.showMessage("Sukces!")
+            view.openMainActivity()
+        },{signInError: Throwable ->
+            view.hideLoading()
+            view.showMessage("Błędne dane logowania!")
+            Log.d(TAG,signInError.toString())
+        })
+    }
+
+    fun dispose() {
+        mSignInUseCase.dispose()
+        mSaveUserUseCase.dispose()
+        mSignUpUseCase.dispose()
     }
 
 }

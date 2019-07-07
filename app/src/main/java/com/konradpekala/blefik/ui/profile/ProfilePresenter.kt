@@ -1,59 +1,79 @@
 package com.konradpekala.blefik.ui.profile
 
 import android.util.Log
-import com.konradpekala.blefik.data.repo.auth.IAuthRepository
-import com.konradpekala.blefik.data.repo.image.IImageRepository
-import com.konradpekala.blefik.data.repo.image.ImageRepository
-import com.konradpekala.blefik.data.repo.image.UrlType
-import com.konradpekala.blefik.data.repo.profile.IProfileRepository
-import com.konradpekala.blefik.ui.base.BasePresenter
-import java.io.File
+import com.konradpekala.blefik.data.model.user.User
+import com.konradpekala.blefik.domain.model.UserUpdateRequest
+import com.konradpekala.blefik.domain.interactors.auth.LogOutUseCase
+import com.konradpekala.blefik.domain.interactors.user.GetLocalUserUseCase
+import com.konradpekala.blefik.domain.interactors.user.UpdateImageUseCase
+import com.konradpekala.blefik.domain.interactors.user.UpdateUserUseCase
+import com.konradpekala.blefik.ui.base.NewBasePresenter
+import com.konradpekala.blefik.utils.schedulers.ValueToUpdate
+import javax.inject.Inject
 
-class ProfilePresenter<V: ProfileMvp.View>(view: V,
-                                           val profileRepo: IProfileRepository,
-                                           val imageRepo: ImageRepository,
-                                           val authRepo: IAuthRepository):
-    BasePresenter<V>(view),ProfileMvp.Presenter<V> {
+class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
+    private val mGetLocalUserUseCase: GetLocalUserUseCase,
+    private val mUpdateImageUseCase: UpdateImageUseCase,
+    private val mUpdateUserUseCase: UpdateUserUseCase,
+    private val mLogOutUseCase: LogOutUseCase):
+    NewBasePresenter<V>(),ProfileMvp.Presenter<V> {
+
+    private val TAG = "ProfilePresenter"
 
     override fun onCreate() {
         super.onCreate()
 
-        view.changeNick(profileRepo.getNick())
-        view.changeEmail(profileRepo.getEmail())
-
-        cd.add(imageRepo.getProfileImage(authRepo.getId()).subscribe({file: File ->
-            view.changeProfileImage(file)
-        },{t: Throwable? ->
-            view.showMessage(t.toString())
-        }))
+        mGetLocalUserUseCase.excecute(
+            onSuccess = { user: User ->
+                Log.d(TAG,"mGetLocalUserUseCase: success")
+                view.changeNick(user.nick)
+                view.changeEmail(user.email)
+                view.changeProfileImage(user.image.url)
+            },onError = {error: Throwable ->
+                Log.d(TAG,"mGetLocalUserUseCase: ${error.message}")
+            }
+        )
     }
 
     override fun onChangeNickClick(newNick: String) {
-        cd.add(profileRepo.setNick(newNick).subscribe({
+        val request = UserUpdateRequest(newNick, ValueToUpdate.NICK)
+
+        mUpdateUserUseCase.excecute(request,{
             view.changeNick(newNick)
             view.showMessage("Powodzenia $newNick!")
-        },{t: Throwable? ->
+        },{t: Throwable ->
+            Log.e(TAG,t.toString())
             view.showMessage("Nie udało się zmienić na $newNick")
-        }))
+        })
+    }
+
+    override fun onChangeEmailClick(newEmail: String) {
+        val request = UserUpdateRequest(newEmail, ValueToUpdate.EMAIL)
+
+        mUpdateUserUseCase.excecute(request,{
+            view.changeEmail(newEmail)
+            view.showMessage("Twój email to teraz $newEmail")
+        },{t: Throwable ->
+            Log.e(TAG,t.toString())
+            view.showMessage("Nie udało się zmienić emailu na $newEmail")
+        })
     }
 
     override fun onLogOutClick() {
-        profileRepo.clean()
-        imageRepo.clean()
-        authRepo.logOut()
+        mLogOutUseCase.execute()
         view.openLoginActivity()
     }
 
-    override fun onNewImageChosen(path: String) {
-        Log.d("onNewImageChosen",path)
-        cd.add(imageRepo.saveImage(path,authRepo.getId())
-            .andThen{profileRepo.saveImageUrl(imageRepo.getImageUrl(UrlType.REMOTE)).subscribe({
-                view.changeProfileImage(imageRepo.getImageUrl(UrlType.REMOTE))
-                Log.d("onNewImageChosen",imageRepo.getImageUrl(UrlType.REMOTE))
-                Log.d("onNewImageChosen","success")
-            },{t: Throwable? ->
-                Log.d("onNewImageChosen",t.toString())
-            })}.subscribe {  })
+    override fun onNewImageChosen(imagePath: String) {
+        Log.d(TAG, imagePath)
+
+        mUpdateImageUseCase.excecute(imagePath,{ remoteImageUrl: String ->
+            view.changeProfileImage(remoteImageUrl)
+            Log.d("onNewImageChosen",remoteImageUrl)
+            Log.d("onNewImageChosen","success")
+        },{t: Throwable ->
+            Log.d("onNewImageChosen",t.toString())
+        })
 
     }
 }

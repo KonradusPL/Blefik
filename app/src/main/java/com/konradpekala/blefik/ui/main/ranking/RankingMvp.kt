@@ -1,6 +1,6 @@
 package com.konradpekala.blefik.ui.main.ranking
 
-import com.konradpekala.blefik.data.model.User
+import com.konradpekala.blefik.data.model.user.User
 import com.konradpekala.blefik.ui.base.MvpPresenter
 import com.konradpekala.blefik.ui.base.MvpView
 import com.konradpekala.blefik.ui.main.adapters.RankingAdapter
@@ -14,6 +14,5 @@ interface RankingMvp {
         fun hideLoading()
     }
     interface Presenter<V: View>: MvpPresenter<V>{
-        fun onLoadData()
     }
 }

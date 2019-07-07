@@ -5,28 +5,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.injection.Injector
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.login.LoginActivity
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.dialog_change_name.view.*
+import kotlinx.android.synthetic.main.dialog_update_user_value.view.*
 import android.app.Activity
+import android.app.Dialog
 import android.util.Log
+import android.view.View
+import com.konradpekala.blefik.utils.schedulers.ValueToUpdate
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjection
 import java.io.File
+import javax.inject.Inject
 
 
 class ProfileActivity : BaseActivity(),ProfileMvp.View {
 
-    private lateinit var mPresenter: ProfilePresenter<ProfileMvp.View>
+    @Inject
+    lateinit var mPresenter: ProfilePresenter<ProfileMvp.View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
         setContentView(R.layout.activity_profile)
 
-        mPresenter = Injector.getProfilePresenter(this,this)
+        mPresenter.onAttach(this)
 
         initButtons()
 
@@ -35,7 +41,10 @@ class ProfileActivity : BaseActivity(),ProfileMvp.View {
 
     private fun initButtons() {
         buttonChangeNick.setOnClickListener {
-            showChangeNameDialog()
+            showUpdateUserValueDialog(ValueToUpdate.NICK)
+        }
+        buttonChangeEmail.setOnClickListener {
+            showUpdateUserValueDialog(ValueToUpdate.EMAIL)
         }
         buttonLogOut.setOnClickListener{
             mPresenter.onLogOutClick()
@@ -66,23 +75,49 @@ class ProfileActivity : BaseActivity(),ProfileMvp.View {
         }
     }
 
-    private fun showChangeNameDialog(){
-        val customView = LayoutInflater.from(this).inflate(R.layout.dialog_change_name,layoutProfile,false)
+    private fun showUpdateUserValueDialog(type: ValueToUpdate){
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_update_user_value,layoutProfile,false)
 
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Zmiana nicku")
-            .setView(customView).create()
+        val dialog = if(type == ValueToUpdate.NICK) createNickDialog(view)
+        else createEmailDialog(view)
 
-        customView.buttonDialogCreate.setOnClickListener {
-            mPresenter.onChangeNickClick(customView.fieldUserName.text.toString())
+        dialog.show()
+    }
+
+    private fun createNickDialog(view: View): Dialog{
+        val dialog = createDialog(view, R.string.changing_nick,R.string.new_nick,R.string.update_nick)
+
+        view.buttonDialogCreate.setOnClickListener {
+            mPresenter.onChangeNickClick(view.fieldUserValue.text.toString())
+            dialog.hide()
+        }
+        return dialog
+    }
+
+    private fun createEmailDialog(view: View): Dialog{
+        val dialog = createDialog(view,R.string.changing_email,R.string.new_email,R.string.update_email)
+
+        view.buttonDialogCreate.setOnClickListener {
+            mPresenter.onChangeEmailClick(view.fieldUserValue.text.toString())
             dialog.hide()
         }
 
-        dialog.show()
+        return dialog
+    }
 
+    private fun createDialog(view: View,titleId: Int, hintId: Int, buttonTextId: Int): Dialog{
+        view.fieldUserValue.setHint(hintId)
+        view.buttonDialogCreate.setText(buttonTextId)
+
+        return AlertDialog.Builder(this)
+            .setTitle(titleId)
+            .setView(view)
+            .create()
     }
 
     override fun openLoginActivity() {
+        val intent = Intent(this,LoginActivity::class.java)
+        setResult(Activity.RESULT_OK,intent)
         startActivity(Intent(this,LoginActivity::class.java))
         finish()
     }

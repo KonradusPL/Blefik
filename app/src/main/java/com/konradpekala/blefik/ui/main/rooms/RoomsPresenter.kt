@@ -1,37 +1,66 @@
 package com.konradpekala.blefik.ui.main.rooms
 
 import android.util.Log
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.data.repo.RoomsRepo
-import com.konradpekala.blefik.ui.base.BasePresenter
+import com.konradpekala.blefik.data.model.room.Room
+import com.konradpekala.blefik.domain.error_models.BaseError
+import com.konradpekala.blefik.domain.interactors.room.AddRoomUseCase
+import com.konradpekala.blefik.domain.interactors.room.ChangeRoomToStartUseCase
+import com.konradpekala.blefik.domain.interactors.room.ObserveRoomsUseCase
+import com.konradpekala.blefik.domain.interactors.room.AddUserToRoomUseCase
+import com.konradpekala.blefik.ui.base.NewBasePresenter
+import org.jetbrains.anko.getStackTraceString
+import javax.inject.Inject
 
-class RoomsPresenter<V: RoomsMvp.View>(view: V, val repo: RoomsRepo): BasePresenter<V>(view),
-    RoomsMvp.Presenter<V> {
+val QWERTY = "QWERTY"
+
+class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(
+    private val mObserveRoomsUseCase: ObserveRoomsUseCase,
+    private val mAddRoomUseCase: AddRoomUseCase,
+    private val mAddUserToRoomUseCase: AddUserToRoomUseCase,
+    private val mChangeRoomToStartUseCase: ChangeRoomToStartUseCase
+)
+    : NewBasePresenter<V>(), RoomsMvp.Presenter<V> {
+
+    private val TAG = "RoomsPresenter"
 
     private var gameOpened = false
 
     override fun onStart() {
         super.onStart()
         gameOpened = false
-        cd.add(repo.observeRooms()
-            .subscribe({room: Room ->
-                if(room.isChoosenByPlayer && room.started && !gameOpened) {
+
+        mObserveRoomsUseCase.execute(
+            onNext = {room: Room ->
+                Log.d(QWERTY,"mObserveRoomsUseCase")
+                Log.d(TAG,"mObserveRoomsUseCase:onNext")
+                if(room.isChoosenByPlayer && room.hasGameStarted && !gameOpened) {
+                    Log.d(TAG,"game is gonna open")
                     gameOpened = true
                     view.openGameActivity(room)
                 }
-                if(room.isChoosenByPlayer)
-                    repo.updateCurrentRoom(room)
                 view.getListAdapter().updateRooms(room)
-
-            },{t: Throwable? ->
-                //view.showMessage(t.toString())
-            }))
+            },onError = {error: Throwable ->
+                Log.d(TAG,"mObserveRoomsUseCase ${error}")
+                Log.d(TAG,"mObserveRoomsUseCase ${error.getStackTraceString()}")
+            })
     }
 
-    override fun stop() {
+    override fun onStop() {
         Log.d("stopRooms","true")
-        super.stop()
-        repo.database.clean()
+        super.onStop()
+        mObserveRoomsUseCase.dispose()
+        mAddUserToRoomUseCase.dispose()
+        mAddRoomUseCase.dispose()
+        //mRepository.database.cleanCache()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG,"onDestroy")
+        mObserveRoomsUseCase.dispose()
+        mAddRoomUseCase.dispose()
+        mAddUserToRoomUseCase.dispose()
+        mChangeRoomToStartUseCase.dispose()
     }
 
     override fun onAddRoomClick() {
@@ -40,48 +69,35 @@ class RoomsPresenter<V: RoomsMvp.View>(view: V, val repo: RoomsRepo): BasePresen
     override fun onAddRoomClick(name: String) {
         view.getListAdapter().removeRoomsLoading()
 
-        cd.add(repo.addRoom(name)
-            .subscribe({t: String? ->
+        mAddRoomUseCase.excecute(name,
+            onComplete = {
+                Log.d(TAG,"onAddRoomClick:success")
                 view.showMessage("Udało się!")
-            },{t: Throwable? ->
+            },onError = { error: Throwable ->
+                Log.d(TAG,"onAddRoomClick:${error.message}")
                 view.showMessage(":(")
-            }))
-    }
+            })
+}
 
     override fun onRoomClick(room: Room) {
-        if(repo.isSameAsChosenBefore(room))
-            return
 
-        if (repo.playerIsInRoom(room)){
-            Log.d("onRoomClick","hasPlayer")
-            room.isChoosenByPlayer = true
-            view.getListAdapter().showRoomLoading(room)
-            repo.updateCurrentRoom(room)
-            return
-        }
-
-        view.getListAdapter().removeRoomsLoading()
-        Log.d("onRoomClick","qweqweqwe")
-
-        cd.add(repo.addUserToRoom(room)
-            .subscribe({
-                Log.d("onRoomClick","success")
-            },{t: Throwable? ->
-                Log.d("onRoomClick",t.toString())
-            }))
+        mAddUserToRoomUseCase.excecute(room,
+            onComplete = {
+                view.getListAdapter().showRoomLoading(room)
+                Log.d(TAG,"mAddUserToRoomUseCase:success")
+            },onError = {error: Throwable ->
+                Log.d(TAG,"mAddUserToRoomUseCase:${error.message}")
+                view.showMessage((error as BaseError).getUIMessage())
+            })
     }
 
     override fun onStartGameClick(room: Room) {
-        if(room.players.size < 2){
-            view.showMessage("Do gry potrzeba conajmniej 2 graczy")
-            return
-        }
+        mChangeRoomToStartUseCase.excecute(room,
+            onComplete = {
 
-        cd.add(repo.changeRoomToStarted(room)
-            .subscribe({
-            },{t: Throwable? ->
-                view.showMessage("Nie udało się stworzyć gry :(")
-            }))
+            },onError = {error: Throwable ->
+                view.showMessage((error as BaseError).getUIMessage())
+            }
+        )
     }
-
 }

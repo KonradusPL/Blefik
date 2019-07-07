@@ -4,6 +4,10 @@ import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.konradpekala.blefik.data.model.*
+import com.konradpekala.blefik.data.model.room.Room
+import com.konradpekala.blefik.data.model.room.Status
+import com.konradpekala.blefik.data.model.room.UpdateType
+import com.konradpekala.blefik.data.model.user.User
 import io.reactivex.*
 
 class FirebaseDatabase: Database {
@@ -75,8 +79,8 @@ class FirebaseDatabase: Database {
         return Observable.create { emitter: ObservableEmitter<Room> ->
               mRoomsListener = database.collection("rooms").addSnapshotListener { querySnapshot: QuerySnapshot?,
                                                                exception: FirebaseFirestoreException? ->
-                Log.d("observeRooms",exception.toString())
-                  Log.d("observeRooms",querySnapshot!!.documentChanges.size.toString())
+                Log.d("observeAllRooms",exception.toString())
+                  Log.d("observeAllRooms",querySnapshot!!.documentChanges.size.toString())
                 for (dc in querySnapshot!!.documentChanges) {
                     val id = dc.document.id
                     val room = dc.document.toObject(Room::class.java)
@@ -152,12 +156,12 @@ class FirebaseDatabase: Database {
         }
     }
 
-    override fun updateBid(room: Room): Completable {
+    override fun updateBid(bid: Bid, roomId: String): Completable {
         return Completable.create { emitter ->
 
             database.collection("rooms")
-                .document(room.roomId)
-                .update("currentBid",room.currentBid?.map(),"updateType",room.updateType.name)
+                .document(roomId)
+                .update("currentBid",bid.map(),"updateType", UpdateType.NewBid.name)
                 .addOnCompleteListener { task: Task<Void> ->
                     if(task.isSuccessful){
                         emitter.onComplete()
@@ -165,7 +169,6 @@ class FirebaseDatabase: Database {
                         emitter.onError(task.exception!!.fillInStackTrace())
                     }
                 }
-
         }
     }
 
@@ -174,7 +177,7 @@ class FirebaseDatabase: Database {
 
             database.collection("rooms")
                 .document(room.roomId)
-                .update("started",true)
+                .update("hasGameStarted",true)
                 .addOnCompleteListener { task: Task<Void> ->
                     if(task.isSuccessful){
                         emitter.onComplete()
@@ -189,11 +192,12 @@ class FirebaseDatabase: Database {
         mRoomsListener?.remove()
     }
 
-    fun createUser(email: String,password: String,id: String, nick: String): Single<String>{
-        val user = User(email = email,password = password,id = id,nick = nick)
-        return Single.create { emitter ->
+    fun createUser(email: String,password: String,id: String, nick: String): Completable{
+        val user =
+            User(email = email, password = password, id = id, nick = nick)
+        return Completable.create { emitter ->
             database.collection("users").document(user.id).set(user)
-                .addOnSuccessListener { emitter.onSuccess("success") }
+                .addOnSuccessListener { emitter.onComplete() }
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
         }
     }
@@ -245,6 +249,7 @@ class FirebaseDatabase: Database {
                     emitter.onSuccess(list)
                 }
                 .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
-        }    }
+        }
+    }
 
 }

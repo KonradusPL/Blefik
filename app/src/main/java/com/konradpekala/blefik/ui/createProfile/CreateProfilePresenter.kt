@@ -1,12 +1,15 @@
 package com.konradpekala.blefik.ui.createProfile
 
-import com.konradpekala.blefik.data.model.User
-import com.konradpekala.blefik.data.repo.CreateProfileRepo
+import com.konradpekala.blefik.data.model.user.User
+import com.konradpekala.blefik.data.repository.CreateProfileRepo
 import com.konradpekala.blefik.ui.base.BasePresenter
 
 class CreateProfilePresenter<V: CreateProfileMvp.View>(view: V, val repo: CreateProfileRepo)
     : BasePresenter<V>(view),
     CreateProfileMvp.Presenter<V> {
+    override fun onDestroy() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
     override fun onAddUserClick(nick: String) {
@@ -15,7 +18,7 @@ class CreateProfilePresenter<V: CreateProfileMvp.View>(view: V, val repo: Create
             return
         }
 
-        cd.add(repo.addUser(User(nick,"","","")).subscribe {
+        cd.add(repo.addUser(User(nick, "", "", "")).subscribe {
             view.showMessage("Udało się !")
             view.openRoomActivity()
         })

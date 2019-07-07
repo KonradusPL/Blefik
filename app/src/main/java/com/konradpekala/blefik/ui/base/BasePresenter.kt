@@ -10,10 +10,14 @@ abstract class BasePresenter<V: MvpView>(var view: V): MvpPresenter<V> {
 
     }
 
+    override fun onAttach(view: V) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun onStart() {
     }
 
-    override fun stop() {
+    override fun onStop() {
         cd.clear()
     }
 }

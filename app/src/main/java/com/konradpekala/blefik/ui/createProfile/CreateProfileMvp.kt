@@ -1,6 +1,5 @@
 package com.konradpekala.blefik.ui.createProfile
 
-import com.konradpekala.blefik.data.model.User
 import com.konradpekala.blefik.ui.base.MvpPresenter
 import com.konradpekala.blefik.ui.base.MvpView
 

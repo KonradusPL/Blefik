@@ -8,7 +8,6 @@ import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.*
@@ -19,16 +18,19 @@ import com.konradpekala.blefik.ui.game.adapters.CardsAdapter
 import com.konradpekala.blefik.ui.game.adapters.PlayersAdapter
 import com.konradpekala.blefik.ui.game.adapters.createbid.BidsAdapter
 import com.konradpekala.blefik.ui.main.MainActivity
-import com.konradpekala.blefik.utils.CardsStuff
+import com.konradpekala.blefik.utils.CardsUtils
 import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
 import com.transitionseverywhere.Rotate
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_game.*
 import org.jetbrains.anko.ctx
+import javax.inject.Inject
 
 class GameActivity : BaseActivity(),GameMvp.View {
 
-    private lateinit var mPresenter: GamePresenter<GameMvp.View>
+    @Inject
+    lateinit var mPresenter: GamePresenter<GameMvp.View>
 
     private lateinit var mBidAdapter: CardsAdapter
     private lateinit var mPlayerCardsAdapter: CardsAdapter
@@ -38,9 +40,8 @@ class GameActivity : BaseActivity(),GameMvp.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
         setContentView(R.layout.activity_game)
-
-        mPresenter = Injector.getGamePresenter(this,ctx)
 
         toolbarGame.title = intent.getStringExtra("roomName") ?: ""
         setSupportActionBar(toolbarGame)
@@ -57,11 +58,12 @@ class GameActivity : BaseActivity(),GameMvp.View {
         Log.d("onCreate","roomId: $roomId")
 
         val shouldGameStart = savedInstanceState?.getBoolean("shouldGameStart",true) ?: true
-        Log.d("onCreate","shouldGameStart: " + shouldGameStart.toString())
+        Log.d("onCreate", "shouldGameStart: $shouldGameStart")
         //**
         //****
         //******
-        mPresenter.startGame(roomId,creatorId,shouldGameStart)
+        mPresenter.onAttach(this)
+        mPresenter.startGame(shouldGameStart)
         //******
         //****
         //**
@@ -129,7 +131,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
     }
 
     private fun initBidsCreatorList(){
-        val bidTypes = CardsStuff.generateBidTypesForCreator()
+        val bidTypes = CardsUtils.generateBidTypesForCreator()
         val mBidsAdapter = BidsAdapter(bidTypes,this)
 
         listBids.adapter = mBidsAdapter
@@ -155,7 +157,7 @@ class GameActivity : BaseActivity(),GameMvp.View {
         listCurrentCards.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false)
     }
 
-    override fun getPresenter(): GameMvp.Presenter<GameMvp.View> {
+    override fun getPresenter(): GamePresenter<GameMvp.View> {
         return mPresenter
     }
 
@@ -185,14 +187,15 @@ class GameActivity : BaseActivity(),GameMvp.View {
             .setTitle("Wyjście z gry")
             .setMessage("Jesteś pewien że chcesz wyjść z gry?")
             .setPositiveButton("Tak!") { _, _ ->
-                openRoomActivity()
+                openMainActivity()
             }.setNegativeButton("Nigdy(͡°͜ʖ͡°)"){ _, _ ->  }
             .create()
             .show()
     }
 
-    override fun openRoomActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
+    override fun openMainActivity() {
+        val code = resources.getInteger(R.integer.main_activity_code)
+        startActivityForResult(Intent(this, MainActivity::class.java),code)
         finish()
     }
 

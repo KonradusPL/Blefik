@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.konradpekala.blefik.ui.main.MainActivity
+import dagger.android.DaggerFragment
 
 class MainFragmentsAdapter(fm: FragmentManager,val mainActivity: MainActivity): FragmentStatePagerAdapter(fm) {
 

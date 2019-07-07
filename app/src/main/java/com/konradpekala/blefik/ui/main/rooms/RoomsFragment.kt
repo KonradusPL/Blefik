@@ -7,31 +7,37 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.injection.Injector
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.ui.base.BaseFragment
 import com.konradpekala.blefik.ui.main.MainMvp
 import com.konradpekala.blefik.ui.main.adapters.RoomsAdapter
 import kotlinx.android.synthetic.main.activity_rooms.*
 import kotlinx.android.synthetic.main.dialog_add_room.view.*
+import javax.inject.Inject
 
 class RoomsFragment: BaseFragment<MainMvp.View>(),
     RoomsMvp.View {
 
     private lateinit var mRoomsAdapter: RoomsAdapter
-    private lateinit var mPresenter: RoomsPresenter<RoomsMvp.View>
+
+    @Inject
+    lateinit var mPresenter: RoomsPresenter<RoomsMvp.View>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_rooms,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mPresenter = Injector.getRoomPresenter(this,parentContext)
-
         initList()
         initUI()
 
+        mPresenter.onAttach(this)
         mPresenter.onStart()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mPresenter.onDestroy()
     }
 
     private fun initUI(){

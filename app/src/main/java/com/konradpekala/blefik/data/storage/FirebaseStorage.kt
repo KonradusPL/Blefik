@@ -14,10 +14,12 @@ import java.io.FileInputStream
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.storage.FileDownloadTask
 import com.google.android.gms.tasks.OnSuccessListener
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-
-object FirebaseStorage {
+@Singleton
+class FirebaseStorage @Inject constructor() {
 
     val profilesStorage = FirebaseStorage.getInstance().getReference("profile_images")
 

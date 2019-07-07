@@ -1,15 +1,11 @@
 package com.konradpekala.blefik.ui.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.model.Room
-import com.konradpekala.blefik.injection.Injector
+import com.konradpekala.blefik.data.model.room.Room
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.game.GameActivity
 import com.konradpekala.blefik.ui.login.LoginActivity
@@ -18,32 +14,36 @@ import com.konradpekala.blefik.ui.main.ranking.RankingFragment
 import com.konradpekala.blefik.ui.main.rooms.RoomsFragment
 import com.konradpekala.blefik.ui.profile.ProfileActivity
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.dialog_change_name.view.*
 import java.io.File
+import javax.inject.Inject
 
 class MainActivity : BaseActivity(),MainMvp.View {
 
+    private val TAG = "MainActivity"
 
     private lateinit var mRoomsFragment: RoomsFragment
     private lateinit var mRankingFragment: RankingFragment
     private lateinit var mFragmentAdapter: MainFragmentsAdapter
 
-    private lateinit var mPresenter: MainPresenter<MainMvp.View>
+    @Inject
+    lateinit var mPresenter: MainPresenter<MainMvp.View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
+
         setContentView(R.layout.activity_main)
 
         mRoomsFragment = RoomsFragment()
         mRankingFragment = RankingFragment()
 
-        mPresenter = Injector.getMainPresenter(this,this)
-
         initButtons()
         setSupportActionBar(toolbarMain)
         initTabsStuff()
 
+        mPresenter.onAttach(this)
         mPresenter.onCreate()
     }
 
@@ -81,14 +81,29 @@ class MainActivity : BaseActivity(),MainMvp.View {
         finish()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG,"onDestroy")
+    }
+
     override fun onStart() {
         super.onStart()
         mPresenter.onStart()
     }
 
     override fun openProfileActivity() {
+        val code = resources.getInteger(R.integer.main_to_profile_code)
         val intent = Intent(this, ProfileActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent,code)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val mainToProfileCode = resources.getInteger(R.integer.main_to_profile_code)
+
+        if(requestCode == mainToProfileCode && resultCode == Activity.RESULT_OK)
+            finish()
     }
 
     override fun openLoginActivity() {

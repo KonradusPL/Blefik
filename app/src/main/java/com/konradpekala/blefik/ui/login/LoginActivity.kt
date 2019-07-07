@@ -5,24 +5,34 @@ import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.View
 import com.konradpekala.blefik.R
-import com.konradpekala.blefik.data.repo.LoginRepository
 import com.konradpekala.blefik.injection.Injector
+import com.konradpekala.blefik.ui.BlefikApplication
 import com.konradpekala.blefik.ui.base.BaseActivity
 import com.konradpekala.blefik.ui.main.MainActivity
 import com.llollox.androidtoggleswitch.widgets.ToggleSwitch
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
+import javax.inject.Inject
 
 class LoginActivity : BaseActivity(),LoginMvp.View {
 
-    private lateinit var mPresenter: LoginPresenter<LoginMvp.View>
+    @Inject
+    lateinit var mPresenter: LoginPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidInjection.inject(this)
+
+        mPresenter.onAttach(this)
+
         setContentView(R.layout.activity_login)
 
         initButtons()
+    }
 
-        mPresenter = Injector.getLoginPresenter(this,applicationContext)
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.dispose()
     }
 
     private fun initButtons(){
@@ -63,4 +73,5 @@ class LoginActivity : BaseActivity(),LoginMvp.View {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
+
 }
