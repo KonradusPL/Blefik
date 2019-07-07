@@ -17,11 +17,14 @@ class ObserveGameChangesUseCase @Inject constructor(@Named("onSubscribe") subscr
                                                     private val mUserSession: UserSession
 ) : ObservableUseCase<Unit, Room>(subscribeScheduler,observeScheduler) {
 
+
+
     override fun buildUseCaseObservable(params: Unit?): Observable<Room> {
         val roomId = getRoomId()
         return mRoomsRepository.observeRoom(roomId)
+            .filter { room: Room ->  mGameSession.hasRoom()}
             .map { room: Room -> getModifiedRoom(room) }
-            .doOnNext { room: Room -> mGameSession.updateCurrentRoom(room) }
+            .doOnNext { room: Room -> mGameSession.updateStartedRoom(room) }
 
     }
 

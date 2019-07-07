@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.domain.interactors.room
 
+import android.util.Log
 import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.gamesession.GameSession
 import com.konradpekala.blefik.data.model.room.Room
@@ -29,10 +30,12 @@ class ObserveRoomsUseCase @Inject constructor(@Named("onSubscribe") subscribeSch
         val isRoomChosenByPlayer = mGameSession.hasSameRoomAs(room)
         if (isRoomChosenByPlayer){
             room.setIsChosenByPlayer(isRoomChosenByPlayer)
-            mGameSession.updateCurrentRoom(room)
+            mGameSession.updateStartedRoom(room)
         }
 
         room.updateLocallyCreated(mUserSession.getUserId())
+
+        Log.d("ObserveRoomsUseCase","$room")
 
         return room
     }

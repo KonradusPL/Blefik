@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.domain.interactors.game
 
+import android.util.Log
 import com.konradpekala.blefik.data.gamesession.GameSession
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.room.UpdateType
@@ -17,12 +18,17 @@ class RemovePlayerUseCase @Inject constructor(@Named("onSubscribe") subscribeSch
 )
     : CompletableUseCase<Player>(subscribeScheduler,observeScheduler) {
 
+    private val TAG = "RemovePlayerUseCase"
+
     override fun buildUseCaseCompletable(request: Player?): Completable {
+        Log.d(TAG,"buildUseCaseCompletable")
+
         val playerToRemove = request!!
         mGameSession.removeBeatenFromCache(playerToRemove)
 
         val room = mGameSession.getCurrentRoom()
         room.updateType = UpdateType.PlayerBeaten
+
         return mRoomsRepository.updateRoom(room)
     }
 

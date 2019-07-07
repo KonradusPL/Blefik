@@ -17,6 +17,6 @@ abstract class BaseUseCase(protected val subscribeScheduler: Scheduler,
     }
 
     protected fun addDisposable(disposable: Disposable){
-        disposables.add(checkNotNull(disposable) {"disposable cannot be null"})
+        disposables.add(disposable)
     }
 }

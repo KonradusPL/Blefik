@@ -13,6 +13,7 @@ import com.konradpekala.blefik.domain.interactors.user.GetLocalUserUseCase
 import com.konradpekala.blefik.domain.model.CheckBidResponse
 import com.konradpekala.blefik.domain.model.CheckTurnResponse
 import com.konradpekala.blefik.ui.base.NewBasePresenter
+import com.konradpekala.blefik.ui.main.rooms.QWERTY
 import com.konradpekala.blefik.utils.CardsUtils
 import org.jetbrains.anko.getStackTraceString
 import javax.inject.Inject
@@ -25,7 +26,9 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
     private val mMakeNewTurnUseCase: MakeNewTurnUseCase,
     private val mGetLocalUserUseCase: GetLocalUserUseCase,
     private val mCheckTurnUseCase: CheckTurnUseCase,
-    private val mObserveGameChangesUseCase: ObserveGameChangesUseCase):
+    private val mObserveGameChangesUseCase: ObserveGameChangesUseCase,
+    private val mSetGameToStartedUseCase: StartGameUseCase,
+    private val mCleanGameSessionUseCase: CleanGameSessionUseCase):
     NewBasePresenter<V>() {
 
     private val TAG = "GamePresenter"
@@ -39,11 +42,13 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
 
         mLocalPlayer = Player()
 
+        mSetGameToStartedUseCase.execute()
+
         mGetLocalUserUseCase.excecute(onSuccess = {user: User ->
             mLocalPlayer.fromUser(user)
             startObservingGame(firstT)
         },onError = {t: Throwable ->
-            Log.d(TAG,"mGetLocalUserUseCase: $t")
+            Log.d(TAG,"mGetLocalUserUseCase: ${t.getStackTraceString()}")
         })
 
        /* cd.add(repo.observeRoom(roomId)
@@ -88,6 +93,7 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
         var firstTime = firstT
 
         mObserveGameChangesUseCase.execute(null,{ room: Room ->
+            Log.d(QWERTY,"mObserveGameChangesUseCase")
             Log.d(TAG,"next room update: $room")
             if(firstTime){
                 firstTime = false
@@ -110,16 +116,11 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
                 UpdateType.NextPlayer -> {
                     view.getPlayersAdapter().refresh(room.players)
                 }
-                UpdateType.PlayerBeaten -> {
-                    if (room.players.size == 1){
-                        view.showMessage("${room.players[0].nick} wygrał!")
-                        view.openMainActivity()
-                    }
-                }
+                UpdateType.GameEnded -> onGameEnd()
                 else -> {}
             }
         },{t: Throwable ->
-            Log.d(TAG,"mObserveGameChangesUseCase: $t")
+            Log.d(TAG,"mObserveGameChangesUseCase: ${t.getStackTraceString()}")
         })
     }
 
@@ -223,12 +224,14 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
                 onCheckBidResponse(response.checkBidResponse)
                 if (response.isSomeoneRemoved)
                     onPlayerRemoved(response.playerRemoved!!)
-                if (response.doesGameNeedToEnd)
-                    onGameEnd()
+                if (response.doesGameNeedToEnd){
+                    //onGameEnd() < this method is not used since every
+                    // player will receive updated, ended room and then app will end the game
+                }
                 else
                     newRound(false)
             },onError = {t: Throwable ->
-                Log.d(TAG,"mCheckTurnUseCase: $t")
+                Log.d(TAG,"mCheckTurnUseCase: ${t.getStackTraceString()}")
             })
 
         /*val beaten = repo.isSomeoneBeaten()
@@ -254,7 +257,19 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
     }
 
     private fun onGameEnd() {
+        mCleanGameSessionUseCase.execute()
+        onDispose()
+
         view.openMainActivity()
+    }
+
+    private fun onDispose(){
+        mMakeNewRoundUseCase.dispose()
+        mUpdateBidUseCase.dispose()
+        mMakeNewTurnUseCase.dispose()
+        mGetLocalUserUseCase.dispose()
+        mCheckTurnUseCase.dispose()
+        mObserveGameChangesUseCase.dispose()
     }
 
     private fun onPlayerRemoved(playerRemoved: Player) {

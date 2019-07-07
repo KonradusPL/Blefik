@@ -35,6 +35,11 @@ class RoomsFragment: BaseFragment<MainMvp.View>(),
         mPresenter.onStart()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mPresenter.onDestroy()
+    }
+
     private fun initUI(){
         buttonAddRoom.setOnClickListener {
             mPresenter.onAddRoomClick()

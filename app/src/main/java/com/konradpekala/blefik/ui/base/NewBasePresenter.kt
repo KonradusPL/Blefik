@@ -8,6 +8,10 @@ abstract class NewBasePresenter<V: MvpView>: MvpPresenter<V> {
 
     protected lateinit var view: V
 
+    override fun onDestroy() {
+
+    }
+
     override fun onAttach(view: V) {
         this.view = view
     }

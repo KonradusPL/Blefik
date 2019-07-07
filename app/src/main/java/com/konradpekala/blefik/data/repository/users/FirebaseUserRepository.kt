@@ -67,16 +67,15 @@ class FirebaseUserRepository @Inject constructor(val userSession: UserSession,
         }
     }
 
-    override fun updateValue(value: Any, valueType: ValueToUpdate): Completable {
+    override fun updateValue(userId: String, value: Any, valueType: ValueToUpdate): Completable {
         val valueName = mUserValueMapper.map(valueType)
 
         Log.d(TAG,"updateValue: $value")
         return Completable.create { emitter ->
             Log.d(TAG,"updateValue: completable.create")
-            database.collection("users").document(userSession.getUserId()).update(valueName,value)
+            database.collection("users").document(userId).update(valueName,value)
                 .addOnSuccessListener { emitter.onComplete() }
-                .addOnFailureListener { exception ->
-                    Log.d(TAG,exception.toString()) }
+                .addOnFailureListener { exception -> emitter.onError(exception)}
         }
     }
 
@@ -113,7 +112,7 @@ class FirebaseUserRepository @Inject constructor(val userSession: UserSession,
                     val obj = documentSnapshot.toObject(User::class.java)
                     emitter.onSuccess(obj!!)
                 }
-                .addOnFailureListener { exception ->  emitter.onError(exception.fillInStackTrace()) }
+                .addOnFailureListener { exception ->  emitter.onError(exception) }
         }
     }
 }

@@ -14,7 +14,7 @@ interface IUserRepository {
         fun saveUser(user: User): Completable
         fun getAllUsers(): Single<List<User>>
         fun getUser(id: String): Single<User>
-        fun updateValue(value: Any, valueType: ValueToUpdate): Completable
         fun getUserGamesWon(id: String): Single<Int>
+        fun updateValue(userId: String, value: Any, valueType: ValueToUpdate): Completable
     }
 }

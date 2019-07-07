@@ -7,6 +7,9 @@ import com.konradpekala.blefik.ui.base.BasePresenter
 class CreateProfilePresenter<V: CreateProfileMvp.View>(view: V, val repo: CreateProfileRepo)
     : BasePresenter<V>(view),
     CreateProfileMvp.Presenter<V> {
+    override fun onDestroy() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
     override fun onAddUserClick(nick: String) {

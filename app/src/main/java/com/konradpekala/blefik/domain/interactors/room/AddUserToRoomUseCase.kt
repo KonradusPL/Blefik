@@ -28,13 +28,13 @@ class AddUserToRoomUseCase @Inject constructor(@Named("onSubscribe") subscribeSc
 
         if (mGameUtils.isPlayerInRoom(room,player)){
             room.isChoosenByPlayer = true
-            mGameSession.updateCurrentRoom(room)
+            mGameSession.updateStartedRoom(room)
             return Completable.complete()
         }
 
 
         return mRoomsRepository.addPlayerToRoom(room, player)
-            .doOnComplete { mGameSession.updateCurrentRoom(room) }
+            .doOnComplete { mGameSession.updateStartedRoom(room) }
     }
 
 }

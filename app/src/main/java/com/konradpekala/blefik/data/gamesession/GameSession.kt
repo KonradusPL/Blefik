@@ -1,5 +1,6 @@
 package com.konradpekala.blefik.data.gamesession
 
+import android.util.Log
 import com.konradpekala.blefik.data.model.Card
 import com.konradpekala.blefik.data.model.Player
 import com.konradpekala.blefik.data.model.room.Room
@@ -12,22 +13,26 @@ import javax.inject.Singleton
 @Singleton
 class GameSession @Inject constructor( ){
 
-    val isGameStarted = false
-    val isLocallyCreated = false
+    private val TAG = "GameSession"
 
-    var mChoosenRoom: Room? = null
+    private var isGameFinished = false
 
-    fun checkIfRoomIsChoosen(room: Room): Boolean{
-        return if(mChoosenRoom != null)
-            mChoosenRoom!!.roomId == room.roomId
-        else false
+    private var mChoosenRoom: Room? = null
+
+    fun updateStartedRoom(room: Room){
+            mChoosenRoom = room.copy()
     }
 
-    fun updateCurrentRoom(room: Room){
-        mChoosenRoom = room.copy()
+    fun setGameToFinished(){
+        isGameFinished = true
+    }
+
+    fun setGameToStarted(){
+        isGameFinished = false
     }
 
     fun hasSameRoomAs(room: Room): Boolean{
+        Log.d(TAG,"hasSameRoomAs: is room null: ${mChoosenRoom == null}")
         return if(mChoosenRoom != null)
             mChoosenRoom!!.name == room.name
         else false
@@ -38,6 +43,8 @@ class GameSession @Inject constructor( ){
     }
 
     fun getCurrentRoom(): Room = mChoosenRoom!!
+
+    fun hasRoom() = mChoosenRoom != null
 
     fun isBidCreated(): Boolean = mChoosenRoom?.currentBid != null ?: false
 

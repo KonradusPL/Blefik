@@ -16,7 +16,6 @@ import javax.inject.Named
 
 class CheckBidUseCase @Inject constructor(@Named("onSubscribe") subscribeScheduler: Scheduler,
                                           @Named("onObserve") observeScheduler: Scheduler,
-                                          private val mUserRepository: UserRepository,
                                           private val mGameSession: GameSession
 )
     : SingleUseCase<Unit, CheckBidResponse>(subscribeScheduler,observeScheduler) {

@@ -76,4 +76,4 @@ data class Room(
 
 }
 enum class Status{Added,Changed,Removed}
-enum class UpdateType{NewGame,NewBid,NextPlayer,PlayerBeaten,None}
+enum class UpdateType{NewGame,NewBid,NextPlayer,PlayerBeaten,GameEnded,None}

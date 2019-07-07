@@ -11,6 +11,8 @@ import com.konradpekala.blefik.ui.base.NewBasePresenter
 import org.jetbrains.anko.getStackTraceString
 import javax.inject.Inject
 
+val QWERTY = "QWERTY"
+
 class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(
     private val mObserveRoomsUseCase: ObserveRoomsUseCase,
     private val mAddRoomUseCase: AddRoomUseCase,
@@ -29,8 +31,10 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(
 
         mObserveRoomsUseCase.execute(
             onNext = {room: Room ->
+                Log.d(QWERTY,"mObserveRoomsUseCase")
                 Log.d(TAG,"mObserveRoomsUseCase:onNext")
                 if(room.isChoosenByPlayer && room.hasGameStarted && !gameOpened) {
+                    Log.d(TAG,"game is gonna open")
                     gameOpened = true
                     view.openGameActivity(room)
                 }
@@ -48,6 +52,15 @@ class RoomsPresenter<V: RoomsMvp.View> @Inject constructor(
         mAddUserToRoomUseCase.dispose()
         mAddRoomUseCase.dispose()
         //mRepository.database.cleanCache()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG,"onDestroy")
+        mObserveRoomsUseCase.dispose()
+        mAddRoomUseCase.dispose()
+        mAddUserToRoomUseCase.dispose()
+        mChangeRoomToStartUseCase.dispose()
     }
 
     override fun onAddRoomClick() {

@@ -4,7 +4,6 @@ import com.google.firebase.Timestamp
 import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.gamesession.GameSession
 import com.konradpekala.blefik.data.model.room.Room
-import com.konradpekala.blefik.data.preferences.Preferences
 import com.konradpekala.blefik.data.repository.room.RoomsRepository
 import com.konradpekala.blefik.data.repository.users.UserRepository
 import com.konradpekala.blefik.domain.interactors.base.CompletableUseCase
@@ -29,7 +28,7 @@ class AddRoomUseCase @Inject constructor(@Named("onSubscribe") subscribeSchedule
 
         room.players.add(player)
 
-        mGameSession.updateCurrentRoom(room)
+        mGameSession.updateStartedRoom(room)
 
         return mRoomsRepository.addRoom(room)
     }
