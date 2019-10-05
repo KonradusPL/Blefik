@@ -28,7 +28,8 @@ class ProfilePresenter<V: ProfileMvp.View> @Inject constructor(
                 Log.d(TAG,"mGetLocalUserUseCase: success")
                 view.changeNick(user.nick)
                 view.changeEmail(user.email)
-                view.changeProfileImage(user.image.url)
+                if(user.image.url.isNotEmpty())
+                    view.changeProfileImage(user.image.url)
             },onError = {error: Throwable ->
                 Log.d(TAG,"mGetLocalUserUseCase: ${error.message}")
             }

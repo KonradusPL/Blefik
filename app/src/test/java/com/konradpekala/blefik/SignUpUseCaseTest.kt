@@ -2,6 +2,7 @@ package com.konradpekala.blefik
 
 import android.content.Context
 import com.google.firebase.FirebaseApp
+import com.konradpekala.blefik.data.auth.FirebaseUserSession
 import com.konradpekala.blefik.data.auth.UserSession
 import com.konradpekala.blefik.data.model.request.LoginRequest
 import com.konradpekala.blefik.data.model.user.User
@@ -49,7 +50,7 @@ class SignUpUseCaseTest {
 
         val testScheduler = TestScheduler()
 
-        val auth = UserSession(mockAuth)
+        val auth = FirebaseUserSession(mockAuth)
         val preferences = SharedPrefs(mockContext)
 
         `when`(auth.signUp(TEST_EMAIL,TEST_PASSWORD))
@@ -75,7 +76,7 @@ class SignUpUseCaseTest {
 
     @Test
     fun saveUserToDatabase(){
-        val auth = UserSession(mockAuth)
+        val auth = FirebaseUserSession(mockAuth)
         val preferences = SharedPrefs(mockContext)
         val remoteUserRepository = FirebaseUserRepository(auth, FirebaseStorage())
 
