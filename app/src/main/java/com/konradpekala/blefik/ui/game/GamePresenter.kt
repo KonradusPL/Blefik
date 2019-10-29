@@ -50,43 +50,6 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
         },onError = {t: Throwable ->
             Log.d(TAG,"mGetLocalUserUseCase: ${t.getStackTraceString()}")
         })
-
-       /* cd.add(repo.observeRoom(roomId)
-            .subscribe({room: Room ->
-                Log.d("onNext vs doOnNext","onNext")
-                Log.d("startGame",room.currentBid?.name ?: "ASd")
-
-                if(firstTime){
-                    firstTime = false
-                    view.getPlayersAdapter().refresh(room.players)
-                    if(repo.playerIsCreator())
-                        newRound(true)
-                }
-                when(room.updateType){
-                    UpdateType.NewGame -> {
-                        view.getPlayersAdapter().refresh(room.players)
-                        view.getPlayerCardsAdapter().refreshCards(repo.getPlayer()!!.currentCards)
-                        view.animateBidChanges()
-                        view.getBidAdapter().refreshCards(emptyList())
-                    }
-                    UpdateType.NewBid -> {
-                        view.animateBidChanges()
-                        view.getBidAdapter().refreshCards(repo.generateBidCards())
-                    }
-                    UpdateType.NextPlayer -> {
-                        view.getPlayersAdapter().refresh(room.players)
-                    }
-                    UpdateType.PlayerBeaten -> {
-                        if (room.players.size == 1){
-                            view.showMessage("${room.players[0].nick} wygrał!")
-                            view.openMainActivity()
-                        }
-                    }
-                    else -> {}
-                }
-            },{t: Throwable? ->
-                Log.d("observeGame",t.toString())
-            }))*/
     }
 
     private fun startObservingGame(firstT: Boolean) {
@@ -127,17 +90,10 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
     fun refreshGame() {
         cd.clear()
         mNeedToRefresh = true
-        //val currentRoom = repo.getRoom()
         startGame(false)
     }
 
     private fun newRound(isRoundFirst: Boolean){
-        /*cd.add(repo.makeNewRound(isRoundFirst)
-            .subscribe({
-                view.showMessage("Nowa runda!")
-            },{t: Throwable? ->
-                Log.d("newRound",t.toString())
-            }))*/
         mMakeNewRoundUseCase.excecute(isRoundFirst,{
             view.showMessage("Nowa runda!")
         },{t: Throwable ->
@@ -150,27 +106,6 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
     }
 
     fun onCreateBidClick(bid: Bid) {
-       /* view.closeBidCreator()
-
-        if(!repo.isBidProperlyCreated(bid)){
-            view.showMessage("Wybierz poprawnie stawke!")
-            return
-        }
-        if(!repo.isNewBidHigher(bid)){
-            view.showMessage("Wybierz wyższą stawke niż poprzednia!")
-            return
-        }
-
-        view.hideKeyboard()
-
-        cd.add(repo.updateBid(bid)
-            .concatWith(repo.makeNextPlayer())
-            .subscribe({
-                view.showMessage("Nowy zawodnik!")
-            },{t: Throwable? ->
-                Log.d("onCreateBidClick",t.toString())
-            }))*/
-
         view.closeBidCreator()
 
         mUpdateBidUseCase.excecute(bid,
@@ -194,31 +129,6 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
     }
 
     fun onCheckBidClick() {
-        /*if (!repo.isBidCreated()){
-            view.showMessage("Brakuje stawki!")
-            return
-        }
-        if(repo.isBidInCards()){
-            view.showMessage("Przegrana runda!")
-            repo.addCardToLoser(false)
-        }else{
-            view.showMessage("Wygrana runda!")
-            repo.addCardToLoser(true)
-        }*/
-
-        /*mCheckBidUseCase.excecute(
-            onSuccess = {response: CheckBidResponse ->
-                when(response){
-                    CheckBidResponse.BID_IN_CARDS -> view.showMessage("Przegrana runda!")
-                    CheckBidResponse.BID_NOT_IN_CARDS -> view.showMessage("Wygrana runda!")
-                }
-                onCheckedBid()
-            },
-            onError = {error: Throwable ->
-                if(error is BaseError) view.showMessage(error.message!!)
-                Log.d(TAG,error.toString())
-            }
-        )*/
         mCheckTurnUseCase.excecute(
             onSuccess = {response: CheckTurnResponse ->
                 onCheckBidResponse(response.checkBidResponse)
@@ -233,27 +143,6 @@ class GamePresenter<V: GameMvp.View> @Inject constructor(
             },onError = {t: Throwable ->
                 Log.d(TAG,"mCheckTurnUseCase: ${t.getStackTraceString()}")
             })
-
-        /*val beaten = repo.isSomeoneBeaten()
-        if(beaten != null){
-            cd.add(repo.removePlayer(beaten)
-                .subscribe({
-                    view.showMessage("${beaten.nick} przegrał!")
-                    if(repo.getRoom()!!.players.size == 1)
-                        cd.add(repo.updateGamesWonByWinner()
-                            .subscribe({
-                                view.openMainActivity()
-                            },{
-                                //Error when updating winner's games won
-                            }))
-                    else
-                        newRound(false)
-                },{t ->
-                    Log.d("removePlayer",t.toString())
-                    view.showMessage("Nie udało się usunąć gracza")
-                }))
-        }else
-            newRound(false)*/
     }
 
     private fun onGameEnd() {
